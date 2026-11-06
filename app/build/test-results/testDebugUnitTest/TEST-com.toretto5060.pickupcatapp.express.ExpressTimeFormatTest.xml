@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.toretto5060.pickupcatapp.express.ExpressTimeFormatTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-05T09:31:57.761Z" hostname="torettodeMacBook-Pro.local" time="0.025">
+  <properties/>
+  <testcase name="lastYearShowsFullDateWeekdayAndClock" classname="com.toretto5060.pickupcatapp.express.ExpressTimeFormatTest" time="0.018"/>
+  <testcase name="yesterdayUsesRelativeWordAndWeekday" classname="com.toretto5060.pickupcatapp.express.ExpressTimeFormatTest" time="0.001"/>
+  <testcase name="todayIsClockOnly" classname="com.toretto5060.pickupcatapp.express.ExpressTimeFormatTest" time="0.0"/>
+  <testcase name="earlierThisYearShowsMonthDayAndWeekday" classname="com.toretto5060.pickupcatapp.express.ExpressTimeFormatTest" time="0.001"/>
+  <testcase name="dayBeforeYesterdayUsesRelativeWordAndWeekday" classname="com.toretto5060.pickupcatapp.express.ExpressTimeFormatTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

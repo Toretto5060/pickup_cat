@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.toretto5060.pickupcatapp.express.ExpressParseTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-11-05T09:31:57.713Z" hostname="torettodeMacBook-Pro.local" time="0.039">
+  <properties/>
+  <testcase name="templateRuleRoundTrip" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.02"/>
+  <testcase name="t4Yuantong" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.008"/>
+  <testcase name="t5Tuxi" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.002"/>
+  <testcase name="t2Duoduo" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.0"/>
+  <testcase name="t1Shentong" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.0"/>
+  <testcase name="groupKeySameForSameAddressCabinet" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.003"/>
+  <testcase name="notAPickupIsDropped" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.003"/>
+  <testcase name="t3Yunda" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.001"/>
+  <testcase name="templateRuleGeneralizes" classname="com.toretto5060.pickupcatapp.express.ExpressParseTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
