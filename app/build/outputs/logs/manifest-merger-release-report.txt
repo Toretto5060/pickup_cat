@@ -1,18 +1,18 @@
 -- Merging decision tree log ---
 provider#com.toretto5060.pickupcatapp.express.ExpressProvider
-INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:41:9-44:40
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:57:9-60:40
 	android:authorities
 		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:43:13-59
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:59:13-59
 	android:exported
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:44:13-37
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:60:13-37
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:42:13-52
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:58:13-52
 manifest
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
-INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
-INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
-INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-109:12
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-109:12
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-109:12
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-109:12
 MERGED from [top.yukonga.miuix.kmp:miuix-preference-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/510101a57ab834895ad2276c483fc8ed/transformed/miuix-preference/AndroidManifest.xml:2:1-7:12
 MERGED from [top.yukonga.miuix.kmp:miuix-ui-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/541c5cbcce2379000eb8ecacd48df17f/transformed/miuix-ui/AndroidManifest.xml:2:1-7:12
 MERGED from [top.yukonga.miuix.kmp:miuix-icons-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/801b91ddf4c461bca71bf41cfa5f8f52/transformed/miuix-icons/AndroidManifest.xml:2:1-7:12
@@ -94,9 +94,41 @@ uses-permission#android.permission.QUERY_ALL_PACKAGES
 ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:5:5-77
 	android:name
 		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:5:22-74
+uses-permission#com.android.permission.GET_INSTALLED_APPS
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:9:22-78
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:11:5-77
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:11:22-74
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:13:5-95
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:13:22-92
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:14:5-81
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:14:22-78
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:17:5-79
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:17:22-76
+uses-permission#android.permission.USE_EXACT_ALARM
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:18:5-74
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:18:22-71
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:20:5-77
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:20:22-74
+uses-permission#android.permission.FOREGROUND_SERVICE_SPECIAL_USE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:21:5-89
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:21:22-86
 application
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:7:5-67:19
-INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:7:5-67:19
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:5-107:19
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:5-107:19
 MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:23:5-33:19
@@ -116,93 +148,137 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/tore
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:12:9-35
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:28:9-35
 	android:label
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:11:9-41
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:27:9-41
 	android:roundIcon
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:10:9-54
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:26:9-54
 	android:icon
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:9:9-43
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:25:9-43
 	android:allowBackup
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:8:9-35
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:24:9-35
 	android:theme
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:13:9-47
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:29:9-47
 activity#com.toretto5060.pickupcatapp.app.ExpressListActivity
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:16:9-25:20
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:32:9-41:20
 	android:label
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:19:13-45
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:35:13-45
 	android:exported
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:18:13-36
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:34:13-36
 	android:theme
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:20:13-51
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:36:13-51
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:17:13-52
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:33:13-52
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:21:13-24:29
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:37:13-40:29
 action#android.intent.action.MAIN
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:22:17-69
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:38:17-69
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:22:25-66
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:38:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:17-77
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:39:17-77
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:27-74
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:39:27-74
 activity#com.toretto5060.pickupcatapp.app.ExpressActivity
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:27:9-30:54
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:43:9-46:54
 	android:label
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:30:13-51
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:46:13-51
 	android:exported
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:29:13-37
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:45:13-37
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:28:13-48
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:44:13-48
 activity#com.toretto5060.pickupcatapp.app.ExpressRulesActivity
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:31:9-34:59
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:47:9-50:59
 	android:label
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:34:13-56
-	android:exported
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:33:13-37
-	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:32:13-53
-activity#com.toretto5060.pickupcatapp.app.ExpressAppPickActivity
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:35:9-38:62
-	android:label
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:38:13-59
-	android:exported
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:37:13-37
-	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:36:13-55
-receiver#com.toretto5060.pickupcatapp.express.ExpressWidgetProvider
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:47:9-56:20
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:50:13-56
 	android:exported
 		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:49:13-37
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:48:13-58
-intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:50:13-52:29
-action#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:17-84
-	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:25-81
-meta-data#android.appwidget.provider
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:53:13-55:63
-	android:resource
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:55:17-60
-	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:54:17-58
-service#com.toretto5060.pickupcatapp.express.ExpressListenService
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:59:9-66:19
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:48:13-53
+activity#com.toretto5060.pickupcatapp.app.ExpressAppPickActivity
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:9-54:62
+	android:label
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:54:13-59
 	android:exported
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:61:13-37
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:53:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:52:13-55
+receiver#com.toretto5060.pickupcatapp.express.ExpressWidgetProvider
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:63:9-72:20
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:65:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:13-58
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:66:13-68:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:67:17-84
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:67:25-81
+meta-data#android.appwidget.provider
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:69:13-71:63
+	android:resource
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:71:17-60
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:70:17-58
+service#com.toretto5060.pickupcatapp.express.ExpressListenService
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:75:9-82:19
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:77:13-37
 	android:permission
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:62:13-87
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:78:13-87
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:60:13-57
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:76:13-57
 intent-filter#action:name:android.service.notification.NotificationListenerService
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:63:13-65:29
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:79:13-81:29
 action#android.service.notification.NotificationListenerService
-ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:17-99
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:80:17-99
 	android:name
-		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:25-96
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:80:25-96
+service#com.toretto5060.pickupcatapp.app.KeepAliveService
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:85:9-93:19
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:87:13-37
+	android:stopWithTask
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:88:13-41
+	android:foregroundServiceType
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:89:13-55
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:86:13-49
+property#android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:90:13-92:63
+	android:value
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:92:17-60
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:91:17-76
+receiver#com.toretto5060.pickupcatapp.app.PermissionCheckReceiver
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:96:9-106:20
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:98:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:97:13-56
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.MY_PACKAGE_REPLACED+action:name:android.intent.action.USER_UNLOCKED+action:name:com.toretto5060.pickupcatapp.PERMISSION_CHECK+action:name:com.toretto5060.pickupcatapp.PERMISSION_CHECK_IMMEDIATE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:99:13-105:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:100:17-79
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:100:25-76
+action#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:101:17-84
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:101:25-81
+action#android.intent.action.USER_UNLOCKED
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:102:17-78
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:102:25-75
+action#com.toretto5060.pickupcatapp.PERMISSION_CHECK
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:103:17-88
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:103:25-85
+action#com.toretto5060.pickupcatapp.PERMISSION_CHECK_IMMEDIATE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:104:17-98
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:104:25-95
 uses-sdk
 INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml

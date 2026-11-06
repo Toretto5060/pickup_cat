@@ -1,7 +1,6 @@
 package com.toretto5060.pickupcatapp.app
 
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -53,7 +52,8 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
  * 选择要监听通知的 App（可选限定）。取件码捕获主通道是"通知使用权"（ExpressListenService），不依赖
  * LSP 作用域：**白名单为空 = 解析全部 App 的通知（含短信）**；勾选后只解析勾选的 App。列表是本机
  * 全部可启动的第三方应用，排除系统应用（短信通知已由"全部"覆盖）与模块自身功能目标。选择实时写入
- * KEY_LISTEN_APPS。依赖 QUERY_ALL_PACKAGES（Manifest 已声明）。
+ * KEY_LISTEN_APPS。数据源 `getInstalledApplications()` 是厂商管控接口：系统「获取应用列表」
+ * 权限被拒绝时只返回自身，列表为空；进入本页前由 [PermissionGuard] 弹系统权限框申请。
  */
 class ExpressAppPickActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
@@ -62,10 +62,27 @@ class ExpressAppPickActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 系统「获取应用列表」权限未授予时不读列表，直接弹系统授权框（不是自绘弹窗）。
+        if (!PermissionGuard.appListGranted(this)) {
+            PermissionGuard.requestAppList(this)
+            return
+        }
         enableEdgeToEdge()
         val blur = AppSettings.load(this).isBlurEnabled
         setContent {
             AppTheme { AppPickPage(isBlurEnabled = blur) }
+        }
+    }
+
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PermissionGuard.REQ_APP_LIST) {
+            if (PermissionGuard.appListGranted(this)) recreate() else finish()
         }
     }
 }
@@ -88,17 +105,16 @@ private fun AppPickPage(isBlurEnabled: Boolean) {
     LaunchedEffect(Unit) {
         val pm = context.packageManager
         apps = withContext(Dispatchers.IO) {
-            pm.queryIntentActivities(
-                Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0,
-            ).distinctBy { it.activityInfo.packageName }
-                .mapNotNull { ri ->
-                    val pkg = ri.activityInfo.packageName
+            // 必须走厂商管控的 getInstalledApplications()：系统里「获取应用列表」被拒绝时
+            // 它只返回自身，列表自然为空；queryIntentActivities() 不受管控会绕过开关。
+            pm.getInstalledApplications(0)
+                .mapNotNull { ai ->
+                    val pkg = ai.packageName
                     if (pkg in EXCLUDED || pkg == context.packageName) return@mapNotNull null
-                    val ai = runCatching { pm.getApplicationInfo(pkg, 0) }.getOrNull()
-                        ?: return@mapNotNull null
                     if (ai.flags and ApplicationInfo.FLAG_SYSTEM != 0) return@mapNotNull null
+                    if (pm.getLaunchIntentForPackage(pkg) == null) return@mapNotNull null
                     AppInfo(
-                        label = ri.loadLabel(pm).toString(),
+                        label = ai.loadLabel(pm).toString(),
                         pkg = pkg,
                         icon = appIcon(context, pkg)?.asImageBitmap(),
                     )

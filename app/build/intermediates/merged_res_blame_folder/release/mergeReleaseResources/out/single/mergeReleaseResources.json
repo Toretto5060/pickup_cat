@@ -1,54 +1,58 @@
 [
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/mipmap-hdpi/ic_launcher.png"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/drawable_express_widget_preview.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/drawable/express_widget_preview.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/drawable_express_widget_pick_bg.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/drawable/express_widget_pick_bg.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/layout_express_widget_row.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/layout/express_widget_row.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/layout_express_widget.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/layout/express_widget.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/drawable-night_express_widget_bg.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/drawable-night/express_widget_bg.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.toretto5060.pickupcatapp-release-37:/drawable_ic_stat_alert.xml.flat",
+        "source": "com.toretto5060.pickupcatapp-main-38:/drawable/ic_stat_alert.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/xml_express_widget_info.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/xml/express_widget_info.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/drawable_express_widget_pick_bg.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/drawable/express_widget_pick_bg.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/drawable_express_widget_bg.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/drawable/express_widget_bg.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/layout_express_widget.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/layout/express_widget.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/layout_express_widget_row.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/layout/express_widget_row.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/xml_express_widget_info.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/xml/express_widget_info.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/drawable-night_express_widget_bg.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/drawable-night/express_widget_bg.xml"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/drawable_express_widget_preview.xml.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/drawable/express_widget_preview.xml"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/mipmap-xxxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "com.toretto5060.pickupcatapp-release-37:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "com.toretto5060.pickupcatapp-main-38:/mipmap-xxxhdpi/ic_launcher_round.png"
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/drawable_express_widget_bg.xml.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/drawable/express_widget_bg.xml"
+    },
+    {
+        "merged": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-release-37:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/Users/toretto/.gradle/daemon/9.7.1/com.toretto5060.pickupcatapp-main-38:/mipmap-xxhdpi/ic_launcher.png"
     }
 ]

@@ -60,4 +60,32 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_cancel">Cancel</string>
+    <string name="permission_banner_app_list">App list access is off. Tap to request system permission</string>
+    <string name="permission_banner_notification">Notification access is off. Tap to open system settings</string>
+    <string name="permission_indicator_on">Pickup code parsing is on</string>
+    <string name="permission_indicator_off">Pickup code parsing is paused: permissions missing</string>
+    <string name="permission_banner_auto_start">Autostart is off. Tap to open system settings</string>
+    <string name="permission_banner_battery">Battery optimization is on. Tap to request unrestricted battery</string>
+    <string name="permission_banner_post_notifications">Notification permission is off. Tap to request (for permission alerts)</string>
+    <string name="permission_alert_channel">Permission alerts</string>
+    <string name="permission_alert_title">Pickup code parsing paused</string>
+    <string name="permission_alert_text">Missing permissions: %1$s. Tap to fix</string>
+    <string name="permission_alert_unknown">some background permissions</string>
+    <string name="keep_alive_channel">Background guard</string>
+    <string name="keep_alive_title">PickupCat is listening for pickup codes</string>
+    <string name="permission_name_app_list">App list access</string>
+    <string name="permission_name_notification_access">Notification access</string>
+    <string name="permission_name_auto_start">Autostart</string>
+    <string name="permission_name_battery">Unrestricted battery</string>
+    <string name="permission_name_post_notifications">Notifications</string>
+    <string name="settings_auto_start">Autostart</string>
+    <string name="settings_auto_start_on">On (or not restricted by system)</string>
+    <string name="settings_auto_start_off">Off. Tap to open autostart settings</string>
+    <string name="settings_battery">Unrestricted battery</string>
+    <string name="settings_battery_on">Added to battery optimization whitelist</string>
+    <string name="settings_battery_off">Not added. Tap to request</string>
+    <string name="settings_permission_status">Status: %1$s\n%2$s</string>
+    <string name="settings_permission_on">On</string>
+    <string name="settings_permission_off">Off</string>
+    <string name="settings_app_list_need_grant">Not granted. Tap to request App list access. Empty = parse notifications from every app (SMS included)</string>
 </resources>

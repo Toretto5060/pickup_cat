@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="express_widget_pick_bg">#FF4A8CFF</color>
-    <color name="express_widget_pick_text">#FFFFFFFF</color>
-    <color name="express_widget_secondary">#99FFFFFF</color>
-    <color name="express_widget_text">#F2FFFFFF</color>
-    <color name="express_widget_title">#E6FFFFFF</color>
-    <style name="Theme.PickupCat" parent="android:Theme.Material.NoActionBar"/>
-</resources>

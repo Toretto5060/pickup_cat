@@ -62,6 +62,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -99,6 +101,23 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
  * 在待取件/已取件之间带动画切换（HorizontalPager + 胶囊颜色过渡）。
  */
 class ExpressListActivity : ComponentActivity() {
+    private val permissionState = mutableStateOf(
+        PermissionState(
+            appListGranted = true,
+            notificationAccessGranted = false,
+            autoStart = AutoStartState.UNKNOWN,
+            batteryUnrestricted = true,
+            postNotificationsGranted = true,
+        ),
+    )
+    // 只防止同一次页面生命周期里 onResume 反复自动弹系统框，不阻止用户点提示条再次请求。
+    private var autoRequested = false
+    // 首次进入时先弹通知权限框，回调后再自动请求应用列表权限，避免两个系统框打架。
+    private var autoAppListPending = false
+    // 本次请求是否来自用户点击提示条：自动请求被拒后不主动跳应用信息页。
+    private var manualRequest = false
+    private var lastCaptureEnabled = false
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.wrapContext(newBase, LocaleHelper.getSavedLanguage(newBase)))
     }
@@ -106,14 +125,92 @@ class ExpressListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        refreshPermissions()
+        // 独立于通知监听服务的后台轮询：开机/覆盖安装由 receiver 重新排程。
+        PermissionMonitor.start(this)
+        // 第一次进入程序时先请求「发送通知」的系统授权框（POST_NOTIFICATIONS）。
+        if (!PermissionGuard.postNotificationsGranted(this) && !PermissionGuard.postNotificationsAsked(this)) {
+            PermissionGuard.markPostNotificationsAsked(this)
+            autoAppListPending = true
+            PermissionGuard.requestPostNotifications(this)
+        }
         setContent {
-            AppTheme { ExpressListPage() }
+            AppTheme {
+                ExpressListPage(
+                    permission = permissionState.value,
+                    onPermissionAction = { kind ->
+                        if (kind == PermissionKind.APP_LIST) {
+                            // 点提示条一律先请求系统权限框；只有回调判定「不再询问」才跳应用信息页。
+                            manualRequest = true
+                            PermissionGuard.requestAppList(this)
+                        } else {
+                            PermissionGuard.openSettingsFor(this, kind)
+                        }
+                    },
+                )
+            }
+        }
+    }
+
+    /** 首次进入、从系统设置返回都重新检测；应用列表权限缺失时自动弹一次系统授权框。 */
+    override fun onResume() {
+        super.onResume()
+        refreshPermissions()
+        maybeAutoRequestAppList()
+    }
+
+    private fun maybeAutoRequestAppList() {
+        if (autoRequested || autoAppListPending) return
+        if (!permissionState.value.appListGranted) {
+            autoRequested = true
+            manualRequest = false
+            PermissionGuard.requestAppList(this)
+        }
+    }
+
+    /** 刷新指示灯/提示条/系统通知；权限从缺失变为齐备时主动重绑监听服务。 */
+    private fun refreshPermissions() {
+        val state = PermissionGuard.state(this)
+        permissionState.value = state
+        if (state.captureEnabled && !lastCaptureEnabled) PermissionGuard.ensureCapture(this)
+        lastCaptureEnabled = state.captureEnabled
+        PermissionMonitor.onCheck(this)
+        // 从系统设置返回 / 冷启动立即按最新权限状态下发或撤销提醒，不等后台 5 秒轮询。
+        PermissionMonitor.checkNow(this)
+    }
+
+    // 厂商适配文档用 onRequestPermissionsResult；Activity Result API 等价但需三处重写
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PermissionGuard.REQ_POST_NOTIFICATIONS -> {
+                autoAppListPending = false
+                refreshPermissions()
+                maybeAutoRequestAppList()
+            }
+            PermissionGuard.REQ_APP_LIST -> {
+                refreshPermissions()
+                val fromUser = manualRequest
+                manualRequest = false
+                // 仅用户主动点提示条、且系统判定不会再弹框（拒绝且不再询问）时才跳应用信息页。
+                if (fromUser && PermissionGuard.shouldOpenAppDetails(this)) {
+                    PermissionGuard.openAppDetails(this)
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun ExpressListPage() {
+private fun ExpressListPage(
+    permission: PermissionState,
+    onPermissionAction: (PermissionKind) -> Unit,
+) {
     val context = LocalContext.current
     // 0 = 待取件，1 = 已取件；tab 由 pager 当前页驱动，点击胶囊用动画滚过去。
     val pagerState = rememberPagerState(pageCount = { 2 })
@@ -152,10 +249,16 @@ private fun ExpressListPage() {
                 points = pendingGroups.size,
                 pendingCount = pendingCount,
                 doneCount = doneCount,
+                parsingEnabled = permission.captureEnabled,
                 onTab = { i -> scope.launch { pagerState.animateScrollToPage(i) } },
                 onSettings = { context.startActivity(Intent(context, ExpressActivity::class.java)) },
                 modifier = Modifier.padding(top = 22.dp),
             )
+            // 4 项权限 + 通知权限任一缺失时用非模态提示条引导，不自绘「是否允许」弹窗。
+            val missing = permission.missing
+            if (missing.isNotEmpty()) {
+                PermissionBanner(missing, onPermissionAction)
+            }
             HorizontalPager(
                 state = pagerState,
                 beyondViewportPageCount = 1,
@@ -201,17 +304,63 @@ private fun ExpressListPage() {
     }
 }
 
-/** 设计稿的标题区：大标题 + 右上件数 + 副标题 + 胶囊 tab。 */
+/** 权限未开启时的引导条：只负责引导，授权一律走系统权限框 / 系统设置页。 */
+@Composable
+private fun PermissionBanner(
+    missing: List<PermissionKind>,
+    onAction: (PermissionKind) -> Unit,
+) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+        missing.forEachIndexed { i, kind ->
+            if (i > 0) Spacer(Modifier.height(6.dp))
+            PermissionRow(stringResource(bannerLabel(kind))) { onAction(kind) }
+        }
+        Spacer(Modifier.height(10.dp))
+    }
+}
+
+private fun bannerLabel(kind: PermissionKind): Int = when (kind) {
+    PermissionKind.APP_LIST -> R.string.permission_banner_app_list
+    PermissionKind.NOTIFICATION_ACCESS -> R.string.permission_banner_notification
+    PermissionKind.AUTO_START -> R.string.permission_banner_auto_start
+    PermissionKind.BATTERY -> R.string.permission_banner_battery
+    PermissionKind.POST_NOTIFICATIONS -> R.string.permission_banner_post_notifications
+}
+
+@Composable
+private fun PermissionRow(text: String, onClick: () -> Unit) {
+    Text(
+        text,
+        fontSize = 13.sp,
+        color = MiuixTheme.colorScheme.primary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(MiuixTheme.colorScheme.primary.copy(alpha = 0.08f))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+    )
+}
+
+/** 设计稿的标题区：大标题 + 右上件数（设置按钮旁带解析状态指示灯）+ 副标题 + 胶囊 tab。 */
 @Composable
 private fun PageHeader(
     tab: Int,
     points: Int,
     pendingCount: Int,
     doneCount: Int,
+    parsingEnabled: Boolean,
     onTab: (Int) -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // 双权限齐备 = 启用解析（绿）；任一缺失 = 停用（红）。与 ExpressListenService 的 gate 同一判定。
+    val indicatorColor by animateColorAsState(
+        targetValue = if (parsingEnabled) Color(0xFF34C759) else Color(0xFFFF3B30),
+    )
+    val indicatorLabel = stringResource(
+        if (parsingEnabled) R.string.permission_indicator_on else R.string.permission_indicator_off,
+    )
     Column(modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -221,22 +370,32 @@ private fun PageHeader(
                 color = MiuixTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f),
             )
-            // 设置按钮在「N 件待取」上方，和件数一起右对齐。
+            // 设置按钮在「N 件待取」上方，和件数一起右对齐；左侧是红/绿解析状态灯。
             Column(horizontalAlignment = Alignment.End) {
-                Box(
-                    Modifier
-                        .size(30.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(MiuixTheme.colorScheme.onSurfaceVariantSummary.copy(alpha = 0.10f))
-                        .clickable(onClick = onSettings),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Settings,
-                        contentDescription = stringResource(R.string.settings_title),
-                        tint = MiuixTheme.colorScheme.onSurfaceVariantSummary,
-                        modifier = Modifier.size(17.dp),
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        Modifier
+                            .size(9.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(indicatorColor)
+                            .semantics { contentDescription = indicatorLabel },
                     )
+                    Spacer(Modifier.width(8.dp))
+                    Box(
+                        Modifier
+                            .size(30.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(MiuixTheme.colorScheme.onSurfaceVariantSummary.copy(alpha = 0.10f))
+                            .clickable(onClick = onSettings),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Settings,
+                            contentDescription = stringResource(R.string.settings_title),
+                            tint = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                            modifier = Modifier.size(17.dp),
+                        )
+                    }
                 }
                 Spacer(Modifier.height(6.dp))
                 Text(
