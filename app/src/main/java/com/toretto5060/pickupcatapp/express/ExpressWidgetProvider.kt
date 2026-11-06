@@ -6,11 +6,13 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import com.toretto5060.pickupcatapp.R
+import com.toretto5060.pickupcatapp.app.AppSettings
 import com.toretto5060.pickupcatapp.app.ExpressListActivity
 import com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity
 
@@ -24,8 +26,15 @@ import com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity
  *   HyperOS 的 newOptions 是拖拽过渡值、getAppWidgetOptions 返回缓存旧值、SIZES 只给
  *   可选档位上限，三个来源都不可靠，依赖它们算行高在 5×2↔5×3 来回 resize 时必然漂移、
  *   无法恢复（详见记忆库避坑指南）。
- * - **背景**：澎湃 OS4 柔光玻璃模式把自绘玻璃层隐藏，背板交给桌面渲染；其它设备/用户选择时
- *   用自绘玻璃（默认兜底）。判定见 [HyperOsGlass]。
+ * - **背景**：固定走「跟随系统」判定 [HyperOsGlass.isSoftGlassAvailable]——澎湃 OS4 隐藏
+ *   自绘玻璃层、背板交给桌面渲染，其它设备自动回退自绘玻璃。无设置项、无强制模式。
+ * - **0 件待取**：由设置项 `AppSettings.hideWidgetWhenEmpty` 决定两种形态（默认开启）：
+ *   开启 → 清空标题两个 TextView、隐藏列表/自绘玻璃层、根背景置透明，整块透明隐形，
+ *   不构建集合、不绑定 adapter；关闭 → 走正常渲染，显示「0 件待取」+ 空态行
+ *   「还没有待取件」，背景照常。切换开关由设置页调 [updateAll] 立即重画。
+ * - **reapply 铁律**：桌面在 layoutId 不变时复用旧视图树，只执行 actions。因此非空分支必须
+ *   把空态改过的每一项显式反向恢复：`setBackgroundResource(express_widget_glass_bg)`、
+ *   标题父容器 VISIBLE、列表 VISIBLE、后缀文本写回。漏一项就会出现「背景不回来 / 只显示数字」。
  * - 逐码「已取」按行 id 精确标记；数据变化由各写入方调 [updateAll] 主动刷新。
  */
 class ExpressWidgetProvider : AppWidgetProvider() {
@@ -70,15 +79,45 @@ class ExpressWidgetProvider : AppWidgetProvider() {
 
     private fun build(context: Context, widgetId: Int): RemoteViews {
         val root = RemoteViews(context.packageName, R.layout.express_widget)
-
-        // 自绘玻璃是默认兜底；系统柔光玻璃模式只留淡底色，让桌面材质透出来。
-        val systemGlass = HyperOsGlass.shouldUseSystemGlass(context)
-        root.setViewVisibility(R.id.widget_custom_bg, if (systemGlass) View.GONE else View.VISIBLE)
-
         val pending = ExpressStore.queryAll(context, picked = false)
-        // 标题拆成「数量(红/加粗) + 件待取」，数量更醒目；后缀文案在布局里写死。
-        root.setTextViewText(R.id.widget_title_count, pending.size.toString())
         root.setOnClickPendingIntent(R.id.widget_root, openApp(context))
+
+        // 设置项「0 件时隐藏小组件」关闭时走下面的正常渲染：显示「0 件待取」+ 空态行
+        // 「还没有待取件」，背景照常；开启时才透明隐形。
+        if (pending.isEmpty() && AppSettings.load(context).hideWidgetWhenEmpty) {
+            // 0 件待取（开关开启）：不显示「0 件待取」/「件待取」、不显示空态行，也不构建集合；
+            // 自绘玻璃层 + 根淡底色一起清掉 → 整个小部件透明隐形（占位仍可点击打开 App）。
+            // 标题栏父容器保持 VISIBLE、只清空文本：桌面 reapply 复用旧视图树时，GONE 过的
+            // ViewGroup 恢复后常只重绘「有 action」的子 view（曾导致只显示数字、件待取消失），
+            // 这里同时显式设 VISIBLE，兼容上一版已把该父容器设成 GONE 的旧 widget。
+            root.setViewVisibility(R.id.widget_title_bar, View.VISIBLE)
+            root.setTextViewText(R.id.widget_title_count, "")
+            root.setTextViewText(R.id.widget_title_suffix, "")
+            root.setViewVisibility(R.id.widget_list, View.GONE)
+            root.setViewVisibility(R.id.widget_custom_bg, View.GONE)
+            // setBackgroundColor 是 View 的 @RemotableViewMethod，可覆盖 XML 的 drawable 背景。
+            root.setInt(android.R.id.background, "setBackgroundColor", Color.TRANSPARENT)
+            return root
+        }
+
+        // 桌面复用旧视图树（layoutId 相同只 reapply actions，不重新 inflate），所以空态改过的
+        // 每一项都必须在这里**显式反向恢复**，不能指望 XML 默认值。
+        root.setInt(
+            android.R.id.background,
+            "setBackgroundResource",
+            R.drawable.express_widget_glass_bg,
+        )
+        root.setViewVisibility(R.id.widget_title_bar, View.VISIBLE)
+        root.setViewVisibility(R.id.widget_list, View.VISIBLE)
+        val systemGlass = HyperOsGlass.isSoftGlassAvailable()
+        root.setViewVisibility(R.id.widget_custom_bg, if (systemGlass) View.GONE else View.VISIBLE)
+        // 标题拆成「数量(红/加粗) + 件待取」；后缀虽在 XML 里写死，但空态清空过就必须显式写回，
+        // 否则 reapply 时静态文本不会重新绘制（用户实测「只显示数字、没有件待取」）。
+        root.setTextViewText(R.id.widget_title_count, pending.size.toString())
+        root.setTextViewText(
+            R.id.widget_title_suffix,
+            context.getString(R.string.express_widget_count_suffix),
+        )
 
         // 行高固定由行布局给定，不读桌面报告尺寸（HyperOS 上不可靠，resize 来回必漂移）；
         // ListView match_parent + 可滚动，尺寸变化由桌面重新布局自然适配。
@@ -88,11 +127,11 @@ class ExpressWidgetProvider : AppWidgetProvider() {
             val builder = RemoteViews.RemoteCollectionItems.Builder()
                 .setHasStableIds(true)
                 .setViewTypeCount(2)
-            val items = pending.take(MAX_LIST_ITEMS)
-            if (items.isEmpty()) {
+            if (pending.isEmpty()) {
+                // 开关关闭：0 件时仍显示一条空态行「还没有待取件」（低版本由 Factory 兜底）。
                 builder.addItem(EMPTY_ITEM_ID, buildWidgetRow(context, null))
             } else {
-                for (entry in items) {
+                for (entry in pending.take(MAX_LIST_ITEMS)) {
                     builder.addItem(entry.id, buildWidgetRow(context, entry))
                 }
             }
@@ -143,6 +182,7 @@ class ExpressWidgetProvider : AppWidgetProvider() {
 
         private const val ACTION_PICKED = "com.toretto5060.pickupcatapp.EXPRESS_PICKED"
         private const val ACTION_MIUI_UPDATE = "miui.appwidget.action.APPWIDGET_UPDATE"
+        // 0 件待取且开关关闭时，空态行的稳定 item id（与真实行 id 不冲突）。
         private const val EMPTY_ITEM_ID = -1L
         // 集合快照随 RemoteViews 走 Binder，限制上限避免异常多的历史记录把事务撑爆；
         // 真实总数仍显示在标题「N 件待取」里。

@@ -1,35 +1,22 @@
 package com.toretto5060.pickupcatapp.express
 
-import android.content.Context
 import android.os.Build
-import com.toretto5060.pickupcatapp.app.AppSettings
 
 /**
- * 澎湃 OS4「柔光玻璃」小部件背景的能力检测与模式判定。
+ * 澎湃 OS4「柔光玻璃」小部件背景的能力检测（原「跟随系统（自动）」这套逻辑）。
  *
  * 柔光玻璃是**桌面（Launcher）渲染的材质**，没有提供给第三方标准 AppWidget 的公开 SDK：
  * 系统按背景层渲染玻璃，App 能做的是把背板让出去——根布局用小米规范固定 id
  * `@android:id/background`、背景保持极淡半透明（规范 7.1 要求不能全透明），不再自绘渐变。
- * 因此这里只做「设备是否可能提供该材质」的判断 + 用户可强制切换；真正是否呈现玻璃由桌面决定。
- * 非 HyperOS4 / 检测不到时自动回退自绘玻璃（用户要求的默认兜底）。
+ * 这里只判断设备是否可能提供该材质，结果由 Provider 直接采用，**不再有设置项 /
+ * Auto·System·Custom 模式 / 强制切换**；真正是否呈现玻璃由桌面决定。
+ * 非 HyperOS4 / 检测不到时自动回退自绘玻璃（内部兜底，不是用户可选项）。
  */
 internal object HyperOsGlass {
-    const val MODE_AUTO = "Auto"
-    const val MODE_SYSTEM = "System"
-    const val MODE_CUSTOM = "Custom"
-
     @Volatile
     private var detected: Boolean? = null
 
-    /** 当前这张小部件是否使用系统背板（自绘玻璃层 GONE）。 */
-    fun shouldUseSystemGlass(context: Context): Boolean =
-        when (AppSettings.load(context).widgetBackground) {
-            MODE_SYSTEM -> true
-            MODE_CUSTOM -> false
-            else -> isSoftGlassAvailable()
-        }
-
-    /** 检测结果为进程内缓存；用户想强行试可在设置里选「系统柔光玻璃（强制）」。 */
+    /** 检测结果进程内缓存；true → 隐藏自绘玻璃层、把背板交给桌面渲染。 */
     fun isSoftGlassAvailable(): Boolean = detected ?: detect().also { detected = it }
 
     private fun detect(): Boolean {

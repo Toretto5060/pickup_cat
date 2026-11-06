@@ -15,7 +15,8 @@ data class ParsedPickup(
     val raw: String,
 )
 
-/** One persisted pickup. [smsHash] de-dupes an SMS that the provider would otherwise insert twice. */
+/** One persisted pickup. [smsHash] de-dupes an SMS that the provider would otherwise insert twice,
+ *  but only against pending (picked=0) rows — a picked-up row must not swallow a later identical code. */
 data class ExpressRow(
     val id: Long,
     val code: String,

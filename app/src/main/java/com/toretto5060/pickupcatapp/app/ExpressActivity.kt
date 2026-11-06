@@ -16,17 +16,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.toretto5060.pickupcatapp.R
 import com.toretto5060.pickupcatapp.express.ExpressWidgetProvider
-import com.toretto5060.pickupcatapp.express.HyperOsGlass
 import com.toretto5060.pickupcatapp.ui.theme.AppTheme
 import com.toretto5060.pickupcatapp.ui.util.PageScaffold
 import com.toretto5060.pickupcatapp.ui.util.firstCard
 import com.toretto5060.pickupcatapp.ui.util.nextCard
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.preference.ArrowPreference
+import top.yukonga.miuix.kmp.preference.SwitchPreference
 
 /**
  * 设置页（由首页右上角的设置按钮进入）。只保留用户要求的项目：
- * 解析通知 App、通知监听权限、短信模板与解析规则、语言、主题模式。
+ * 解析通知 App、通知监听权限、短信模板与解析规则、语言、主题模式、「无待取件时隐藏组件」。
+ * 小部件背景没有设置项：固定按 HyperOsGlass.isSoftGlassAvailable() 自动判定。
  * 取件码捕获默认开启，故没有总开关；首页就是列表，故没有「取件码列表」入口。
  * 两项权限状态在这里以 summary 展示；缺应用列表权限时点击走系统权限框。
  */
@@ -40,7 +41,7 @@ class ExpressActivity : ComponentActivity() {
             postNotificationsGranted = true,
         ),
     )
-    private val widgetBackground = mutableStateOf(HyperOsGlass.MODE_AUTO)
+    private val hideWidgetWhenEmpty = mutableStateOf(true)
     private var pendingOpenPicker = false
 
     override fun attachBaseContext(newBase: Context) {
@@ -53,17 +54,17 @@ class ExpressActivity : ComponentActivity() {
         permissionState.value = PermissionGuard.state(this)
         val appSettings = AppSettings.load(this)
         val blur = appSettings.isBlurEnabled
-        widgetBackground.value = appSettings.widgetBackground
+        hideWidgetWhenEmpty.value = appSettings.hideWidgetWhenEmpty
         setContent {
             AppTheme {
                 SettingsPage(
                     isBlurEnabled = blur,
                     state = permissionState.value,
-                    widgetBackground = widgetBackground.value,
-                    onWidgetBackgroundChange = { mode ->
-                        AppSettings.save(this, AppSettings.load(this).copy(widgetBackground = mode))
-                        widgetBackground.value = mode
-                        // 背景模式变了要立刻重画所有已添加的小部件。
+                    hideWidgetWhenEmpty = hideWidgetWhenEmpty.value,
+                    onHideWidgetWhenEmptyChange = { enabled ->
+                        AppSettings.save(this, AppSettings.load(this).copy(hideWidgetWhenEmpty = enabled))
+                        hideWidgetWhenEmpty.value = enabled
+                        // 开关变了要立刻重画：0 件时两种形态（透明隐形 / 正常显示）互斥。
                         ExpressWidgetProvider().updateAll(this)
                     },
                     onOpen = { target -> startActivity(Intent(this, target)) },
@@ -109,8 +110,8 @@ class ExpressActivity : ComponentActivity() {
 private fun SettingsPage(
     isBlurEnabled: Boolean,
     state: PermissionState,
-    widgetBackground: String,
-    onWidgetBackgroundChange: (String) -> Unit,
+    hideWidgetWhenEmpty: Boolean,
+    onHideWidgetWhenEmptyChange: (Boolean) -> Unit,
     onOpen: (Class<*>) -> Unit,
     onRequestAppList: () -> Unit,
     onPermissionAction: (PermissionKind) -> Unit,
@@ -137,21 +138,6 @@ private fun SettingsPage(
     val themeValues = arrayOf("System", "Light", "Dark")
     val themeIndex = themeValues.indexOf(settings.themeMode).coerceAtLeast(0)
     val cancelLabel = stringResource(R.string.settings_cancel)
-
-    val backgroundTitle = stringResource(R.string.settings_widget_background)
-    val backgroundLabels: Array<CharSequence> = arrayOf(
-        stringResource(R.string.settings_widget_background_auto),
-        stringResource(R.string.settings_widget_background_system),
-        stringResource(R.string.settings_widget_background_custom),
-    )
-    val backgroundValues = arrayOf(
-        HyperOsGlass.MODE_AUTO, HyperOsGlass.MODE_SYSTEM, HyperOsGlass.MODE_CUSTOM,
-    )
-    val backgroundIndex = backgroundValues.indexOf(widgetBackground).coerceAtLeast(0)
-    val activeBackground = stringResource(
-        if (HyperOsGlass.shouldUseSystemGlass(context)) R.string.settings_widget_background_glass_on
-        else R.string.settings_widget_background_glass_off,
-    )
 
     PageScaffold(
         title = stringResource(R.string.settings_title),
@@ -243,21 +229,11 @@ private fun SettingsPage(
                                 }
                             },
                         )
-                        ArrowPreference(
-                            title = backgroundTitle,
-                            summary = stringResource(
-                                R.string.settings_widget_background_summary,
-                                backgroundLabels[backgroundIndex].toString(),
-                                activeBackground,
-                            ),
-                            onClick = {
-                                showChoice(
-                                    context, backgroundTitle, backgroundLabels,
-                                    backgroundIndex, cancelLabel,
-                                ) { which ->
-                                    onWidgetBackgroundChange(backgroundValues[which])
-                                }
-                            },
+                        SwitchPreference(
+                            checked = hideWidgetWhenEmpty,
+                            onCheckedChange = onHideWidgetWhenEmptyChange,
+                            title = stringResource(R.string.settings_hide_widget_when_empty),
+                            summary = stringResource(R.string.settings_hide_widget_when_empty_summary),
                         )
                     }
                 }

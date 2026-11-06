@@ -72,10 +72,14 @@ internal class ExpressProvider : ContentProvider() {
             CODE_ENTRIES -> {
                 // De-dupe an SMS that the provider would otherwise insert twice (some ROMs fire the
                 // insert for both the inbox and a notify row). A row with the same sms_hash stays.
+                // 只与「待取件列表」比对：同一地址可能隔很久（例如一年）再次收到内容完全相同、
+                // 取件码也相同的短信，旧行那时已被标记 picked=1，不能让它把新件过滤掉。
+                // 逻辑照旧，唯一变化是查询增加 ${C.COL_PICKED}=0 条件。
                 val hash = v.getAsString(C.COL_SMS_HASH)
                 if (!hash.isNullOrEmpty()) {
                     val existing = db.query(
-                        C.TABLE_ENTRIES, arrayOf(C.COL_ID), "${C.COL_SMS_HASH}=?",
+                        C.TABLE_ENTRIES, arrayOf(C.COL_ID),
+                        "${C.COL_SMS_HASH}=? AND ${C.COL_PICKED}=0",
                         arrayOf(hash), null, null, null, "1",
                     )
                     if (existing.moveToFirst()) {

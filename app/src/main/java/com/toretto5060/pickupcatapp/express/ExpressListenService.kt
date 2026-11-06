@@ -60,7 +60,8 @@ internal class ExpressListenService : NotificationListenerService() {
      * 补录停机期间的通知：只看通知栏现存的 [activeNotifications]，且必须与实时通知走完全一样的
      * 权限总闸 / 解析 App 白名单 / 规则解析（[parseSbn]）。去重两道：
      * 1. 这里按「未取件列表」的 (code, address, cabinet) 先判，已存在直接跳过；
-     * 2. [ExpressStore.insertPickup] 落到 Provider 后仍有 sms_hash + (code,address,cabinet,picked=0) 唯一键。
+     * 2. [ExpressStore.insertPickup] 落到 Provider 后仍有 sms_hash(picked=0) +
+     *    (code,address,cabinet,picked=0) 两层去重，全部只比对「待取件列表」，已取件历史不参与。
      */
     private fun backfillActiveNotifications() {
         if (!PermissionGuard.captureEnabled(this)) return

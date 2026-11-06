@@ -7,13 +7,15 @@
      widget_list 用 match_parent 填满可见区并保留滚动、不锁死高度（否则 HyperOS 报告尺寸≠实际
      可见区会把最后一行永久裁掉，见避坑 C32）；行高固定写在行布局里、不读桌面报告尺寸（HyperOS
      尺寸回调不可靠，resize 来回必漂移，见 C33）；行内卡片背景 express_widget_row_bg，行间靠
-     ListView 的 dividerHeight 留 10dp 间隙露出圆角（用户看图指出 15dp 两张卡片间的缝偏大，
-     要求「小一点点」；这是卡片之间的缝，与 row_root 单张卡片高度 58dp 是两个独立参数，见 C35/C36）；
+     ListView 的 dividerHeight 当前 12dp（用户手动调过 15→10→12）；这是两张卡片之间的缝，
+     与 row_root 单张卡片高度 58dp 是两个独立参数，见 C35/C36；空态由 Provider 在运行时
+     清空标题两个 TextView 文本（父容器保持 VISIBLE）、隐藏列表/背板并清掉根底色；非空时每项
+     都要显式反向恢复（桌面 reapply 复用旧视图树、不重新 inflate，见 C40）。
      滚动保持系统默认，不做手势拦截（此前冲突是误报）。
      标题区与列表从顶部开始（无 center_vertical）；paddingTop 10dp：既不让标题贴着圆角顶，
-     也不会像居中那样把顶部空白放大；paddingBottom 16dp（用户截图指出最后一张卡片到背景底边的
-     留白偏大，24→16dp），兼作回弹缓冲（MIUI 忽略 ListView 的 clipToPadding/paddingBottom，
-     只能靠根布局 padding，别再降到 12dp 以下）。 -->
+     也不会像居中那样把顶部空白放大；paddingBottom 当前 18dp（用户手动调过 24→16→18），
+     兼作回弹缓冲（MIUI 忽略 ListView 的 clipToPadding/paddingBottom，只能靠根布局 padding，
+     别再降到 12dp 以下）。 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/background"
     android:layout_width="match_parent"
@@ -38,6 +40,7 @@
         android:clipChildren="false">
 
         <LinearLayout
+            android:id="@+id/widget_title_bar"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"

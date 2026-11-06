@@ -90,11 +90,6 @@
     <string name="settings_permission_off">Off</string>
     <string name="settings_app_list_need_grant">Not granted. Tap to request App list access. Empty = parse notifications from every app (SMS included)</string>
     <string name="express_widget_name">Pending pickups</string>
-    <string name="settings_widget_background">Widget background</string>
-    <string name="settings_widget_background_auto">Follow system (auto)</string>
-    <string name="settings_widget_background_system">System soft glass (force)</string>
-    <string name="settings_widget_background_custom">Built-in glass</string>
-    <string name="settings_widget_background_glass_on">HyperOS 4 soft glass</string>
-    <string name="settings_widget_background_glass_off">Built-in glass</string>
-    <string name="settings_widget_background_summary">%1$s · Active: %2$s\nHyperOS 4 soft glass is rendered by the launcher; other devices fall back to built-in glass.</string>
+    <string name="settings_hide_widget_when_empty">Hide widget when no pickups</string>
+    <string name="settings_hide_widget_when_empty_summary">On: fully transparent with no text when nothing is pending; Off: show a 0 count and the empty hint</string>
 </resources>

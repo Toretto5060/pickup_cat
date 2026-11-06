@@ -14,8 +14,8 @@ data class AppSettings(
     val isLiquidGlass: Boolean = false,
     val isBlurEnabled: Boolean = true,
     val language: String = "",
-    /** 小部件背景：Auto = 澎湃OS4 用系统柔光玻璃、其余回退自绘；System/Custom 为强制模式。 */
-    val widgetBackground: String = "Auto",
+    /** 无待取件时隐藏组件：true = 清空文字 + 整块透明；false = 正常显示「0 件待取」+ 空态行。 */
+    val hideWidgetWhenEmpty: Boolean = true,
 ) {
     fun toJson(): String = JSONObject().apply {
         put("themeMode", themeMode)
@@ -23,7 +23,7 @@ data class AppSettings(
         put("isLiquidGlass", isLiquidGlass)
         put("isBlurEnabled", isBlurEnabled)
         put("language", language)
-        put("widgetBackground", widgetBackground)
+        put("hideWidgetWhenEmpty", hideWidgetWhenEmpty)
     }.toString(2)
 
     companion object {
@@ -32,7 +32,7 @@ data class AppSettings(
         private const val KEY_FLOATING_NAVBAR = "floating_navbar"
         private const val KEY_LIQUID_GLASS = "liquid_glass"
         private const val KEY_BLUR_ENABLED = "blur_enabled"
-        private const val KEY_WIDGET_BACKGROUND = "widget_background"
+        private const val KEY_HIDE_WIDGET_WHEN_EMPTY = "hide_widget_when_empty"
 
         fun fromJson(json: String): AppSettings = try {
             val obj = JSONObject(json)
@@ -42,7 +42,7 @@ data class AppSettings(
                 isLiquidGlass = obj.optBoolean("isLiquidGlass", false),
                 isBlurEnabled = obj.optBoolean("isBlurEnabled", true),
                 language = obj.optString("language", ""),
-                widgetBackground = obj.optString("widgetBackground", "Auto"),
+                hideWidgetWhenEmpty = obj.optBoolean("hideWidgetWhenEmpty", true),
             )
         } catch (_: Exception) {
             AppSettings()
@@ -56,7 +56,7 @@ data class AppSettings(
                 isLiquidGlass = prefs.getBoolean(KEY_LIQUID_GLASS, false),
                 isBlurEnabled = prefs.getBoolean(KEY_BLUR_ENABLED, true),
                 language = LocaleHelper.getSavedLanguage(context).code,
-                widgetBackground = prefs.getString(KEY_WIDGET_BACKGROUND, "Auto") ?: "Auto",
+                hideWidgetWhenEmpty = prefs.getBoolean(KEY_HIDE_WIDGET_WHEN_EMPTY, true),
             )
         }
 
@@ -66,7 +66,7 @@ data class AppSettings(
                 putBoolean(KEY_FLOATING_NAVBAR, settings.isFloatingNavbar)
                 putBoolean(KEY_LIQUID_GLASS, settings.isLiquidGlass)
                 putBoolean(KEY_BLUR_ENABLED, settings.isBlurEnabled)
-                putString(KEY_WIDGET_BACKGROUND, settings.widgetBackground)
+                putBoolean(KEY_HIDE_WIDGET_WHEN_EMPTY, settings.hideWidgetWhenEmpty)
             }
             val lang = LocaleHelper.Language.entries.find { it.code == settings.language }
                 ?: LocaleHelper.Language.SYSTEM

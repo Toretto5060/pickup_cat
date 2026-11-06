@@ -23,9 +23,9 @@
   已被清除或被新通知覆盖的历史通知拿不到。
 - 桌面小部件：高度最多 3 格、宽度不限；可见条数与高度匹配（3 格 3 条 / 2 格 2 条），
   剩余条目在小部件内上下滑动查看；顶部显示「N 件待取」，每行有「已取」按钮。
-  背景默认自绘玻璃；检测到澎湃 OS4 时改用系统柔光玻璃（背板由桌面渲染），
-  也可在「设置 → 小部件背景」里强制切换
-- 设置：解析通知 App、通知监听权限、短信模板与解析规则、语言、主题模式、小部件背景
+  背景固定「跟随系统」：检测到澎湃 OS4 时用系统柔光玻璃（背板由桌面渲染），
+  其它设备自动回退自绘玻璃；无设置项、无强制模式
+- 设置：解析通知 App、通知监听权限、短信模板与解析规则、语言、主题模式、无待取件时隐藏组件
 
 ## 构建
 
@@ -72,8 +72,15 @@
 > SIZES）都不可靠，依赖它们算行高在 5×2↔5×3 来回调整时必然漂移、无法恢复。
 > 行卡片背景：浅色 `drawable/express_widget_row_bg.xml` `#80FFFFFF`、深色
 > `drawable-night/express_widget_row_bg.xml` `#801C1C1E`（均 50% 不透明，14dp 圆角）。
-> 两张卡片**之间的距离**由 `express_widget.xml` 里 `widget_list` 的 `dividerHeight`（当前 10dp）控制，
-> 与 `row_root` 行高是两个独立参数，别混淆。
+> 两张卡片**之间的距离**由 `express_widget.xml` 里 `widget_list` 的 `dividerHeight`（当前 12dp）控制，
+> 与 `row_root` 行高是两个独立参数，别混淆；底部留白由 `widget_root` `paddingBottom`（当前 18dp）控制。
+> **0 件待取**：由设置开关 `AppSettings.hideWidgetWhenEmpty`（默认开启）决定。
+> 开启：`build()` 早返回，清空标题两个 TextView 文本（父容器保持 VISIBLE）、隐藏列表/自绘玻璃层，
+> 并用 `setBackgroundColor(Color.TRANSPARENT)` 清掉根淡底色 → 整个小部件透明隐形。
+> 关闭：正常显示「0 件待取」+ 空态行「还没有待取件」，背景照常。
+> **非空分支必须逐项显式反向恢复**（桌面 reapply 复用旧视图树，不会重新 inflate）：
+> `setBackgroundResource(express_widget_glass_bg)`、标题父容器 VISIBLE、列表 VISIBLE、
+> 「件待取」文本写回，否则会出现背景不回来 / 只显示数字（见避坑 C40）。
 > 以下小节为**历史迭代快照**，仅保留作背景参考。
 
 - **尺寸**：`express_widget_info.xml` 的 `minHeight=210dp` / `maxResizeHeight=210dp`（3 格 × 70dp）、
@@ -103,7 +110,8 @@
   隐藏自绘玻璃层；
   `HyperOsGlass` 用 `getprop ro.mi.os.version.name` 检测澎湃 OS4，检测不到自动回退自绘玻璃。
   桌面是否真的叠加玻璃、以及旗舰芯片 / 静态壁纸等硬件门槛，需要真机确认；
-  设置里也提供「系统柔光玻璃（强制）」和「自绘玻璃」两个可切换的兜底选项。
+  （历史快照）当初设置里曾有「系统柔光玻璃（强制）」「自绘玻璃」两个选项，现已取消：
+  `HyperOsGlass` 只保留 `isSoftGlassAvailable()` 自动判定，由 Provider 直接采用，不再给选项。
 - 小米《小部件审核规范》写明「不支持在小部件内上下滑动」，那是**收录上架**的规范而非技术限制；
   本项目按需求实现了滑动列表，若要上架小米小部件中心需要另行评估。
 

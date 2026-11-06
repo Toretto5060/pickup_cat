@@ -90,11 +90,6 @@
     <string name="settings_battery_on">已加入电池优化白名单</string>
     <string name="settings_battery_off">未加入，点击申请</string>
     <string name="express_widget_name">待取件</string>
-    <string name="settings_widget_background">小部件背景</string>
-    <string name="settings_widget_background_auto">跟随系统（自动）</string>
-    <string name="settings_widget_background_system">系统柔光玻璃（强制）</string>
-    <string name="settings_widget_background_custom">自绘玻璃</string>
-    <string name="settings_widget_background_glass_on">澎湃OS4 柔光玻璃</string>
-    <string name="settings_widget_background_glass_off">自绘玻璃</string>
-    <string name="settings_widget_background_summary">%1$s · 当前生效：%2$s\n澎湃OS4 的柔光玻璃由桌面渲染，其它设备自动回退自绘玻璃</string>
+    <string name="settings_hide_widget_when_empty">无待取件时隐藏组件</string>
+    <string name="settings_hide_widget_when_empty_summary">开启：无待取件时小组件完全透明、不显示文字；关闭：正常显示「0 件待取」和空态提示</string>
 </resources>

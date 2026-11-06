@@ -81,7 +81,7 @@ internal object ExpressStore {
             extraRules = loadCustomRules(ctx),
         )
 
-    /** Persist a parsed pickup; de-duped by the provider on [C.COL_SMS_HASH]. */
+    /** Persist a parsed pickup; de-duped by the provider on [C.COL_SMS_HASH] **within pending rows only**. */
     fun insertPickup(ctx: Context, p: ParsedPickup) {
         val v = ContentValues().apply {
             put(C.COL_CODE, p.code)
