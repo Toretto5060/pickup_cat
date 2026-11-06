@@ -99,6 +99,22 @@
             </intent-filter>
         </service>
 
+        <!-- 双击锁屏：只提供 GLOBAL_ACTION_LOCK_SCREEN，不读取窗口内容。
+             需用户在 系统设置 → 无障碍 里启用本服务；设置页开关开启时会引导过去。
+             exported=true 供系统绑定，BIND_ACCESSIBILITY_SERVICE 保证第三方无法绑定。 -->
+        <service
+            android:name=".app.ExpressLockAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:label="@string/accessibility_service_label">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/express_lock_accessibility" />
+        </service>
+
         <!-- 进程守护前台服务：specialUse 类型（Android 14+ 要求 property 说明用途） -->
         <service
             android:name=".app.KeepAliveService"

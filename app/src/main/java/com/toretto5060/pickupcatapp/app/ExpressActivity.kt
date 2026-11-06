@@ -42,6 +42,8 @@ class ExpressActivity : ComponentActivity() {
         ),
     )
     private val hideWidgetWhenEmpty = mutableStateOf(true)
+    private val doubleTapLockScreen = mutableStateOf(false)
+    private val accessibilityGranted = mutableStateOf(false)
     private var pendingOpenPicker = false
 
     override fun attachBaseContext(newBase: Context) {
@@ -55,6 +57,8 @@ class ExpressActivity : ComponentActivity() {
         val appSettings = AppSettings.load(this)
         val blur = appSettings.isBlurEnabled
         hideWidgetWhenEmpty.value = appSettings.hideWidgetWhenEmpty
+        doubleTapLockScreen.value = appSettings.doubleTapLockScreen
+        accessibilityGranted.value = ExpressLockAccessibilityService.isEnabled(this)
         setContent {
             AppTheme {
                 SettingsPage(
@@ -64,8 +68,28 @@ class ExpressActivity : ComponentActivity() {
                     onHideWidgetWhenEmptyChange = { enabled ->
                         AppSettings.save(this, AppSettings.load(this).copy(hideWidgetWhenEmpty = enabled))
                         hideWidgetWhenEmpty.value = enabled
+                        // 关闭隐藏组件时同时把「双击锁屏」重置为关（AppSettings.save 里也有数据层
+                        // 约束）；重新开启时它就是默认关闭，不会恢复上次的状态。
+                        if (!enabled) doubleTapLockScreen.value = false
                         // 开关变了要立刻重画：0 件时两种形态（透明隐形 / 正常显示）互斥。
                         ExpressWidgetProvider().updateAll(this)
+                    },
+                    doubleTapLockScreen = doubleTapLockScreen.value,
+                    accessibilityGranted = accessibilityGranted.value,
+                    onDoubleTapLockChange = { enabled ->
+                        // 防御：隐藏组件关闭时该开关在 UI 上不显示，任何残留调用都不应写入。
+                        if (hideWidgetWhenEmpty.value) {
+                            AppSettings.save(
+                                this,
+                                AppSettings.load(this).copy(doubleTapLockScreen = enabled),
+                            )
+                            doubleTapLockScreen.value = enabled
+                            // 开启时若还没授权，直接带用户去系统无障碍设置开启本 App 的服务；
+                            // 从系统设置返回时 onResume 会刷新授权状态与 summary。
+                            if (enabled && !ExpressLockAccessibilityService.isEnabled(this)) {
+                                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                            }
+                        }
                     },
                     onOpen = { target -> startActivity(Intent(this, target)) },
                     onRequestAppList = {
@@ -82,6 +106,8 @@ class ExpressActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         permissionState.value = PermissionGuard.state(this)
+        // 从系统无障碍设置返回后刷新「双击锁屏」的授权状态文案。
+        accessibilityGranted.value = ExpressLockAccessibilityService.isEnabled(this)
     }
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
@@ -112,6 +138,9 @@ private fun SettingsPage(
     state: PermissionState,
     hideWidgetWhenEmpty: Boolean,
     onHideWidgetWhenEmptyChange: (Boolean) -> Unit,
+    doubleTapLockScreen: Boolean,
+    accessibilityGranted: Boolean,
+    onDoubleTapLockChange: (Boolean) -> Unit,
     onOpen: (Class<*>) -> Unit,
     onRequestAppList: () -> Unit,
     onPermissionAction: (PermissionKind) -> Unit,
@@ -235,6 +264,18 @@ private fun SettingsPage(
                             title = stringResource(R.string.settings_hide_widget_when_empty),
                             summary = stringResource(R.string.settings_hide_widget_when_empty_summary),
                         )
+                        // 双击锁屏依赖「空态」才存在，隐藏组件关闭时整个开关不显示。
+                        if (hideWidgetWhenEmpty) {
+                            SwitchPreference(
+                                checked = doubleTapLockScreen,
+                                onCheckedChange = onDoubleTapLockChange,
+                                title = stringResource(R.string.settings_double_tap_lock),
+                                summary = stringResource(
+                                    if (accessibilityGranted) R.string.settings_double_tap_lock_granted
+                                    else R.string.settings_double_tap_lock_need_grant,
+                                ),
+                            )
+                        }
                     }
                 }
             }

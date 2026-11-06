@@ -92,4 +92,9 @@
     <string name="express_widget_name">Pending pickups</string>
     <string name="settings_hide_widget_when_empty">Hide widget when no pickups</string>
     <string name="settings_hide_widget_when_empty_summary">On: fully transparent with no text when nothing is pending; Off: show a 0 count and the empty hint</string>
+    <string name="settings_double_tap_lock">Double-tap to lock</string>
+    <string name="settings_double_tap_lock_granted">Authorized - double-tap the empty widget to lock the screen</string>
+    <string name="settings_double_tap_lock_need_grant">Not authorized - turning this on opens Accessibility settings; enable PickupCat double-tap lock there</string>
+    <string name="accessibility_service_label">PickupCat - Double-tap lock</string>
+    <string name="accessibility_service_description">Only used to lock the screen on a double-tap of the empty widget; does not read screen content or collect data.</string>
 </resources>

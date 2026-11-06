@@ -9,11 +9,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
+import android.os.SystemClock
 import android.view.View
 import android.widget.RemoteViews
 import com.toretto5060.pickupcatapp.R
 import com.toretto5060.pickupcatapp.app.AppSettings
 import com.toretto5060.pickupcatapp.app.ExpressListActivity
+import com.toretto5060.pickupcatapp.app.ExpressLockAccessibilityService
 import com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity
 
 /**
@@ -35,6 +37,10 @@ import com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity
  * - **reapply 铁律**：桌面在 layoutId 不变时复用旧视图树，只执行 actions。因此非空分支必须
  *   把空态改过的每一项显式反向恢复：`setBackgroundResource(express_widget_glass_bg)`、
  *   标题父容器 VISIBLE、列表 VISIBLE、后缀文本写回。漏一项就会出现「背景不回来 / 只显示数字」。
+ * - **点击整块小部件**：有待取件、或「无待取件时隐藏组件」开关关闭（哪怕 0 件）→ 照常跳待取件页；
+ *   隐藏开关开启且 0 件 → 挂 [ACTION_EMPTY_CLICK] 空广播，不跳转；若「双击锁屏」开关开启，
+ *   该广播里做 350ms 双击计时并调 [ExpressLockAccessibilityService.lockScreen]。两条路径都**显式**
+ *   `setOnClickPendingIntent`，因为 reapply 复用旧视图树时旧的 listener 不会自动消失。
  * - 逐码「已取」按行 id 精确标记；数据变化由各写入方调 [updateAll] 主动刷新。
  */
 class ExpressWidgetProvider : AppWidgetProvider() {
@@ -57,6 +63,11 @@ class ExpressWidgetProvider : AppWidgetProvider() {
                 updateAll(context)
             }
             ACTION_MIUI_UPDATE -> updateAll(context)
+            // 空态（隐藏组件开启且 0 件）点击整个小部件：绝不跳待取件页；若「双击锁屏」开启，
+            // 在这里做双击计时并执行锁屏（服务未授权时静默无效）。
+            // 这个广播 PendingIntent 是必须的：桌面 reapply 复用旧视图树，不显式覆盖的话
+            // 上一次挂的 openApp listener 会残留、点击照样跳转。
+            ACTION_EMPTY_CLICK -> onEmptyWidgetClick(context)
         }
     }
 
@@ -80,13 +91,14 @@ class ExpressWidgetProvider : AppWidgetProvider() {
     private fun build(context: Context, widgetId: Int): RemoteViews {
         val root = RemoteViews(context.packageName, R.layout.express_widget)
         val pending = ExpressStore.queryAll(context, picked = false)
-        root.setOnClickPendingIntent(R.id.widget_root, openApp(context))
 
-        // 设置项「0 件时隐藏小组件」关闭时走下面的正常渲染：显示「0 件待取」+ 空态行
+        // 设置项「无待取件时隐藏组件」关闭时走下面的正常渲染：显示「0 件待取」+ 空态行
         // 「还没有待取件」，背景照常；开启时才透明隐形。
         if (pending.isEmpty() && AppSettings.load(context).hideWidgetWhenEmpty) {
             // 0 件待取（开关开启）：不显示「0 件待取」/「件待取」、不显示空态行，也不构建集合；
-            // 自绘玻璃层 + 根淡底色一起清掉 → 整个小部件透明隐形（占位仍可点击打开 App）。
+            // 自绘玻璃层 + 根淡底色一起清掉 → 整个小部件透明隐形。
+            // 点击：必须显式挂一个「空点击」PendingIntent 覆盖上次渲染遗留的 openApp listener，
+            // 否则 reapply 复用旧视图树时点透明占位仍会跳待取件页。
             // 标题栏父容器保持 VISIBLE、只清空文本：桌面 reapply 复用旧视图树时，GONE 过的
             // ViewGroup 恢复后常只重绘「有 action」的子 view（曾导致只显示数字、件待取消失），
             // 这里同时显式设 VISIBLE，兼容上一版已把该父容器设成 GONE 的旧 widget。
@@ -97,11 +109,14 @@ class ExpressWidgetProvider : AppWidgetProvider() {
             root.setViewVisibility(R.id.widget_custom_bg, View.GONE)
             // setBackgroundColor 是 View 的 @RemotableViewMethod，可覆盖 XML 的 drawable 背景。
             root.setInt(android.R.id.background, "setBackgroundColor", Color.TRANSPARENT)
+            root.setOnClickPendingIntent(R.id.widget_root, emptyClick(context))
             return root
         }
 
         // 桌面复用旧视图树（layoutId 相同只 reapply actions，不重新 inflate），所以空态改过的
         // 每一项都必须在这里**显式反向恢复**，不能指望 XML 默认值。
+        // 有待取件、或「隐藏组件」开关关闭（哪怕 0 件）→ 点击整块小部件照常跳待取件页。
+        root.setOnClickPendingIntent(R.id.widget_root, openApp(context))
         root.setInt(
             android.R.id.background,
             "setBackgroundResource",
@@ -159,6 +174,36 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
+    /**
+     * 收到空态点击：只有「双击锁屏」开关开启才做双击计时。
+     * 双击成立时调用无障碍服务的 GLOBAL_ACTION_LOCK_SCREEN；服务未授权时
+     * [ExpressLockAccessibilityService.lockScreen] 返回 false，
+     * 静默无效（空态点击本来也不跳页）。三连击不会触发两次：命中后把时间戳清零。
+     */
+    private fun onEmptyWidgetClick(context: Context) {
+        if (!AppSettings.load(context).doubleTapLockScreen) return
+        val now = SystemClock.elapsedRealtime()
+        val last = lastEmptyClickAt
+        if (last > 0L && now - last <= DOUBLE_TAP_TIMEOUT_MS) {
+            lastEmptyClickAt = 0L
+            ExpressLockAccessibilityService.lockScreen()
+        } else {
+            lastEmptyClickAt = now
+        }
+    }
+
+    /**
+     * 空态点击：发一条只发给自己的空广播（[ACTION_EMPTY_CLICK]），不跳页、不重绘。
+     * 用广播而不是「不设置」是因为桌面 reapply 复用旧视图树时，旧的 openApp listener 不会自动消失；
+     * 显式挂一个新 PendingIntent 才能把它覆盖掉（见 C40）。
+     */
+    private fun emptyClick(context: Context): PendingIntent = PendingIntent.getBroadcast(
+        context,
+        REQ_EMPTY_CLICK,
+        Intent(context, ExpressWidgetProvider::class.java).setAction(ACTION_EMPTY_CLICK),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
+
     /** 模板必须 MUTABLE（Android 12+），否则 item 的 fillInIntent extras 无法合入。 */
     private fun clickTemplate(context: Context): PendingIntent {
         val mutable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -182,6 +227,14 @@ class ExpressWidgetProvider : AppWidgetProvider() {
 
         private const val ACTION_PICKED = "com.toretto5060.pickupcatapp.EXPRESS_PICKED"
         private const val ACTION_MIUI_UPDATE = "miui.appwidget.action.APPWIDGET_UPDATE"
+        private const val ACTION_EMPTY_CLICK = "com.toretto5060.pickupcatapp.WIDGET_EMPTY_CLICK"
+        private const val REQ_EMPTY_CLICK = 3
+        /** 双击判定窗口（ms）；命中后清零，避免三连击触发两次锁屏。 */
+        private const val DOUBLE_TAP_TIMEOUT_MS = 350L
+
+        @Volatile
+        private var lastEmptyClickAt = 0L
+
         // 0 件待取且开关关闭时，空态行的稳定 item id（与真实行 id 不冲突）。
         private const val EMPTY_ITEM_ID = -1L
         // 集合快照随 RemoteViews 走 Binder，限制上限避免异常多的历史记录把事务撑爆；

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 双击锁屏用的无障碍服务配置：只要系统允许执行 global action，不读取窗口内容、不请求手势能力。
+     eventTypes 留一个最小类型（服务才能被系统连接），onAccessibilityEvent 在代码里直接忽略。 -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/accessibility_service_description"
+    android:accessibilityEventTypes="typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:notificationTimeout="100"
+    android:canRetrieveWindowContent="false"
+    android:canPerformGestures="false" />

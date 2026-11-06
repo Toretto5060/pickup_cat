@@ -92,4 +92,9 @@
     <string name="express_widget_name">待取件</string>
     <string name="settings_hide_widget_when_empty">无待取件时隐藏组件</string>
     <string name="settings_hide_widget_when_empty_summary">开启：无待取件时小组件完全透明、不显示文字；关闭：正常显示「0 件待取」和空态提示</string>
+    <string name="settings_double_tap_lock">双击锁屏</string>
+    <string name="settings_double_tap_lock_granted">已授权 · 隐藏组件开启且 0 件时，双击小部件空白处锁屏</string>
+    <string name="settings_double_tap_lock_need_grant">未授权 · 开启后前往系统设置，开启「取件喵 · 双击锁屏」无障碍服务</string>
+    <string name="accessibility_service_label">取件喵 · 双击锁屏</string>
+    <string name="accessibility_service_description">仅用于「无待取件时隐藏组件」开启后双击小部件锁屏；不读取屏幕内容、不收集任何信息。</string>
 </resources>
