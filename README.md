@@ -21,8 +21,11 @@
   未取件列表已有相同取件码就跳过、没有才入库并刷小部件，弥补进程没运行期间漏收的通知；
   实时通知与补录共用同一套权限总闸 / 白名单 / 解析逻辑。只能补回仍挂在通知栏的通知，
   已被清除或被新通知覆盖的历史通知拿不到。
-- 桌面小部件：待取件逐码列表 + 每行「已取」按钮
-- 设置：解析通知 App、通知监听权限、短信模板与解析规则、语言、主题模式
+- 桌面小部件：高度最多 3 格、宽度不限；可见条数与高度匹配（3 格 3 条 / 2 格 2 条），
+  剩余条目在小部件内上下滑动查看；顶部显示「N 件待取」，每行有「已取」按钮。
+  背景默认自绘玻璃；检测到澎湃 OS4 时改用系统柔光玻璃（背板由桌面渲染），
+  也可在「设置 → 小部件背景」里强制切换
+- 设置：解析通知 App、通知监听权限、短信模板与解析规则、语言、主题模式、小部件背景
 
 ## 构建
 
@@ -57,7 +60,41 @@
    万一被杀，亮屏约 1 秒内（划掉卡片时约 0.3 秒）自动拉起并重新绑定监听服务，不用解锁或手动打开 App，
    代价是亮屏期间每秒一次轻量唤醒；熄屏自动降频到 60 秒。若在系统应用详情点了「强行停止」，
    系统会取消全部闹钟并屏蔽广播，只能手动打开一次 App 恢复。
-4. 长按桌面 → 小部件 → 添加「取件喵」。
+4. 长按桌面 → 小部件 → 添加「取件喵」。升级本版本后建议**删除旧小部件重新添加**，
+   让桌面重新读取新的尺寸配置与列表布局。
+
+## 桌面小部件适配说明
+
+- **尺寸**：`express_widget_info.xml` 的 `minHeight=210dp` / `maxResizeHeight=210dp`（3 格 × 70dp）、
+  `minResizeHeight=140dp`（2 格），`resizeMode="horizontal|vertical"`，**不设 `maxResizeWidth`**。
+  `maxResizeHeight` 从 Android 12(API 31) 起生效；低版本桌面会忽略它，代码里由
+  `ExpressWidgetSizing` 把可见行数 clamp 到 3 兜底（不能真正阻止拖拽到更高）。
+- **可见条数（2026-11-06 校准）**：`ExpressWidgetSizing.heightDp()` 优先取桌面报告的
+  `OPTION_APPWIDGET_SIZES`，否则取 `max(OPTION_APPWIDGET_MIN_HEIGHT, OPTION_APPWIDGET_MAX_HEIGHT)`——
+  **不能只读 minHeight**，那往往只是 `widget_info` 里声明的值，比小米桌面 5×3 的实际窗口矮，
+  会算出行高偏小、露出第 4 条。按 80dp/格换算格数并 clamp 到 3，
+  行高 =「(高度 − 50dp chrome) / 格数」，按 widgetId 存 SharedPreferences。
+  除给每行套 `setViewLayoutHeight`，还用 `setViewLayoutHeight` 把 **ListView 自身的可视高度**
+  锁成 `cells × rowHeight`：桌面给的窗口再高也只会有留白，绝不会多露出一条；
+  剩余条目仍在 ListView 里上下滑动查看。API 29/30 无 `setViewLayoutHeight`，退回 56dp 固定行高。
+- **排版**：标题「N 件待取」15sp 粗体 / 30dp 高，左右 padding 18dp（避开 24dp 圆角）；
+  取件码 19sp、公司 / 时间 / 地址 12sp、「已取」13sp，行基线 56dp。
+- **滚动与点击**：RemoteViews 里只有 AdapterView 系列能滚动，所以从「固定行 + addView(≤5 行)」
+  换成 `ListView`。Android 12+ 用官方推荐的 `RemoteViews.RemoteCollectionItems` 把所有条目
+  作为集合快照随 RemoteViews 提交（桌面无需绑定 Service，也避开 API 35 起对 Intent 版
+  `setRemoteAdapter` 的弃用）；Android 11 及以下保留 `RemoteViewsService` 兜底。
+  条目不再截断为 5 条（上限 100 条，防 Binder 事务过大），点击走
+  `setPendingIntentTemplate` + `setOnClickFillInIntent`，由透明中转页
+  `ExpressWidgetClickActivity` 分发「打开列表 / 逐码已取」。
+- **柔光玻璃**：HyperOS 4 的柔光玻璃是**桌面渲染的材质，没有提供给第三方标准 AppWidget 的公开 SDK**。
+  能做的是把背板让给桌面——根布局用小米小部件规范的固定 id `@android:id/background`、
+  背景只留 15% 半透明（规范 7.1 要求有背景色且不能全透明，同时兼顾桌面不叠玻璃时的可读性）、
+  隐藏自绘玻璃层；
+  `HyperOsGlass` 用 `getprop ro.mi.os.version.name` 检测澎湃 OS4，检测不到自动回退自绘玻璃。
+  桌面是否真的叠加玻璃、以及旗舰芯片 / 静态壁纸等硬件门槛，需要真机确认；
+  设置里也提供「系统柔光玻璃（强制）」和「自绘玻璃」两个可切换的兜底选项。
+- 小米《小部件审核规范》写明「不支持在小部件内上下滑动」，那是**收录上架**的规范而非技术限制；
+  本项目按需求实现了滑动列表，若要上架小米小部件中心需要另行评估。
 
 ## 与源项目的差异
 

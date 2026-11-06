@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="express_widget_count_red">#FF3B30</color>
     <color name="express_widget_pick_bg">#FF3482FF</color>
     <color name="express_widget_pick_text">#FFFFFFFF</color>
     <color name="express_widget_secondary">#99000000</color>
@@ -50,6 +51,8 @@
     <string name="express_test_source">来源</string>
     <string name="express_view_all">取件码列表</string>
     <string name="express_view_all_summary">待取件与已取件记录</string>
+    <string name="express_widget_count_suffix">件待取</string>
+    <string name="express_widget_name">待取件</string>
     <string name="keep_alive_channel">后台守护</string>
     <string name="keep_alive_title">取件喵正在后台监听取件码</string>
     <string name="permission_alert_channel">权限异常提醒</string>
@@ -93,5 +96,12 @@
     <string name="settings_theme_light">浅色</string>
     <string name="settings_theme_system">跟随系统</string>
     <string name="settings_title">设置</string>
+    <string name="settings_widget_background">小部件背景</string>
+    <string name="settings_widget_background_auto">跟随系统（自动）</string>
+    <string name="settings_widget_background_custom">自绘玻璃</string>
+    <string name="settings_widget_background_glass_off">自绘玻璃</string>
+    <string name="settings_widget_background_glass_on">澎湃OS4 柔光玻璃</string>
+    <string name="settings_widget_background_summary">%1$s · 当前生效：%2$s\n澎湃OS4 的柔光玻璃由桌面渲染，其它设备自动回退自绘玻璃</string>
+    <string name="settings_widget_background_system">系统柔光玻璃（强制）</string>
     <style name="Theme.PickupCat" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>

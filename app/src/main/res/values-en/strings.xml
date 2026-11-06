@@ -16,6 +16,7 @@
     <string name="express_pick_search">Search app name or package</string>
     <string name="express_picked_all">Pick up all</string>
     <string name="express_pending_count">%1$d to pick up</string>
+    <string name="express_widget_count_suffix">to pick up</string>
     <string name="express_done_count">%1$d picked up</string>
     <string name="express_points">Across %1$d locations</string>
     <string name="express_meta_code">Pickup code</string>
@@ -88,4 +89,12 @@
     <string name="settings_permission_on">On</string>
     <string name="settings_permission_off">Off</string>
     <string name="settings_app_list_need_grant">Not granted. Tap to request App list access. Empty = parse notifications from every app (SMS included)</string>
+    <string name="express_widget_name">Pending pickups</string>
+    <string name="settings_widget_background">Widget background</string>
+    <string name="settings_widget_background_auto">Follow system (auto)</string>
+    <string name="settings_widget_background_system">System soft glass (force)</string>
+    <string name="settings_widget_background_custom">Built-in glass</string>
+    <string name="settings_widget_background_glass_on">HyperOS 4 soft glass</string>
+    <string name="settings_widget_background_glass_off">Built-in glass</string>
+    <string name="settings_widget_background_summary">%1$s · Active: %2$s\nHyperOS 4 soft glass is rendered by the launcher; other devices fall back to built-in glass.</string>
 </resources>

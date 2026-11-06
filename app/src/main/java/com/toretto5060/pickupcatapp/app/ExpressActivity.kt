@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.toretto5060.pickupcatapp.R
+import com.toretto5060.pickupcatapp.express.ExpressWidgetProvider
+import com.toretto5060.pickupcatapp.express.HyperOsGlass
 import com.toretto5060.pickupcatapp.ui.theme.AppTheme
 import com.toretto5060.pickupcatapp.ui.util.PageScaffold
 import com.toretto5060.pickupcatapp.ui.util.firstCard
@@ -38,6 +40,7 @@ class ExpressActivity : ComponentActivity() {
             postNotificationsGranted = true,
         ),
     )
+    private val widgetBackground = mutableStateOf(HyperOsGlass.MODE_AUTO)
     private var pendingOpenPicker = false
 
     override fun attachBaseContext(newBase: Context) {
@@ -48,12 +51,21 @@ class ExpressActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         permissionState.value = PermissionGuard.state(this)
-        val blur = AppSettings.load(this).isBlurEnabled
+        val appSettings = AppSettings.load(this)
+        val blur = appSettings.isBlurEnabled
+        widgetBackground.value = appSettings.widgetBackground
         setContent {
             AppTheme {
                 SettingsPage(
                     isBlurEnabled = blur,
                     state = permissionState.value,
+                    widgetBackground = widgetBackground.value,
+                    onWidgetBackgroundChange = { mode ->
+                        AppSettings.save(this, AppSettings.load(this).copy(widgetBackground = mode))
+                        widgetBackground.value = mode
+                        // 背景模式变了要立刻重画所有已添加的小部件。
+                        ExpressWidgetProvider().updateAll(this)
+                    },
                     onOpen = { target -> startActivity(Intent(this, target)) },
                     onRequestAppList = {
                         pendingOpenPicker = true
@@ -97,6 +109,8 @@ class ExpressActivity : ComponentActivity() {
 private fun SettingsPage(
     isBlurEnabled: Boolean,
     state: PermissionState,
+    widgetBackground: String,
+    onWidgetBackgroundChange: (String) -> Unit,
     onOpen: (Class<*>) -> Unit,
     onRequestAppList: () -> Unit,
     onPermissionAction: (PermissionKind) -> Unit,
@@ -123,6 +137,21 @@ private fun SettingsPage(
     val themeValues = arrayOf("System", "Light", "Dark")
     val themeIndex = themeValues.indexOf(settings.themeMode).coerceAtLeast(0)
     val cancelLabel = stringResource(R.string.settings_cancel)
+
+    val backgroundTitle = stringResource(R.string.settings_widget_background)
+    val backgroundLabels: Array<CharSequence> = arrayOf(
+        stringResource(R.string.settings_widget_background_auto),
+        stringResource(R.string.settings_widget_background_system),
+        stringResource(R.string.settings_widget_background_custom),
+    )
+    val backgroundValues = arrayOf(
+        HyperOsGlass.MODE_AUTO, HyperOsGlass.MODE_SYSTEM, HyperOsGlass.MODE_CUSTOM,
+    )
+    val backgroundIndex = backgroundValues.indexOf(widgetBackground).coerceAtLeast(0)
+    val activeBackground = stringResource(
+        if (HyperOsGlass.shouldUseSystemGlass(context)) R.string.settings_widget_background_glass_on
+        else R.string.settings_widget_background_glass_off,
+    )
 
     PageScaffold(
         title = stringResource(R.string.settings_title),
@@ -211,6 +240,22 @@ private fun SettingsPage(
                                         AppSettings.load(context).copy(themeMode = themeValues[which]),
                                     )
                                     restartHome(context)
+                                }
+                            },
+                        )
+                        ArrowPreference(
+                            title = backgroundTitle,
+                            summary = stringResource(
+                                R.string.settings_widget_background_summary,
+                                backgroundLabels[backgroundIndex].toString(),
+                                activeBackground,
+                            ),
+                            onClick = {
+                                showChoice(
+                                    context, backgroundTitle, backgroundLabels,
+                                    backgroundIndex, cancelLabel,
+                                ) { which ->
+                                    onWidgetBackgroundChange(backgroundValues[which])
                                 }
                             },
                         )

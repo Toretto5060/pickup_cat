@@ -45,6 +45,8 @@
     <string name="express_test_source">Source</string>
     <string name="express_view_all">Pickup codes</string>
     <string name="express_view_all_summary">Pending and picked up records</string>
+    <string name="express_widget_count_suffix">to pick up</string>
+    <string name="express_widget_name">Pending pickups</string>
     <string name="keep_alive_channel">Background guard</string>
     <string name="keep_alive_title">PickupCat is listening for pickup codes</string>
     <string name="permission_alert_channel">Permission alerts</string>
@@ -88,4 +90,11 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_system">System</string>
     <string name="settings_title">Settings</string>
+    <string name="settings_widget_background">Widget background</string>
+    <string name="settings_widget_background_auto">Follow system (auto)</string>
+    <string name="settings_widget_background_custom">Built-in glass</string>
+    <string name="settings_widget_background_glass_off">Built-in glass</string>
+    <string name="settings_widget_background_glass_on">HyperOS 4 soft glass</string>
+    <string name="settings_widget_background_summary">%1$s · Active: %2$s\nHyperOS 4 soft glass is rendered by the launcher; other devices fall back to built-in glass.</string>
+    <string name="settings_widget_background_system">System soft glass (force)</string>
 </resources>

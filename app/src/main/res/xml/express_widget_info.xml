@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 高度最多 3 格（70dp/格 × 3 = 210dp），可缩到 2 格；宽度不设 maxResizeWidth，横向自由拉伸。
+     maxResizeHeight 从 Android 12(API 31) 起生效，低版本桌面忽略时由 ExpressWidgetSizing
+     在代码里把可见行数 clamp 到 3 兜底。根布局宽高 match_parent，符合小米小部件布局规范。 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="368dp"
-    android:minHeight="220dp"
+    android:minHeight="210dp"
     android:minResizeWidth="180dp"
-    android:minResizeHeight="110dp"
+    android:minResizeHeight="140dp"
+    android:maxResizeHeight="210dp"
     android:targetCellWidth="5"
     android:targetCellHeight="3"
     android:updatePeriodMillis="1800000"

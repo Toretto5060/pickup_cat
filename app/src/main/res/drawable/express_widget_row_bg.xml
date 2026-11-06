@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 小部件行卡片背景：用户明确要「白色实心卡片」（参考旧版图2），不要浅灰色。
+     纯白实心 + 14dp 圆角，行间靠 ListView dividerHeight 留小间隙分隔。 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF" />
+    <corners android:radius="14dp" />
+</shape>

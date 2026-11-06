@@ -14,6 +14,8 @@ data class AppSettings(
     val isLiquidGlass: Boolean = false,
     val isBlurEnabled: Boolean = true,
     val language: String = "",
+    /** 小部件背景：Auto = 澎湃OS4 用系统柔光玻璃、其余回退自绘；System/Custom 为强制模式。 */
+    val widgetBackground: String = "Auto",
 ) {
     fun toJson(): String = JSONObject().apply {
         put("themeMode", themeMode)
@@ -21,6 +23,7 @@ data class AppSettings(
         put("isLiquidGlass", isLiquidGlass)
         put("isBlurEnabled", isBlurEnabled)
         put("language", language)
+        put("widgetBackground", widgetBackground)
     }.toString(2)
 
     companion object {
@@ -29,6 +32,7 @@ data class AppSettings(
         private const val KEY_FLOATING_NAVBAR = "floating_navbar"
         private const val KEY_LIQUID_GLASS = "liquid_glass"
         private const val KEY_BLUR_ENABLED = "blur_enabled"
+        private const val KEY_WIDGET_BACKGROUND = "widget_background"
 
         fun fromJson(json: String): AppSettings = try {
             val obj = JSONObject(json)
@@ -38,6 +42,7 @@ data class AppSettings(
                 isLiquidGlass = obj.optBoolean("isLiquidGlass", false),
                 isBlurEnabled = obj.optBoolean("isBlurEnabled", true),
                 language = obj.optString("language", ""),
+                widgetBackground = obj.optString("widgetBackground", "Auto"),
             )
         } catch (_: Exception) {
             AppSettings()
@@ -51,6 +56,7 @@ data class AppSettings(
                 isLiquidGlass = prefs.getBoolean(KEY_LIQUID_GLASS, false),
                 isBlurEnabled = prefs.getBoolean(KEY_BLUR_ENABLED, true),
                 language = LocaleHelper.getSavedLanguage(context).code,
+                widgetBackground = prefs.getString(KEY_WIDGET_BACKGROUND, "Auto") ?: "Auto",
             )
         }
 
@@ -60,6 +66,7 @@ data class AppSettings(
                 putBoolean(KEY_FLOATING_NAVBAR, settings.isFloatingNavbar)
                 putBoolean(KEY_LIQUID_GLASS, settings.isLiquidGlass)
                 putBoolean(KEY_BLUR_ENABLED, settings.isBlurEnabled)
+                putString(KEY_WIDGET_BACKGROUND, settings.widgetBackground)
             }
             val lang = LocaleHelper.Language.entries.find { it.code == settings.language }
                 ?: LocaleHelper.Language.SYSTEM

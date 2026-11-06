@@ -78,18 +78,38 @@
             android:authorities="com.toretto5060.pickupcatapp.express"
             android:exported="false" />
 
-        <!-- 待取件列表小部件（桌面 + 负一屏） -->
+        <!--
+             待取件列表小部件（桌面 + 负一屏）。
+             miui.appwidget.action.APPWIDGET_UPDATE 兼容小米桌面的曝光刷新；
+             根布局用 @android:id/background 让系统统一裁圆角/叠加桌面材质。
+        -->
         <receiver
             android:name="com.toretto5060.pickupcatapp.express.ExpressWidgetProvider"
-            android:exported="false" >
+            android:exported="false"
+            android:label="@string/express_widget_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="miui.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/express_widget_info" />
         </receiver>
+
+        <!-- 可上下滑动的待取件列表数据源（仅 Android 11 及以下需要）；BIND_REMOTEVIEWS 保证只有系统桌面能绑定。 -->
+        <service
+            android:name="com.toretto5060.pickupcatapp.express.ExpressWidgetService"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <!-- 列表项点击的透明中转页：不进最近任务、不留历史，处理完立即 finish。 -->
+        <activity
+            android:name="com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- 取件码捕获主通道：需用户在系统设置里授予通知使用权，不需要 root / LSPosed -->
         <service
