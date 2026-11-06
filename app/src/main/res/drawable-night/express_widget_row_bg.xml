@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 小部件行卡片背景（深色模式）：此前只有 drawable/ 下的纯白实心卡片，深色模式下白卡片
-     配 values-night 的白色文字会糊成一片。这里补 night 版：60% 不透明深黑 #991C1C1E，
-     与浅色 #99FFFFFF 同样透明度，透出底下柔光玻璃；圆角/描边参数与浅色版一致。 -->
+     配 values-night 的白色文字会糊成一片。这里补 night 版：50% 不透明深黑 #801C1C1E，
+     与浅色 #80FFFFFF 同样透明度，透出底下柔光玻璃；圆角/描边参数与浅色版一致。 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#991C1C1E" />
+    <solid android:color="#801C1C1E" />
     <corners android:radius="14dp" />
 </shape>

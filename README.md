@@ -70,8 +70,8 @@
 > `onAppWidgetOptionsChanged`，不再有 `setViewLayoutHeight` / 动态行高 / SharedPreferences 换算，
 > `ExpressWidgetSizing.kt` 已删除）——HyperOS 的尺寸回调（newOptions / getAppWidgetOptions /
 > SIZES）都不可靠，依赖它们算行高在 5×2↔5×3 来回调整时必然漂移、无法恢复。
-> 行卡片背景：浅色 `drawable/express_widget_row_bg.xml` `#99FFFFFF`、深色
-> `drawable-night/express_widget_row_bg.xml` `#991C1C1E`（均 60% 不透明，14dp 圆角）。
+> 行卡片背景：浅色 `drawable/express_widget_row_bg.xml` `#80FFFFFF`、深色
+> `drawable-night/express_widget_row_bg.xml` `#801C1C1E`（均 50% 不透明，14dp 圆角）。
 > 两张卡片**之间的距离**由 `express_widget.xml` 里 `widget_list` 的 `dividerHeight`（当前 10dp）控制，
 > 与 `row_root` 行高是两个独立参数，别混淆。
 > 以下小节为**历史迭代快照**，仅保留作背景参考。

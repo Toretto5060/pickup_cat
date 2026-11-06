@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 小部件行卡片背景（浅色模式）：白卡片 + 14dp 圆角，行间靠 ListView dividerHeight 留间隙分隔。
-     用户要求透明度调到 60%，取 60% 不透明白 #99FFFFFF，让底下自绘/系统玻璃透出 40%。
-     深色模式对应 drawable-night/express_widget_row_bg.xml（60% 不透明黑），勿只改这一份。 -->
+     用户要求透明度「再增加点」，不透明度 60%→50%：#80FFFFFF，让底下自绘/系统玻璃透出 50%。
+     深色模式对应 drawable-night/express_widget_row_bg.xml（50% 不透明黑），勿只改这一份。 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#99FFFFFF" />
+    <solid android:color="#80FFFFFF" />
     <corners android:radius="14dp" />
 </shape>
