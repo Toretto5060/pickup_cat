@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 卡片背景 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+    <!-- 列表行 1 -->
+    <item android:top="44dp" android:left="28dp" android:right="28dp" android:bottom="136dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E4E4E4" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <!-- 列表行 2 -->
+    <item android:top="96dp" android:left="28dp" android:right="28dp" android:bottom="84dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E4E4E4" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <!-- 列表行 3 -->
+    <item android:top="148dp" android:left="28dp" android:right="28dp" android:bottom="32dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E4E4E4" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+</layer-list>

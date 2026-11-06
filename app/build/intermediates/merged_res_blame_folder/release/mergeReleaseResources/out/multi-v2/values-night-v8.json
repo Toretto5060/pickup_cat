@@ -1,0 +1,43 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.toretto5060.pickupcatapp-mergeReleaseResources-35:/values-night-v8/values-night-v8.xml",
+            "map": [
+                {
+                    "source": "/Users/toretto/Documents/code/pickup_cat_app/app/src/main/res/values-night/colors.xml",
+                    "from": {
+                        "startLines": "5,6,4,3,2",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "229,288,168,112,55",
+                        "endColumns": "58,60,60,55,56",
+                        "endOffsets": "283,344,224,163,107"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,114,175,236,292",
+                        "endColumns": "58,60,60,55,56",
+                        "endOffsets": "109,170,231,287,344"
+                    }
+                },
+                {
+                    "source": "/Users/toretto/Documents/code/pickup_cat_app/app/src/main/res/values-night/themes.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "80",
+                        "endOffsets": "131"
+                    },
+                    "to": {
+                        "startLines": "7",
+                        "startColumns": "4",
+                        "startOffsets": "349",
+                        "endColumns": "79",
+                        "endOffsets": "424"
+                    }
+                }
+            ]
+        }
+    ]
+}

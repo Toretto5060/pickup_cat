@@ -1,0 +1,453 @@
+-- Merging decision tree log ---
+provider#com.toretto5060.pickupcatapp.express.ExpressProvider
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:41:9-44:40
+	android:authorities
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:43:13-59
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:44:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:42:13-52
+manifest
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:1-69:12
+MERGED from [top.yukonga.miuix.kmp:miuix-preference-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/510101a57ab834895ad2276c483fc8ed/transformed/miuix-preference/AndroidManifest.xml:2:1-7:12
+MERGED from [top.yukonga.miuix.kmp:miuix-ui-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/541c5cbcce2379000eb8ecacd48df17f/transformed/miuix-ui/AndroidManifest.xml:2:1-7:12
+MERGED from [top.yukonga.miuix.kmp:miuix-icons-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/801b91ddf4c461bca71bf41cfa5f8f52/transformed/miuix-icons/AndroidManifest.xml:2:1-7:12
+MERGED from [top.yukonga.miuix.kmp:miuix-core-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/27fbe12c733a3a517802f5399445c917/transformed/miuix-core/AndroidManifest.xml:2:1-7:12
+MERGED from [top.yukonga.miuix.kmp:miuix-squircle-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/6a15bffce38cf98d1ec674aba0ac947e/transformed/miuix-squircle/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.animation:animation-core-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/8cc7779a95fa3c15e56b049d7ecfad21/transformed/animation-core/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.animation:animation-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/946c43b5d63deae02acda5912d5144c5/transformed/animation/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.foundation:foundation-layout-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/9811cd2bf26ec961f2bbb95001d28518/transformed/foundation-layout/AndroidManifest.xml:2:1-7:12
+MERGED from [top.yukonga.miuix.kmp:miuix-shader-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/aa9a57bf3c6c644c864b132a5113957e/transformed/miuix-shader/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.foundation:foundation-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/1ca2d4dbdac28b2ffd75fd6f2b227675/transformed/foundation/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-core-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/de8fc72e109e1c91cc766df32d129dae/transformed/animation-core/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/67e193e9dcde5a2703d2c162355f640e/transformed/animation/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c45f8271e09aa5784c037aa440bc3e1f/transformed/foundation-layout/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/f8f3fdd65f52e5cf64acc2f0c8994d24/transformed/foundation/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.material3:material3-window-size-class-android:1.12.0-alpha03] /Users/toretto/.gradle/caches/9.7.1/transforms/62b88b2ea9a1f08ffa787c5c73cb068c/transformed/material3-window-size-class/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material3:material3-window-size-class-android:1.5.0-alpha22] /Users/toretto/.gradle/caches/9.7.1/transforms/5d958a06e44544a858b0ef3b70f3eb1e/transformed/material3-window-size-class/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.ui:ui-graphics-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/3d788dc323e33fe1c12606b1ba413b5d/transformed/ui-graphics/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.ui:ui-geometry-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/c871b17b2eeaa8351d2e6c8118b0551a/transformed/ui-geometry/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.ui:ui-util-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/f5fe5124759405b4a7636e8638a1f259/transformed/ui-util/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.ui:ui-text-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/38a43739370a0ba1ac760b0ca4b42beb/transformed/ui-text/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.ui:ui-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/d3ddd1ffcfebb36f49dcaede346847df/transformed/ui/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.ui:ui-unit-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/1e25ab6ba627f8d6cb3adce4f080d00c/transformed/ui-unit/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8db06d09c47b83fdf71c9de3a137ab69/transformed/ui-unit/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/bfec601c9719edab070304a3ed0d8919/transformed/ui-geometry/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9279c4c7e3b9b090957a5bf4f972d818/transformed/ui-util/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/e4a725e477944f5a9fcaac4e7fac3425/transformed/ui-text/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/af7f9ad938ca066a36d6fffafb5d9fec/transformed/ui-graphics/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigationevent:navigationevent-android:1.1.2] /Users/toretto/.gradle/caches/9.7.1/transforms/4d34604e0400dba5b61842cc86774c32/transformed/navigationevent/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigationevent:navigationevent-compose-android:1.1.2] /Users/toretto/.gradle/caches/9.7.1/transforms/5d691b63f235120ae9bcb34bafb8faa0/transformed/navigationevent-compose/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/3c18cb5e6acde0ae2e40f40c5786a5e7/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7826354483a3f59531dd077578d30927/transformed/lifecycle-livedata-core-2.11.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c0b5e98717f4cfe906ed0913350ea5ed/transformed/lifecycle-viewmodel/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.runtime:runtime-annotation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/891914ef22dcf86c0ff563b9516033c4/transformed/runtime-annotation/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-retain-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7e25d3a3527957443ab57d9ddb20038c/transformed/runtime-retain/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.runtime:runtime-saveable-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/c6ea3b66b7da6c0e11d25fad6a18ab8a/transformed/runtime-saveable/AndroidManifest.xml:2:1-7:12
+MERGED from [org.jetbrains.compose.runtime:runtime-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/5384e5e2b33aac181c3b2a94f4406fe9/transformed/runtime/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/b895ccbbee3746f1ee6b9222445c642b/transformed/runtime/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9f52a93bc4494e186cd72f63628b5edf/transformed/runtime-saveable/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.savedstate:savedstate-compose-android:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/5dd4965f513f460831a9533f5ed8a706/transformed/savedstate-compose/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/acf0c0a55a6c5f961b9c5adc29bb2f75/transformed/savedstate-ktx-1.4.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.savedstate:savedstate-android:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/6e568a27f3c8a172d1bcaf2f7ca0239c/transformed/savedstate/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c4622d65ead91bc4ac489577f176f35b/transformed/lifecycle-viewmodel-savedstate/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/d5e0c3030a86cfbfd8816376455fb6b6/transformed/core-ktx-1.19.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.autofill:autofill:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/06e28821ad27b6c54a972d5fb9f10cf6/transformed/autofill-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.window:window-core-android:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c6ad0663dd764d9d4d25abfc49fb1a61/transformed/window-core/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.graphics:graphics-path:1.0.1] /Users/toretto/.gradle/caches/9.7.1/transforms/28108a4bb6955714b65d6e779c983f88/transformed/graphics-path-1.0.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/0a755483c1558bec6d4635b3754dde63/transformed/lifecycle-runtime/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/338854cdff4970cf4c700ca344fa042c/transformed/lifecycle-viewmodel-ktx-2.11.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/afd72050bad3adc67f4d6c27b914a895/transformed/lifecycle-runtime-ktx/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9d57c6ded626a50e81510e382177e173/transformed/lifecycle-runtime-compose/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.8] /Users/toretto/.gradle/caches/9.7.1/transforms/4c5372a6bbb5d3a53870aa887e1d9b08/transformed/material-icons-extended-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.8] /Users/toretto/.gradle/caches/9.7.1/transforms/b09236b3baa8bf2c9ca58727157907d3/transformed/material-icons-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a1775b91f8e53f6a825cfe4c2cd79a1a/transformed/ui/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-ktx:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7ecd66d15bfb7bf914780a06aabf01a2/transformed/activity-ktx-1.13.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a40d4fd4621f5172968993e29f792417/transformed/activity-1.13.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-compose:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/930eb0d3d960cc6dfcea034fe186cfa9/transformed/activity-compose-1.13.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core-viewtree:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/f88ba3029bf4b89567df22f7db4f80ba/transformed/core-viewtree-1.0.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /Users/toretto/.gradle/caches/9.7.1/transforms/f4d77969f84b9f1d1367ab5b287d36e7/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:2:1-7:12
+MERGED from [com.materialkolor:material-color-utilities-android:5.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a0670232c77bf844e82c9fac1497f8e4/transformed/material-color-utilities/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.2.0] /Users/toretto/.gradle/caches/9.7.1/transforms/320252d44c2bfd7b3e4742d08e4df169/transformed/tracing-1.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/88e045cfb0e15a358093c11d59ce4918/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/07d3543d0fde6266846791b5bbbd7c97/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/toretto/.gradle/caches/9.7.1/transforms/20754801c77aee9d8c350bf948c934a5/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.QUERY_ALL_PACKAGES
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:5:5-77
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:5:22-74
+application
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:7:5-67:19
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:7:5-67:19
+MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:22:5-29:19
+MERGED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:22:5-29:19
+MERGED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/07d3543d0fde6266846791b5bbbd7c97/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/07d3543d0fde6266846791b5bbbd7c97/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:12:9-35
+	android:label
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:11:9-41
+	android:roundIcon
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:10:9-54
+	android:icon
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:9:9-43
+	android:allowBackup
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:8:9-35
+	android:theme
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:13:9-47
+activity#com.toretto5060.pickupcatapp.app.ExpressListActivity
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:16:9-25:20
+	android:label
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:19:13-45
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:18:13-36
+	android:theme
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:20:13-51
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:17:13-52
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:21:13-24:29
+action#android.intent.action.MAIN
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:22:17-69
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:22:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:17-77
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:27-74
+activity#com.toretto5060.pickupcatapp.app.ExpressActivity
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:27:9-30:54
+	android:label
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:30:13-51
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:29:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:28:13-48
+activity#com.toretto5060.pickupcatapp.app.ExpressRulesActivity
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:31:9-34:59
+	android:label
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:34:13-56
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:33:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:32:13-53
+activity#com.toretto5060.pickupcatapp.app.ExpressAppPickActivity
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:35:9-38:62
+	android:label
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:38:13-59
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:37:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:36:13-55
+receiver#com.toretto5060.pickupcatapp.express.ExpressWidgetProvider
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:47:9-56:20
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:49:13-37
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:48:13-58
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:50:13-52:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:17-84
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:25-81
+meta-data#android.appwidget.provider
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:53:13-55:63
+	android:resource
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:55:17-60
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:54:17-58
+service#com.toretto5060.pickupcatapp.express.ExpressListenService
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:59:9-66:19
+	android:exported
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:61:13-37
+	android:permission
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:62:13-87
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:60:13-57
+intent-filter#action:name:android.service.notification.NotificationListenerService
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:63:13-65:29
+action#android.service.notification.NotificationListenerService
+ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:17-99
+	android:name
+		ADDED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:25-96
+uses-sdk
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+MERGED from [top.yukonga.miuix.kmp:miuix-preference-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/510101a57ab834895ad2276c483fc8ed/transformed/miuix-preference/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-preference-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/510101a57ab834895ad2276c483fc8ed/transformed/miuix-preference/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-ui-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/541c5cbcce2379000eb8ecacd48df17f/transformed/miuix-ui/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-ui-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/541c5cbcce2379000eb8ecacd48df17f/transformed/miuix-ui/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-icons-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/801b91ddf4c461bca71bf41cfa5f8f52/transformed/miuix-icons/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-icons-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/801b91ddf4c461bca71bf41cfa5f8f52/transformed/miuix-icons/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-core-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/27fbe12c733a3a517802f5399445c917/transformed/miuix-core/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-core-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/27fbe12c733a3a517802f5399445c917/transformed/miuix-core/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-squircle-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/6a15bffce38cf98d1ec674aba0ac947e/transformed/miuix-squircle/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-squircle-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/6a15bffce38cf98d1ec674aba0ac947e/transformed/miuix-squircle/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.animation:animation-core-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/8cc7779a95fa3c15e56b049d7ecfad21/transformed/animation-core/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.animation:animation-core-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/8cc7779a95fa3c15e56b049d7ecfad21/transformed/animation-core/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.animation:animation-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/946c43b5d63deae02acda5912d5144c5/transformed/animation/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.animation:animation-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/946c43b5d63deae02acda5912d5144c5/transformed/animation/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.foundation:foundation-layout-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/9811cd2bf26ec961f2bbb95001d28518/transformed/foundation-layout/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.foundation:foundation-layout-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/9811cd2bf26ec961f2bbb95001d28518/transformed/foundation-layout/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-shader-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/aa9a57bf3c6c644c864b132a5113957e/transformed/miuix-shader/AndroidManifest.xml:5:5-44
+MERGED from [top.yukonga.miuix.kmp:miuix-shader-android:0.9.4-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/aa9a57bf3c6c644c864b132a5113957e/transformed/miuix-shader/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.foundation:foundation-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/1ca2d4dbdac28b2ffd75fd6f2b227675/transformed/foundation/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.foundation:foundation-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/1ca2d4dbdac28b2ffd75fd6f2b227675/transformed/foundation/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/de8fc72e109e1c91cc766df32d129dae/transformed/animation-core/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/de8fc72e109e1c91cc766df32d129dae/transformed/animation-core/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/67e193e9dcde5a2703d2c162355f640e/transformed/animation/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/67e193e9dcde5a2703d2c162355f640e/transformed/animation/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c45f8271e09aa5784c037aa440bc3e1f/transformed/foundation-layout/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c45f8271e09aa5784c037aa440bc3e1f/transformed/foundation-layout/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/f8f3fdd65f52e5cf64acc2f0c8994d24/transformed/foundation/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/f8f3fdd65f52e5cf64acc2f0c8994d24/transformed/foundation/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.material3:material3-window-size-class-android:1.12.0-alpha03] /Users/toretto/.gradle/caches/9.7.1/transforms/62b88b2ea9a1f08ffa787c5c73cb068c/transformed/material3-window-size-class/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.material3:material3-window-size-class-android:1.12.0-alpha03] /Users/toretto/.gradle/caches/9.7.1/transforms/62b88b2ea9a1f08ffa787c5c73cb068c/transformed/material3-window-size-class/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material3:material3-window-size-class-android:1.5.0-alpha22] /Users/toretto/.gradle/caches/9.7.1/transforms/5d958a06e44544a858b0ef3b70f3eb1e/transformed/material3-window-size-class/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material3:material3-window-size-class-android:1.5.0-alpha22] /Users/toretto/.gradle/caches/9.7.1/transforms/5d958a06e44544a858b0ef3b70f3eb1e/transformed/material3-window-size-class/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-graphics-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/3d788dc323e33fe1c12606b1ba413b5d/transformed/ui-graphics/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-graphics-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/3d788dc323e33fe1c12606b1ba413b5d/transformed/ui-graphics/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-geometry-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/c871b17b2eeaa8351d2e6c8118b0551a/transformed/ui-geometry/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-geometry-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/c871b17b2eeaa8351d2e6c8118b0551a/transformed/ui-geometry/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-util-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/f5fe5124759405b4a7636e8638a1f259/transformed/ui-util/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-util-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/f5fe5124759405b4a7636e8638a1f259/transformed/ui-util/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-text-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/38a43739370a0ba1ac760b0ca4b42beb/transformed/ui-text/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-text-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/38a43739370a0ba1ac760b0ca4b42beb/transformed/ui-text/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/d3ddd1ffcfebb36f49dcaede346847df/transformed/ui/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/d3ddd1ffcfebb36f49dcaede346847df/transformed/ui/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-unit-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/1e25ab6ba627f8d6cb3adce4f080d00c/transformed/ui-unit/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.ui:ui-unit-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/1e25ab6ba627f8d6cb3adce4f080d00c/transformed/ui-unit/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8db06d09c47b83fdf71c9de3a137ab69/transformed/ui-unit/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8db06d09c47b83fdf71c9de3a137ab69/transformed/ui-unit/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/bfec601c9719edab070304a3ed0d8919/transformed/ui-geometry/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/bfec601c9719edab070304a3ed0d8919/transformed/ui-geometry/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9279c4c7e3b9b090957a5bf4f972d818/transformed/ui-util/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9279c4c7e3b9b090957a5bf4f972d818/transformed/ui-util/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/e4a725e477944f5a9fcaac4e7fac3425/transformed/ui-text/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/e4a725e477944f5a9fcaac4e7fac3425/transformed/ui-text/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/af7f9ad938ca066a36d6fffafb5d9fec/transformed/ui-graphics/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/af7f9ad938ca066a36d6fffafb5d9fec/transformed/ui-graphics/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigationevent:navigationevent-android:1.1.2] /Users/toretto/.gradle/caches/9.7.1/transforms/4d34604e0400dba5b61842cc86774c32/transformed/navigationevent/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigationevent:navigationevent-android:1.1.2] /Users/toretto/.gradle/caches/9.7.1/transforms/4d34604e0400dba5b61842cc86774c32/transformed/navigationevent/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigationevent:navigationevent-compose-android:1.1.2] /Users/toretto/.gradle/caches/9.7.1/transforms/5d691b63f235120ae9bcb34bafb8faa0/transformed/navigationevent-compose/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigationevent:navigationevent-compose-android:1.1.2] /Users/toretto/.gradle/caches/9.7.1/transforms/5d691b63f235120ae9bcb34bafb8faa0/transformed/navigationevent-compose/AndroidManifest.xml:5:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/3c18cb5e6acde0ae2e40f40c5786a5e7/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/3c18cb5e6acde0ae2e40f40c5786a5e7/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7826354483a3f59531dd077578d30927/transformed/lifecycle-livedata-core-2.11.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7826354483a3f59531dd077578d30927/transformed/lifecycle-livedata-core-2.11.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c0b5e98717f4cfe906ed0913350ea5ed/transformed/lifecycle-viewmodel/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c0b5e98717f4cfe906ed0913350ea5ed/transformed/lifecycle-viewmodel/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.runtime:runtime-annotation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/891914ef22dcf86c0ff563b9516033c4/transformed/runtime-annotation/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-annotation-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/891914ef22dcf86c0ff563b9516033c4/transformed/runtime-annotation/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-retain-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7e25d3a3527957443ab57d9ddb20038c/transformed/runtime-retain/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-retain-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7e25d3a3527957443ab57d9ddb20038c/transformed/runtime-retain/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.runtime:runtime-saveable-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/c6ea3b66b7da6c0e11d25fad6a18ab8a/transformed/runtime-saveable/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.runtime:runtime-saveable-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/c6ea3b66b7da6c0e11d25fad6a18ab8a/transformed/runtime-saveable/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.runtime:runtime-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/5384e5e2b33aac181c3b2a94f4406fe9/transformed/runtime/AndroidManifest.xml:5:5-44
+MERGED from [org.jetbrains.compose.runtime:runtime-android:1.12.0-rc01] /Users/toretto/.gradle/caches/9.7.1/transforms/5384e5e2b33aac181c3b2a94f4406fe9/transformed/runtime/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/b895ccbbee3746f1ee6b9222445c642b/transformed/runtime/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/b895ccbbee3746f1ee6b9222445c642b/transformed/runtime/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9f52a93bc4494e186cd72f63628b5edf/transformed/runtime-saveable/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9f52a93bc4494e186cd72f63628b5edf/transformed/runtime-saveable/AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-compose-android:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/5dd4965f513f460831a9533f5ed8a706/transformed/savedstate-compose/AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-compose-android:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/5dd4965f513f460831a9533f5ed8a706/transformed/savedstate-compose/AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/acf0c0a55a6c5f961b9c5adc29bb2f75/transformed/savedstate-ktx-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/acf0c0a55a6c5f961b9c5adc29bb2f75/transformed/savedstate-ktx-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-android:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/6e568a27f3c8a172d1bcaf2f7ca0239c/transformed/savedstate/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-android:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/6e568a27f3c8a172d1bcaf2f7ca0239c/transformed/savedstate/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c4622d65ead91bc4ac489577f176f35b/transformed/lifecycle-viewmodel-savedstate/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c4622d65ead91bc4ac489577f176f35b/transformed/lifecycle-viewmodel-savedstate/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/d5e0c3030a86cfbfd8816376455fb6b6/transformed/core-ktx-1.19.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/d5e0c3030a86cfbfd8816376455fb6b6/transformed/core-ktx-1.19.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/06e28821ad27b6c54a972d5fb9f10cf6/transformed/autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/06e28821ad27b6c54a972d5fb9f10cf6/transformed/autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window-core-android:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c6ad0663dd764d9d4d25abfc49fb1a61/transformed/window-core/AndroidManifest.xml:5:5-44
+MERGED from [androidx.window:window-core-android:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/c6ad0663dd764d9d4d25abfc49fb1a61/transformed/window-core/AndroidManifest.xml:5:5-44
+MERGED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.graphics:graphics-path:1.0.1] /Users/toretto/.gradle/caches/9.7.1/transforms/28108a4bb6955714b65d6e779c983f88/transformed/graphics-path-1.0.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.graphics:graphics-path:1.0.1] /Users/toretto/.gradle/caches/9.7.1/transforms/28108a4bb6955714b65d6e779c983f88/transformed/graphics-path-1.0.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/0a755483c1558bec6d4635b3754dde63/transformed/lifecycle-runtime/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/0a755483c1558bec6d4635b3754dde63/transformed/lifecycle-runtime/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/338854cdff4970cf4c700ca344fa042c/transformed/lifecycle-viewmodel-ktx-2.11.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/338854cdff4970cf4c700ca344fa042c/transformed/lifecycle-viewmodel-ktx-2.11.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/afd72050bad3adc67f4d6c27b914a895/transformed/lifecycle-runtime-ktx/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/afd72050bad3adc67f4d6c27b914a895/transformed/lifecycle-runtime-ktx/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9d57c6ded626a50e81510e382177e173/transformed/lifecycle-runtime-compose/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/9d57c6ded626a50e81510e382177e173/transformed/lifecycle-runtime-compose/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.8] /Users/toretto/.gradle/caches/9.7.1/transforms/4c5372a6bbb5d3a53870aa887e1d9b08/transformed/material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.8] /Users/toretto/.gradle/caches/9.7.1/transforms/4c5372a6bbb5d3a53870aa887e1d9b08/transformed/material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.8] /Users/toretto/.gradle/caches/9.7.1/transforms/b09236b3baa8bf2c9ca58727157907d3/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.8] /Users/toretto/.gradle/caches/9.7.1/transforms/b09236b3baa8bf2c9ca58727157907d3/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a1775b91f8e53f6a825cfe4c2cd79a1a/transformed/ui/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.12.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a1775b91f8e53f6a825cfe4c2cd79a1a/transformed/ui/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7ecd66d15bfb7bf914780a06aabf01a2/transformed/activity-ktx-1.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/7ecd66d15bfb7bf914780a06aabf01a2/transformed/activity-ktx-1.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a40d4fd4621f5172968993e29f792417/transformed/activity-1.13.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a40d4fd4621f5172968993e29f792417/transformed/activity-1.13.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-compose:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/930eb0d3d960cc6dfcea034fe186cfa9/transformed/activity-compose-1.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.13.0] /Users/toretto/.gradle/caches/9.7.1/transforms/930eb0d3d960cc6dfcea034fe186cfa9/transformed/activity-compose-1.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-viewtree:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/f88ba3029bf4b89567df22f7db4f80ba/transformed/core-viewtree-1.0.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-viewtree:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/f88ba3029bf4b89567df22f7db4f80ba/transformed/core-viewtree-1.0.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /Users/toretto/.gradle/caches/9.7.1/transforms/f4d77969f84b9f1d1367ab5b287d36e7/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /Users/toretto/.gradle/caches/9.7.1/transforms/f4d77969f84b9f1d1367ab5b287d36e7/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+MERGED from [com.materialkolor:material-color-utilities-android:5.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a0670232c77bf844e82c9fac1497f8e4/transformed/material-color-utilities/AndroidManifest.xml:5:5-44
+MERGED from [com.materialkolor:material-color-utilities-android:5.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/a0670232c77bf844e82c9fac1497f8e4/transformed/material-color-utilities/AndroidManifest.xml:5:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.2.0] /Users/toretto/.gradle/caches/9.7.1/transforms/320252d44c2bfd7b3e4742d08e4df169/transformed/tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.tracing:tracing:1.2.0] /Users/toretto/.gradle/caches/9.7.1/transforms/320252d44c2bfd7b3e4742d08e4df169/transformed/tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/88e045cfb0e15a358093c11d59ce4918/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/toretto/.gradle/caches/9.7.1/transforms/88e045cfb0e15a358093c11d59ce4918/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/07d3543d0fde6266846791b5bbbd7c97/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/07d3543d0fde6266846791b5bbbd7c97/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/toretto/.gradle/caches/9.7.1/transforms/20754801c77aee9d8c350bf948c934a5/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/toretto/.gradle/caches/9.7.1/transforms/20754801c77aee9d8c350bf948c934a5/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/toretto/.gradle/caches/9.7.1/transforms/88fec36c786f97a143e7db837f48469d/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:30:17-78
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:23:9-25:40
+	android:required
+		ADDED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:25:13-37
+	android:name
+		ADDED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:24:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:26:9-28:40
+	android:required
+		ADDED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:28:13-37
+	android:name
+		ADDED from [androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:27:13-51
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:23:9-81
+permission#com.toretto5060.pickupcatapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:26:22-94
+uses-permission#com.toretto5060.pickupcatapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:25-92

@@ -1,0 +1,8 @@
+com.toretto5060.pickupcatapp-pngs-0 /Users/toretto/Documents/code/pickup_cat_app/app/build/generated/res/pngs/release
+com.toretto5060.pickupcatapp-updated_navigation_xml-1 /Users/toretto/Documents/code/pickup_cat_app/app/build/generated/updated_navigation_xml/release
+com.toretto5060.pickupcatapp-packageReleaseResources-2 /Users/toretto/Documents/code/pickup_cat_app/app/build/intermediates/incremental/release/packageReleaseResources/merged.dir
+com.toretto5060.pickupcatapp-packageReleaseResources-3 /Users/toretto/Documents/code/pickup_cat_app/app/build/intermediates/incremental/release/packageReleaseResources/stripped.dir
+com.toretto5060.pickupcatapp-release-4 /Users/toretto/Documents/code/pickup_cat_app/app/build/intermediates/merged_res/release/mergeReleaseResources
+com.toretto5060.pickupcatapp-main-5 /Users/toretto/Documents/code/pickup_cat_app/app/src/main/res
+com.toretto5060.pickupcatapp-release-6 /Users/toretto/Documents/code/pickup_cat_app/app/src/release/res
+gradleHome-0 /Users/toretto/.gradle

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 「解析通知 App」需要列出本机已安装应用 -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PickupCat">
+
+        <!-- 首页就是取件码列表 -->
+        <activity
+            android:name=".app.ExpressListActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PickupCat">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".app.ExpressActivity"
+            android:exported="false"
+            android:label="@string/settings_title" />
+        <activity
+            android:name=".app.ExpressRulesActivity"
+            android:exported="false"
+            android:label="@string/express_rules_title" />
+        <activity
+            android:name=".app.ExpressAppPickActivity"
+            android:exported="false"
+            android:label="@string/express_pick_app_title" />
+
+        <!-- 取件码数据：本 App 私有，仅同 UID 可访问 -->
+        <provider
+            android:name=".express.ExpressProvider"
+            android:authorities="${applicationId}.express"
+            android:exported="false" />
+
+        <!-- 待取件列表小部件（桌面 + 负一屏） -->
+        <receiver
+            android:name=".express.ExpressWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/express_widget_info" />
+        </receiver>
+
+        <!-- 取件码捕获主通道：需用户在系统设置里授予通知使用权，不需要 root / LSPosed -->
+        <service
+            android:name=".express.ExpressListenService"
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

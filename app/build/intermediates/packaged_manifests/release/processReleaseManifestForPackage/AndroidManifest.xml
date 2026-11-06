@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.toretto5060.pickupcatapp"
+    android:versionCode="1000"
+    android:versionName="0.0.1" >
+
+    <uses-sdk
+        android:minSdkVersion="29"
+        android:targetSdkVersion="37" />
+
+    <!-- 「解析通知 App」需要列出本机已安装应用 -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <permission
+        android:name="com.toretto5060.pickupcatapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.toretto5060.pickupcatapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
+    <application
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:extractNativeLibs="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PickupCat" >
+
+        <!-- 首页就是取件码列表 -->
+        <activity
+            android:name="com.toretto5060.pickupcatapp.app.ExpressListActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PickupCat" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.toretto5060.pickupcatapp.app.ExpressActivity"
+            android:exported="false"
+            android:label="@string/settings_title" />
+        <activity
+            android:name="com.toretto5060.pickupcatapp.app.ExpressRulesActivity"
+            android:exported="false"
+            android:label="@string/express_rules_title" />
+        <activity
+            android:name="com.toretto5060.pickupcatapp.app.ExpressAppPickActivity"
+            android:exported="false"
+            android:label="@string/express_pick_app_title" />
+
+        <!-- 取件码数据：本 App 私有，仅同 UID 可访问 -->
+        <provider
+            android:name="com.toretto5060.pickupcatapp.express.ExpressProvider"
+            android:authorities="com.toretto5060.pickupcatapp.express"
+            android:exported="false" />
+
+        <!-- 待取件列表小部件（桌面 + 负一屏） -->
+        <receiver
+            android:name="com.toretto5060.pickupcatapp.express.ExpressWidgetProvider"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/express_widget_info" />
+        </receiver>
+
+        <!-- 取件码捕获主通道：需用户在系统设置里授予通知使用权，不需要 root / LSPosed -->
+        <service
+            android:name="com.toretto5060.pickupcatapp.express.ExpressListenService"
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.toretto5060.pickupcatapp.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+        <uses-library
+            android:name="androidx.window.extensions"
+            android:required="false" />
+        <uses-library
+            android:name="androidx.window.sidecar"
+            android:required="false" />
+
+        <receiver
+            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+            android:directBootAware="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.DUMP" >
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

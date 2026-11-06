@@ -1,0 +1,225 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.toretto5060.pickupcatapp"
+4    android:versionCode="1000"
+5    android:versionName="0.0.1" >
+6
+7    <uses-sdk
+7-->INJECTED
+8        android:minSdkVersion="29"
+8-->INJECTED
+9        android:targetSdkVersion="37" />
+9-->INJECTED
+10
+11    <!-- 「解析通知 App」需要列出本机已安装应用 -->
+12    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+12-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:5:5-77
+12-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:5:22-74
+13
+14    <permission
+14-->[androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:22:5-24:47
+15        android:name="com.toretto5060.pickupcatapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+15-->[androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:23:9-81
+16        android:protectionLevel="signature" />
+16-->[androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:24:9-44
+17
+18    <uses-permission android:name="com.toretto5060.pickupcatapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+18-->[androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:26:5-97
+18-->[androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:26:22-94
+19
+20    <application
+20-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:7:5-67:19
+21        android:allowBackup="true"
+21-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:8:9-35
+22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+22-->[androidx.core:core:1.19.0] /Users/toretto/.gradle/caches/9.7.1/transforms/31771ccd783044f195ec1328d8d20cca/transformed/core-1.19.0/AndroidManifest.xml:28:18-86
+23        android:extractNativeLibs="false"
+23-->INJECTED
+24        android:icon="@mipmap/ic_launcher"
+24-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:9:9-43
+25        android:label="@string/app_name"
+25-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:11:9-41
+26        android:roundIcon="@mipmap/ic_launcher_round"
+26-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:10:9-54
+27        android:supportsRtl="true"
+27-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:12:9-35
+28        android:theme="@style/Theme.PickupCat" >
+28-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:13:9-47
+29
+30        <!-- 首页就是取件码列表 -->
+31        <activity
+31-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:16:9-25:20
+32            android:name="com.toretto5060.pickupcatapp.app.ExpressListActivity"
+32-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:17:13-52
+33            android:exported="true"
+33-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:18:13-36
+34            android:label="@string/app_name"
+34-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:19:13-45
+35            android:theme="@style/Theme.PickupCat" >
+35-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:20:13-51
+36            <intent-filter>
+36-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:21:13-24:29
+37                <action android:name="android.intent.action.MAIN" />
+37-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:22:17-69
+37-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:22:25-66
+38
+39                <category android:name="android.intent.category.LAUNCHER" />
+39-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:17-77
+39-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:23:27-74
+40            </intent-filter>
+41        </activity>
+42        <activity
+42-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:27:9-30:54
+43            android:name="com.toretto5060.pickupcatapp.app.ExpressActivity"
+43-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:28:13-48
+44            android:exported="false"
+44-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:29:13-37
+45            android:label="@string/settings_title" />
+45-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:30:13-51
+46        <activity
+46-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:31:9-34:59
+47            android:name="com.toretto5060.pickupcatapp.app.ExpressRulesActivity"
+47-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:32:13-53
+48            android:exported="false"
+48-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:33:13-37
+49            android:label="@string/express_rules_title" />
+49-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:34:13-56
+50        <activity
+50-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:35:9-38:62
+51            android:name="com.toretto5060.pickupcatapp.app.ExpressAppPickActivity"
+51-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:36:13-55
+52            android:exported="false"
+52-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:37:13-37
+53            android:label="@string/express_pick_app_title" />
+53-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:38:13-59
+54
+55        <!-- 取件码数据：本 App 私有，仅同 UID 可访问 -->
+56        <provider
+56-->INJECTED
+57            android:name="com.toretto5060.pickupcatapp.express.ExpressProvider"
+57-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:42:13-52
+58            android:authorities="com.toretto5060.pickupcatapp.express"
+58-->INJECTED
+59            android:exported="false" />
+59-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:44:13-37
+60
+61        <!-- 待取件列表小部件（桌面 + 负一屏） -->
+62        <receiver
+62-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:47:9-56:20
+63            android:name="com.toretto5060.pickupcatapp.express.ExpressWidgetProvider"
+63-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:48:13-58
+64            android:exported="false" >
+64-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:49:13-37
+65            <intent-filter>
+65-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:50:13-52:29
+66                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+66-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:17-84
+66-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:51:25-81
+67            </intent-filter>
+68
+69            <meta-data
+69-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:53:13-55:63
+70                android:name="android.appwidget.provider"
+70-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:54:17-58
+71                android:resource="@xml/express_widget_info" />
+71-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:55:17-60
+72        </receiver>
+73
+74        <!-- 取件码捕获主通道：需用户在系统设置里授予通知使用权，不需要 root / LSPosed -->
+75        <service
+75-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:59:9-66:19
+76            android:name="com.toretto5060.pickupcatapp.express.ExpressListenService"
+76-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:60:13-57
+77            android:exported="false"
+77-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:61:13-37
+78            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+78-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:62:13-87
+79            <intent-filter>
+79-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:63:13-65:29
+80                <action android:name="android.service.notification.NotificationListenerService" />
+80-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:17-99
+80-->/Users/toretto/Documents/code/pickup_cat_app/app/src/main/AndroidManifest.xml:64:25-96
+81            </intent-filter>
+82        </service>
+83
+84        <provider
+84-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
+85            android:name="androidx.startup.InitializationProvider"
+85-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:25:13-67
+86            android:authorities="com.toretto5060.pickupcatapp.androidx-startup"
+86-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:26:13-68
+87            android:exported="false" >
+87-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:27:13-37
+88            <meta-data
+88-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
+89                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+89-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:30:17-75
+90                android:value="androidx.startup" />
+90-->[androidx.emoji2:emoji2:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eab1ad89317c5ed2ffcf8b314f9f024/transformed/emoji2-1.4.0/AndroidManifest.xml:31:17-49
+91            <meta-data
+91-->[androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:29:13-31:52
+92                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+92-->[androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:30:17-78
+93                android:value="androidx.startup" />
+93-->[androidx.lifecycle:lifecycle-process:2.11.0] /Users/toretto/.gradle/caches/9.7.1/transforms/8eda66a6a6e641d9418df900c8599efb/transformed/lifecycle-process-2.11.0/AndroidManifest.xml:31:17-49
+94            <meta-data
+94-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:29:13-31:52
+95                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+95-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:30:17-85
+96                android:value="androidx.startup" />
+96-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:31:17-49
+97        </provider>
+98
+99        <uses-library
+99-->[androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:23:9-25:40
+100            android:name="androidx.window.extensions"
+100-->[androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:24:13-54
+101            android:required="false" />
+101-->[androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:25:13-37
+102        <uses-library
+102-->[androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:26:9-28:40
+103            android:name="androidx.window.sidecar"
+103-->[androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:27:13-51
+104            android:required="false" />
+104-->[androidx.window:window:1.5.0] /Users/toretto/.gradle/caches/9.7.1/transforms/38892ecc962902c754e2a57194ba1bcd/transformed/window-1.5.0/AndroidManifest.xml:28:13-37
+105
+106        <receiver
+106-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:34:9-52:20
+107            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+107-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:35:13-76
+108            android:directBootAware="false"
+108-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:36:13-44
+109            android:enabled="true"
+109-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:37:13-35
+110            android:exported="true"
+110-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:38:13-36
+111            android:permission="android.permission.DUMP" >
+111-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:39:13-57
+112            <intent-filter>
+112-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:40:13-42:29
+113                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+113-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:17-91
+113-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:25-88
+114            </intent-filter>
+115            <intent-filter>
+115-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:43:13-45:29
+116                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+116-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:17-85
+116-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:25-82
+117            </intent-filter>
+118            <intent-filter>
+118-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:46:13-48:29
+119                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+119-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:17-88
+119-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:25-85
+120            </intent-filter>
+121            <intent-filter>
+121-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:49:13-51:29
+122                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+122-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:17-95
+122-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/toretto/.gradle/caches/9.7.1/transforms/4161355d52f4d53f65a7c3ba01f9dba3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:25-92
+123            </intent-filter>
+124        </receiver>
+125    </application>
+126
+127</manifest>
