@@ -2,7 +2,6 @@ package com.toretto5060.pickupcatapp.express
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -12,17 +11,18 @@ import com.toretto5060.pickupcatapp.R
  * 构造一条待取件行（entry 为 null 时是空态行）。
  *
  * Android 12+ 的 RemoteCollectionItems 与低版本 RemoteViewsService 两条可滚动列表路径
- * 共用这一份渲染，保证「文字布局 / 动态行高 / 点击 fillIn」只维护一处。
+ * 共用这一份渲染，保证「文字布局 / 点击 fillIn」只维护一处。
+ *
+ * 行高固定由 express_widget_row.xml 给定，不再按桌面报告尺寸动态换算：
+ * HyperOS 的尺寸回调（newOptions / getAppWidgetOptions / SIZES）都不可靠（滞后、缓存、
+ * 只给档位上限），凡是依赖它算行高的方案在 5×2↔5×3 来回 resize 时必然漂移且无法恢复。
+ * 列表本身 match_parent + 可滚动，resize 零代码自然适配。
  */
 internal fun buildWidgetRow(
     context: Context,
     entry: ExpressRow?,
-    rowHeightDp: Float,
 ): RemoteViews {
     val row = RemoteViews(context.packageName, R.layout.express_widget_row)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        row.setViewLayoutHeight(R.id.row_root, rowHeightDp, TypedValue.COMPLEX_UNIT_DIP)
-    }
     // 集合 item 不能逐个 setOnClickPendingIntent（RemoteViews 会复用），统一用 fillInIntent。
     row.setOnClickFillInIntent(
         R.id.row_root,

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 小部件行：左列两行（快递 + 取件码 / 时间 + 地址），右列色块「已取」按钮。
-     默认行高 56dp；Android 12+ 由 buildWidgetRow() 用 setViewLayoutHeight 按部件高度覆盖，
-     让 N 行等高铺满可见区。本次放大：取件码 26sp、快递公司 16sp、时间/地址 17sp、已取按钮 16sp；
-     行高下限按格数动态（3 格 64dp、2 格 56dp，见 ExpressWidgetSizing.minRowFor），内容居中不贴底；
+     行高恢复固定 58dp（比内容 ~53dp 高 5dp，内容居中不贴卡片边）：不再按桌面报告尺寸动态换算，
+     HyperOS 的尺寸回调不可靠（滞后/缓存/只给档位上限），凡依赖它算行高的方案在 5×2↔5×3
+     来回 resize 时必然漂移且无法恢复；列表 match_parent + 可滚动，resize 零代码自然适配。
+     字号：取件码 26sp、快递公司 16sp、时间/地址 17sp、已取按钮 15sp；
      每行套纯白实心圆角卡片 express_widget_row_bg（用户要白色背景、不要浅灰），行间靠 ListView
      dividerHeight 留小间隙分隔；左右 padding 14dp 让文字/按钮不贴两侧；文字全部单行省略。 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/row_root"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="61dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:paddingStart="14dp"

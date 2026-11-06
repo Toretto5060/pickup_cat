@@ -1,6 +1,5 @@
 package com.toretto5060.pickupcatapp.express
 
-import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
@@ -19,12 +18,8 @@ class ExpressWidgetService : RemoteViewsService() {
 
     internal class ExpressWidgetFactory(
         private val context: Context,
-        intent: Intent,
+        @Suppress("unused") intent: Intent,
     ) : RemoteViewsFactory {
-        private val widgetId = intent.getIntExtra(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID,
-        )
         private var rows: List<ExpressRow> = emptyList()
 
         override fun onCreate() {}
@@ -47,10 +42,7 @@ class ExpressWidgetService : RemoteViewsService() {
 
         override fun hasStableIds(): Boolean = true
 
-        override fun getViewAt(position: Int): RemoteViews = buildWidgetRow(
-            context,
-            rows.getOrNull(position),
-            ExpressWidgetSizing.rowHeightDp(context, widgetId),
-        )
+        override fun getViewAt(position: Int): RemoteViews =
+            buildWidgetRow(context, rows.getOrNull(position))
     }
 }

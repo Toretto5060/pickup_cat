@@ -8,9 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
 import com.toretto5060.pickupcatapp.R
@@ -20,12 +17,13 @@ import com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity
 /**
  * 待取件小部件：桌面与负一屏共用同一个，列表**可上下滚动**（用户明确要求）。
  *
- * - **高度最多 3 格**（express_widget_info.xml 的 maxResizeHeight），宽度不限；
- *   尺寸变化走 onAppWidgetOptionsChanged，由 [ExpressWidgetSizing.visibleRows] 得出可见条数。
- * - **首屏大致 N 条**：给每行套动态行高（按 widgetId 存的高度反推），让 3 格约铺 3 条、2 格约 2 条；
- *   ListView 用 match_parent 填满桌面给的可见区并保留上下滚动，剩余条目照常滑动查看。
- *   不再人为锁 ListView 高度——实测在 HyperOS 上锁死高度会因报告高度与实际可见区（圆角/安全区）不符，
- *   导致 resize 后最后一行被永久裁切；改为不锁后即便行高略大也只是首屏少露、滚动可见，不会裁掉按钮。
+ * - **高度最多 3 格**（express_widget_info.xml 的 maxResizeHeight），宽度不限。
+ * - **resize 零代码**：行高固定（express_widget_row.xml），ListView 用 match_parent 填满
+ *   桌面给的可见区并保留上下滚动；尺寸变化由桌面重新布局自然适配，不需要重写
+ *   onAppWidgetOptionsChanged。此前几轮「读桌面报告尺寸 → 动态换算行高」的方案全部推翻：
+ *   HyperOS 的 newOptions 是拖拽过渡值、getAppWidgetOptions 返回缓存旧值、SIZES 只给
+ *   可选档位上限，三个来源都不可靠，依赖它们算行高在 5×2↔5×3 来回 resize 时必然漂移、
+ *   无法恢复（详见记忆库避坑指南）。
  * - **背景**：澎湃 OS4 柔光玻璃模式把自绘玻璃层隐藏，背板交给桌面渲染；其它设备/用户选择时
  *   用自绘玻璃（默认兜底）。判定见 [HyperOsGlass]。
  * - 逐码「已取」按行 id 精确标记；数据变化由各写入方调 [updateAll] 主动刷新。
@@ -33,28 +31,7 @@ import com.toretto5060.pickupcatapp.app.ExpressWidgetClickActivity
 class ExpressWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, mgr: AppWidgetManager, ids: IntArray) {
-        for (id in ids) refreshOne(context, mgr, id, null)
-    }
-
-    override fun onAppWidgetOptionsChanged(
-        context: Context,
-        mgr: AppWidgetManager,
-        id: Int,
-        newOptions: Bundle,
-    ) {
-        // 立即用回调值响应一次；但 HyperOS 在该回调里给出的 options 常为过渡/滞后值（拖拽动画中途），
-        // 直接据此算行高会按旧格数算大，导致 5×2↔5×3 来回切后行高漂移、无法恢复。
-        // 因此再用主线程延时（等系统尺寸真正稳定后）以实时尺寸重算重绘，覆盖掉这次可能的错值。
-        refreshOne(context, mgr, id, newOptions)
-        val appCtx = context.applicationContext
-        mainHandler.postDelayed({
-            val m = AppWidgetManager.getInstance(appCtx)
-            refreshOne(appCtx, m, id, null)
-        }, 250)
-    }
-
-    override fun onDeleted(context: Context, ids: IntArray) {
-        for (id in ids) ExpressWidgetSizing.clear(context, id)
+        for (id in ids) refreshOne(context, mgr, id)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -78,13 +55,11 @@ class ExpressWidgetProvider : AppWidgetProvider() {
     fun updateAll(context: Context) {
         val mgr = AppWidgetManager.getInstance(context)
         val ids = mgr.getAppWidgetIds(ComponentName(context, ExpressWidgetProvider::class.java))
-        for (id in ids) refreshOne(context, mgr, id, null)
+        for (id in ids) refreshOne(context, mgr, id)
     }
 
-    private fun refreshOne(context: Context, mgr: AppWidgetManager, id: Int, options: Bundle?) {
-        val opts = options ?: mgr.getAppWidgetOptions(id)
-        ExpressWidgetSizing.refresh(context, id, opts)
-        mgr.updateAppWidget(id, build(context, id, opts))
+    private fun refreshOne(context: Context, mgr: AppWidgetManager, id: Int) {
+        mgr.updateAppWidget(id, build(context, id))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             // 低版本列表数据由 RemoteViewsService 提供，需单独通知它重新 onDataSetChanged()；
             // Android 12+ 的集合快照已随 updateAppWidget 提交，不需要（且该 API 已被弃用）。
@@ -93,7 +68,7 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         }
     }
 
-    private fun build(context: Context, widgetId: Int, options: Bundle?): RemoteViews {
+    private fun build(context: Context, widgetId: Int): RemoteViews {
         val root = RemoteViews(context.packageName, R.layout.express_widget)
 
         // 自绘玻璃是默认兜底；系统柔光玻璃模式只留淡底色，让桌面材质透出来。
@@ -105,15 +80,8 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         root.setTextViewText(R.id.widget_title_count, pending.size.toString())
         root.setOnClickPendingIntent(R.id.widget_root, openApp(context))
 
-        // 行高按当前实例尺寸**实时**计算（Android 12+ 集合快照随 RemoteViews 一次性提交，不读持久化的旧值），
-        // 这样 resize 在 2/3 格间来回切时行高始终跟随当前格数，不会按旧格数算大、也不会回不去。
-        // ListView 用 match_parent 填满可见区并保留滚动，不再锁死高度——HyperOS 报告高度与实际可见区
-        // （圆角/安全区）不符时锁死会让最后一行被永久裁切。
-        // 低版本（走 RemoteViewsService）仍由 refresh() 把行高写入 SharedPreferences 供 Factory 读取。
-        val opts = options ?: AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
-        val height = ExpressWidgetSizing.heightDp(opts)
-        val rowHeight = ExpressWidgetSizing.rowHeightFor(height, ExpressWidgetSizing.visibleRows(height))
-
+        // 行高固定由行布局给定，不读桌面报告尺寸（HyperOS 上不可靠，resize 来回必漂移）；
+        // ListView match_parent + 可滚动，尺寸变化由桌面重新布局自然适配。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // Android 12+：官方推荐的集合快照，所有 item 随 RemoteViews 一次性提交，
             // 桌面无需绑定 RemoteViewsService，也不依赖已弃用的 notifyAppWidgetViewDataChanged。
@@ -122,10 +90,10 @@ class ExpressWidgetProvider : AppWidgetProvider() {
                 .setViewTypeCount(2)
             val items = pending.take(MAX_LIST_ITEMS)
             if (items.isEmpty()) {
-                builder.addItem(EMPTY_ITEM_ID, buildWidgetRow(context, null, rowHeight))
+                builder.addItem(EMPTY_ITEM_ID, buildWidgetRow(context, null))
             } else {
                 for (entry in items) {
-                    builder.addItem(entry.id, buildWidgetRow(context, entry, rowHeight))
+                    builder.addItem(entry.id, buildWidgetRow(context, entry))
                 }
             }
             root.setRemoteAdapter(R.id.widget_list, builder.build())
@@ -179,7 +147,5 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         // 集合快照随 RemoteViews 走 Binder，限制上限避免异常多的历史记录把事务撑爆；
         // 真实总数仍显示在标题「N 件待取」里。
         private const val MAX_LIST_ITEMS = 100
-        // resize 延时稳定重算用的主线程 Handler（避开系统回调里滞后的过渡尺寸）。
-        private val mainHandler = Handler(Looper.getMainLooper())
     }
 }
