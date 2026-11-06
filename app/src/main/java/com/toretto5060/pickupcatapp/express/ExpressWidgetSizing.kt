@@ -17,9 +17,10 @@ import kotlin.math.roundToInt
  *  1. [heightDp] 优先取**当前实例**尺寸 `maxOf(minHeight, maxHeight)`（离散档位 resize 后
  *     min==max==当前，能跟随拖拽改高度）；`OPTION_APPWIDGET_SIZES` 的最大值只代表可选档位上限、
  *     不随 resize 变化，仅作极低版本兜底；格子换算 80dp、[MAX_CELLS] = 3；
- *  2. Provider 用 [listHeightFor] 把 **ListView 本身的可视高度** 也锁成 cells 行，
- *     即使桌面报告的高度不准 / 实际窗口更高，也只会有留白，绝不会多露出一条。
- * 行高按 widgetId 存 SharedPreferences，供低版本 RemoteViewsService 的 Factory 读取。
+ *  2. 行高（[rowHeightFor]）按当前实例尺寸 / 格数反推，下限随格数动态（见 [minRowFor]）；
+ *     Provider 在 Android 12+ 每次渲染时**实时**计算行高（不再读持久化的旧值），避免 resize 在
+ *     2/3 格间来回切时按旧格数算大、无法恢复；低版本走 RemoteViewsService 时由 [refresh] 写入
+ *     SharedPreferences 供 Factory 读取。
  */
 internal object ExpressWidgetSizing {
     const val MAX_CELLS = 3
@@ -28,8 +29,8 @@ internal object ExpressWidgetSizing {
     private const val KEY_ROW_HEIGHT = "row_height_"
     private const val CELL_DP = 80f
     private const val DEFAULT_HEIGHT_DP = 240f
-    /** 布局里除列表外的固定占用：paddingTop 10 + 标题区 40 + paddingBottom 16 = 66，与 express_widget.xml 一致。 */
-    const val CHROME_DP = 66f
+    /** 布局里除列表外的固定占用：paddingTop 10 + 标题区 40 + paddingBottom 24 = 74，与 express_widget.xml 一致。 */
+    const val CHROME_DP = 74f
     // 行高下限按可见格数动态：3 格 58dp（比内容 53dp 高 5dp，内容离白卡边约 2.5dp、不贴底）；
     // 2 格 56dp（略大于内容，紧凑不溢出）；避免 2 格被 3 格行高撑成只显 1 条。1 格同 2 格逻辑。
     private fun minRowFor(cells: Int): Float = if (cells >= 3) 58f else 56f

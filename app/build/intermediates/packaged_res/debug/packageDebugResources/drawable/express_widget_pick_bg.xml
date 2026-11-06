@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 小部件"已取"按钮色块：圆角矩形，主色。RemoteViews 里 TextView 用 background 引用它。 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/express_widget_pick_bg" />
-    <corners android:radius="12dp" />
-</shape>

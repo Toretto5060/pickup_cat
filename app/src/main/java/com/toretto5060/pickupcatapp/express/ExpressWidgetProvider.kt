@@ -9,6 +9,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
 import com.toretto5060.pickupcatapp.R
@@ -40,8 +42,15 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         id: Int,
         newOptions: Bundle,
     ) {
-        // 用户拖拽改变高度时立刻按新格数重算行高与列表高度。
+        // 立即用回调值响应一次；但 HyperOS 在该回调里给出的 options 常为过渡/滞后值（拖拽动画中途），
+        // 直接据此算行高会按旧格数算大，导致 5×2↔5×3 来回切后行高漂移、无法恢复。
+        // 因此再用主线程延时（等系统尺寸真正稳定后）以实时尺寸重算重绘，覆盖掉这次可能的错值。
         refreshOne(context, mgr, id, newOptions)
+        val appCtx = context.applicationContext
+        mainHandler.postDelayed({
+            val m = AppWidgetManager.getInstance(appCtx)
+            refreshOne(appCtx, m, id, null)
+        }, 250)
     }
 
     override fun onDeleted(context: Context, ids: IntArray) {
@@ -96,10 +105,14 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         root.setTextViewText(R.id.widget_title_count, pending.size.toString())
         root.setOnClickPendingIntent(R.id.widget_root, openApp(context))
 
-        // 行高按 widgetId 存的高度反推（refresh 已写入），ListView 用 match_parent 填满可见区并保留滚动，
-        // 不再 setViewLayoutHeight 锁死列表高度——HyperOS 报告高度与实际可见区（圆角/安全区）不符时，
-        // 锁死高度会让最后一行被永久裁切。
-        val rowHeight = ExpressWidgetSizing.rowHeightDp(context, widgetId)
+        // 行高按当前实例尺寸**实时**计算（Android 12+ 集合快照随 RemoteViews 一次性提交，不读持久化的旧值），
+        // 这样 resize 在 2/3 格间来回切时行高始终跟随当前格数，不会按旧格数算大、也不会回不去。
+        // ListView 用 match_parent 填满可见区并保留滚动，不再锁死高度——HyperOS 报告高度与实际可见区
+        // （圆角/安全区）不符时锁死会让最后一行被永久裁切。
+        // 低版本（走 RemoteViewsService）仍由 refresh() 把行高写入 SharedPreferences 供 Factory 读取。
+        val opts = options ?: AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
+        val height = ExpressWidgetSizing.heightDp(opts)
+        val rowHeight = ExpressWidgetSizing.rowHeightFor(height, ExpressWidgetSizing.visibleRows(height))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // Android 12+：官方推荐的集合快照，所有 item 随 RemoteViews 一次性提交，
@@ -166,5 +179,7 @@ class ExpressWidgetProvider : AppWidgetProvider() {
         // 集合快照随 RemoteViews 走 Binder，限制上限避免异常多的历史记录把事务撑爆；
         // 真实总数仍显示在标题「N 件待取」里。
         private const val MAX_LIST_ITEMS = 100
+        // resize 延时稳定重算用的主线程 Handler（避开系统回调里滞后的过渡尺寸）。
+        private val mainHandler = Handler(Looper.getMainLooper())
     }
 }
