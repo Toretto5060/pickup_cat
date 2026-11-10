@@ -59,13 +59,23 @@
             android:authorities="${applicationId}.express"
             android:exported="false" />
 
-        <!-- HyperOS 4 MAML 小部件（.mtz 主题）数据源：只暴露待取件数量与前 4 条脱敏展示字段，
-             不含 raw/origin_pkg；只读，且代码里再按调用方包名白名单（小米桌面/智能助理）过滤。
-             主题通过 content://com.toretto5060.pickupcatapp.maml/pending 的 ContentProviderBinder 取值。 -->
+        <!-- HyperOS 4 MAML 小部件（.mtz 主题）兜底数据源：只暴露待取件数量与前 5 条展示字段，
+             不含 raw/origin_pkg；只读且恒返回 1 行（不再按调用方包名过滤，否则变量不更新）。
+             主题只在 init / resume 时通过 content://com.toretto5060.pickupcatapp.maml/pending 拉一次，
+             实时刷新走 MamlWidgetNotifier 的广播 extras 直推。 -->
         <provider
             android:name=".express.MamlWidgetProvider"
             android:authorities="com.toretto5060.pickupcatapp.maml"
             android:exported="true" />
+
+        <!-- MAML 主题小部件 init / resume 时请求 App 重推数据；显式广播，任何来源都可触发只读快照。 -->
+        <receiver
+            android:name=".express.MamlWidgetRequestReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.toretto5060.pickupcatapp.MAML_WIDGET_REQUEST" />
+            </intent-filter>
+        </receiver>
 
         <!-- 待取件列表小部件（桌面 + 负一屏）。
              miui.appwidget.action.APPWIDGET_UPDATE 兼容小米桌面的曝光刷新；

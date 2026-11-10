@@ -19,10 +19,24 @@ internal object ExpressConst {
     /** 供 HyperOS 4 MAML 小部件（.mtz 主题）读取的只读投影，独立于私有数据库 Provider。 */
     const val MAML_AUTHORITY = "com.toretto5060.pickupcatapp.maml"
     const val MAML_PENDING_URI = "content://$MAML_AUTHORITY/pending"
-    const val MAML_COL_COUNT = "count"
+    const val MAML_COL_COUNT = "count"          // 取件点组数（标题用）
+    const val MAML_COL_ROWS = "rows"            // 取件码条数（逐行显示，行可见性用）
     const val MAML_COL_UPDATED_AT = "updated_at"
     const val MAML_COL_EMPTY_TEXT = "empty_text"
     const val MAML_COL_SUFFIX = "suffix"
+    const val MAML_COL_STATUS = "status"
+
+    /**
+     * 与 mtz 主题里 <BroadcastBinder action="..."> 对应的刷新广播。
+     * 广播 extras 直接携带 MamlWidgetSnapshot 的完整快照，由主题的
+     * <Variable name="pc_count" type="number" extra="count"/> 等注入 MAML 变量（主通道）；
+     * 不再依赖 MAML 宿主跨进程查询 ContentProvider（真机上常被包可见性 / Observer 丢失影响）。
+     * ContentProviderBinder 只保留 init / resume 兜底；其 mUpdateInterval=-1，默认不周期重查。
+     */
+    const val MAML_CHANGED_ACTION = "com.toretto5060.pickupcatapp.MAML_WIDGET_CHANGED"
+
+    /** 主题小部件 init / resume 时反向请求 App 重推快照（显式广播，静态接收器可被拉起）。 */
+    const val MAML_REQUEST_ACTION = "com.toretto5060.pickupcatapp.MAML_WIDGET_REQUEST"
 
     /** SQLite table that holds one row per captured pickup. */
     const val TABLE_ENTRIES = "entries"

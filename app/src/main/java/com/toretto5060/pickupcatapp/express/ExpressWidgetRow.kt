@@ -15,12 +15,16 @@ import com.toretto5060.pickupcatapp.R
  *
  * 行高固定由 express_widget_row.xml 给定，不再按桌面报告尺寸动态换算：
  * HyperOS 的尺寸回调（newOptions / getAppWidgetOptions / SIZES）都不可靠（滞后、缓存、
- * 只给档位上限），凡是依赖它算行高的方案在 5×2↔5×3 来回 resize 时必然漂移且无法恢复。
+ * 只给档位上限），凡是依赖它算行高的方案在 resize 来回切换时必然漂移且无法恢复。
  * 列表本身 match_parent + 可滚动，resize 零代码自然适配。
+ *
+ * [companyOverride] 由调用方按「归一化地址 + 批次」聚合得出：同一取件点的行共用同一个
+ * 快递品牌，解析脏值（「2条」）不会显示在公司名位置。
  */
 internal fun buildWidgetRow(
     context: Context,
     entry: ExpressRow?,
+    companyOverride: String? = null,
 ): RemoteViews {
     val row = RemoteViews(context.packageName, R.layout.express_widget_row)
     // 集合 item 不能逐个 setOnClickPendingIntent（RemoteViews 会复用），统一用 fillInIntent。
@@ -40,7 +44,9 @@ internal fun buildWidgetRow(
         return row
     }
 
-    val company = entry.company.ifEmpty { entry.source }
+    val company = companyOverride?.takeIf { it.isNotEmpty() } ?: companyBrand(entry.company)
+    // 空态行把 row_company 设为 GONE，reapply 复用视图树时必须显式恢复。
+    row.setViewVisibility(R.id.row_company, View.VISIBLE)
     row.setTextViewText(R.id.row_company, company)
     row.setTextColor(R.id.row_company, brandColorArgb(company))
     row.setTextViewText(

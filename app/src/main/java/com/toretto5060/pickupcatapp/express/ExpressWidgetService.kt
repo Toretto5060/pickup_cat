@@ -21,15 +21,19 @@ class ExpressWidgetService : RemoteViewsService() {
         @Suppress("unused") intent: Intent,
     ) : RemoteViewsFactory {
         private var rows: List<ExpressRow> = emptyList()
+        private var brands: Map<String, String> = emptyMap()
 
         override fun onCreate() {}
 
         override fun onDataSetChanged() {
             rows = ExpressStore.queryAll(context, picked = false)
+            // 与高版本路径一致：同地址同批次共用一个快递品牌，避免脏值显示在公司名位置。
+            brands = brandByGroup(rows)
         }
 
         override fun onDestroy() {
             rows = emptyList()
+            brands = emptyMap()
         }
 
         override fun getCount(): Int = rows.size.coerceAtLeast(1)
@@ -42,7 +46,13 @@ class ExpressWidgetService : RemoteViewsService() {
 
         override fun hasStableIds(): Boolean = true
 
-        override fun getViewAt(position: Int): RemoteViews =
-            buildWidgetRow(context, rows.getOrNull(position))
+        override fun getViewAt(position: Int): RemoteViews {
+            val row = rows.getOrNull(position)
+            return buildWidgetRow(
+                context,
+                row,
+                row?.let { brands[groupKey(it.address, it.batch)] },
+            )
+        }
     }
 }

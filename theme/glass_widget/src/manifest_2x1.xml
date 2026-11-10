@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 取件喵 · HyperOS 4 柔光玻璃小部件 (2x1) -->
+<!-- 取件喵 · HyperOS 4 柔光玻璃小部件 (2x1)；样式对齐标准 Android AppWidget -->
 <Widget frameRate="0" scaleByDensity="false" screenWidth="1080" version="2"
         supportBackgroundBlur="false" useVariableUpdater="DateTime.Minute,HyperMaterial"
         disableCutRoundCorner="false" enableLayerAnimation="1">
   <Var name="isInPicker" type="number" expression="eqs(@isPreviewMode,'true')"/>
-  <Var name="outlineRadius" type="number" expression="ifelse(#isInPicker,0,ifelse(#widget_radius,(#widget_radius / #__scale_factor),60))"/>
+  <Var name="outlineRadius" type="number" expression="ifelse(#isInPicker,0,ifelse(#widget_radius,(#widget_radius / #__scale_factor),72))"/>
   <Var name="designW" type="number" expression="440"/>
   <Var name="designH" type="number" expression="165"/>
   <Var name="scaleX" type="number" expression="(#view_width / #designW)"/>
   <Var name="scaleY" type="number" expression="(#view_height / #designH)"/>
   <Var name="scale" type="number" expression="ifelse((#scaleX { #scaleY),#scaleX,#scaleY)"/>
-  <Var name="pad" type="number" expression="24*#scale"/>
+  <Var name="u" type="number" expression="1.15*#scale"/>
+  <Var name="padX" type="number" expression="18*#u"/>
+  <Var name="padTop" type="number" expression="24*#u"/>
+  <Var name="padBottom" type="number" expression="12*#u"/>
+  <Var name="titleH" type="number" expression="40*#u"/>
+  <Var name="rowH" type="number" expression="58*#u"/>
+  <Var name="gap" type="number" expression="12*#u"/>
+  <Var name="rowPad" type="number" expression="14*#u"/>
+  <Var name="btnW" type="number" expression="84*#u"/>
+  <Var name="btnH" type="number" expression="42*#u"/>
+  <Var name="cardW" type="number" expression="#view_width-2*#padX"/>
   <Var name="showBg" type="number" expression="!#enable_hyper_material||#isInPicker||(#hyper_material_view_type==2)"/>
   <Var name="isGlass" type="number" expression="#hyper_material_view_type==1"/>
   <Var name="isBlend" type="number" expression="#hyper_material_view_type==0"/>
-  <Var name="isGlassBionic" type="number" expression="#glass_type[0]"/>
+  <!-- 文字/按钮的明暗基准必须跟随「实际生效的柔光玻璃」而不是只看系统模式：
+       关掉「跟随系统」手动选深色柔光时系统可能仍是浅色模式，只看 #__darkmode 会出黑字。 -->
+  <Var name="uiDark" type="number" expression="ifelse(#followSystem,#__darkmode,#glass_type[0])"/>
+  <Var name="isGlassBionic" type="number" expression="#uiDark"/>
+  <Var name="bionicUseLight" type="number" expression="ifelse(#followSystem,(! #__darkmode),#applied_light_wallpaper)"/>
   <Var name="isBionic" type="number" expression="#isGlassBionic ** #hyper_material_glass_enable ** (! #isInPicker) ** (#hyper_material_view_type==1)"/>
-  <Var name="cardBgColor" type="string" expression="ifelse(#__darkmode,'#801C1C1E','#CCF5F8FC')"/>
-  <Var name="rowColor" type="string" expression="ifelse(#__darkmode,'#33FFFFFF','#80FFFFFF')"/>
-  <Var name="ink" type="string" expression="ifelse(#autoColor,ifelse(#__darkmode,'#FFFFFFFF','#F21A1A1A'),@textColor)"/>
-  <Var name="subInk" type="string" expression="ifelse(#__darkmode,'#B3FFFFFF','#991A1A1A')"/>
-  <Var name="codeInk" type="string" expression="ifelse(#__darkmode,'#FFFFFFFF','#FF0A63D6')"/>
-  <Var name="accent" type="string" expression="'#FFFF3B30'"/>
-  <Var name="hideCard" type="number" expression="(#pc_count==0) ** (! #showEmpty) ** (! #isInPicker)"/>
+  <!-- Android 小部件配色：values/colors.xml 与 values-night/colors.xml，按 #uiDark 反色 -->
+  <Var name="titleInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#E6FFFFFF','#E6000000'),@textColor)"/>
+  <Var name="textInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#F2FFFFFF','#F2000000'),@textColor)"/>
+  <Var name="secondaryInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#99FFFFFF','#99000000'),@textColor)"/>
+  <Var name="countRed" type="string" expression="'#FFFF3B30'"/>
+  <Var name="pickBg" type="string" expression="ifelse(#uiDark,'#FF4A8CFF','#FF3482FF')"/>
   <Var name="pc_tick" type="number" expression="0"/>
-  <Var name="pc_last_query" type="number" expression="0"/>
   <Var name="common_glass_params" type="number[]" values=" ifelse(#__darkmode,0.5,ifelse(#applied_light_wallpaper,0.5,1)),ifelse(#__darkmode,1,ifelse(#applied_light_wallpaper,1,1)),ifelse(#__darkmode,0,0),ifelse(#__darkmode,1,1), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.2,0.3)), ifelse(#__darkmode,3,2), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.1,0.2)), 0, ifelse(#__darkmode,0.4,ifelse(#applied_light_wallpaper,0.6,0.4)),0.8, ifelse(#__darkmode,0.04,0.02), ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.4,1), 0, ifelse(#__darkmode,0.8,1), ifelse(#__darkmode,1.5,1), 1, 36, ifelse(#__darkmode,2.2,ifelse(#applied_light_wallpaper,2.2,1.8)), 80, 200, 1, 0.8, -0.4,0.6,-0.8, ifelse(#__darkmode,2.4,1.4), ifelse(#__darkmode,1.6,0.8), 1.4, 0.85, 3, 0, 0, 0, 0, 0, 0, 0, 0,0 " />
   <Var name="bionic_dark_glass_params" type="number[]" values=" 0.5,1.5,0.5,1.4, 0.16, 1.5, 0.2, 0.3, 0.2,0.8, 0, 1,1,1,0.1, 0, 0.2, 1.4, 1, 36, 2.2, 80, 200, 1, 0.8, -0.4,0.6,-0.8, 1, 0.7, 1.4, 1.12, 3, 1.8, -0.2, 1, 0, 0, 0, 0, 0,0 " />
   <Var name="bionic_light_glass_params" type="number[]" values=" 0.5,1,0,1, 0.2, 2, 0.1, 0.01, 0.6,0.8, 0.02, 0.9,0.9,0.9,1, 0, 0.5, 1.5, 1, 36, 2.2, 80, 200, 1, 0.8, -0.4,0.6,-0.8, 0.8, 0.5, 1.4, 1.12, 3, 0, 0, 0, 0, 0, 0, 0, 0,0 " />
-  <Layer alpha="ifelse(#hideCard,0,255)" width="#view_width" height="#view_height"
-         frameRate="-1" layerType="bottom" x="0" y="0" export="true" name="root">
+  <Layer width="#view_width" height="#view_height" frameRate="-1" layerType="bottom"
+         x="0" y="0" export="true" name="root">
     <MaterialToken tokenName="pickupcat_glass_material" version="30">
       <BackgroundBlurConfig disableBlur="ifelse(#showBg,1,0)" blurBgMode="1" blurContentMode="1"
                             blurRadius="120" blurType="0" passWindow="true" rustPassWindow="true" reuseContainer="true"/>
-      <GlassConfig params="ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[0],#bionic_dark_glass_params[0]),#common_glass_params[0]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[1],#bionic_dark_glass_params[1]),#common_glass_params[1]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[2],#bionic_dark_glass_params[2]),#common_glass_params[2]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[3],#bionic_dark_glass_params[3]),#common_glass_params[3]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[4],#bionic_dark_glass_params[4]),#common_glass_params[4]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[5],#bionic_dark_glass_params[5]),#common_glass_params[5]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[6],#bionic_dark_glass_params[6]),#common_glass_params[6]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[7],#bionic_dark_glass_params[7]),#common_glass_params[7]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[8],#bionic_dark_glass_params[8]),#common_glass_params[8]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[9],#bionic_dark_glass_params[9]),#common_glass_params[9]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[10],#bionic_dark_glass_params[10]),#common_glass_params[10]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[11],#bionic_dark_glass_params[11]),#common_glass_params[11]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[12],#bionic_dark_glass_params[12]),#common_glass_params[12]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[13],#bionic_dark_glass_params[13]),#common_glass_params[13]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[14],#bionic_dark_glass_params[14]),#common_glass_params[14]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[15],#bionic_dark_glass_params[15]),#common_glass_params[15]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[16],#bionic_dark_glass_params[16]),#common_glass_params[16]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[17],#bionic_dark_glass_params[17]),#common_glass_params[17]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[18],#bionic_dark_glass_params[18]),#common_glass_params[18]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[19],#bionic_dark_glass_params[19]),#common_glass_params[19]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[20],#bionic_dark_glass_params[20]),#common_glass_params[20]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[21],#bionic_dark_glass_params[21]),#common_glass_params[21]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[22],#bionic_dark_glass_params[22]),#common_glass_params[22]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[23],#bionic_dark_glass_params[23]),#common_glass_params[23]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[24],#bionic_dark_glass_params[24]),#common_glass_params[24]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[25],#bionic_dark_glass_params[25]),#common_glass_params[25]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[26],#bionic_dark_glass_params[26]),#common_glass_params[26]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[27],#bionic_dark_glass_params[27]),#common_glass_params[27]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[28],#bionic_dark_glass_params[28]),#common_glass_params[28]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[29],#bionic_dark_glass_params[29]),#common_glass_params[29]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[30],#bionic_dark_glass_params[30]),#common_glass_params[30]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[31],#bionic_dark_glass_params[31]),#common_glass_params[31]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[32],#bionic_dark_glass_params[32]),#common_glass_params[32]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[33],#bionic_dark_glass_params[33]),#common_glass_params[33]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[34],#bionic_dark_glass_params[34]),#common_glass_params[34]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[35],#bionic_dark_glass_params[35]),#common_glass_params[35]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[36],#bionic_dark_glass_params[36]),#common_glass_params[36]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[37],#bionic_dark_glass_params[37]),#common_glass_params[37]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[38],#bionic_dark_glass_params[38]),#common_glass_params[38]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[39],#bionic_dark_glass_params[39]),#common_glass_params[39]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[40],#bionic_dark_glass_params[40]),#common_glass_params[40]),ifelse(#isBionic,ifelse(#applied_light_wallpaper,#bionic_light_glass_params[41],#bionic_dark_glass_params[41]),#common_glass_params[41])" disableGlass="ifelse((#showBg || #isBlend),1,0)"
+      <GlassConfig params="ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[0],#bionic_dark_glass_params[0]),#common_glass_params[0]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[1],#bionic_dark_glass_params[1]),#common_glass_params[1]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[2],#bionic_dark_glass_params[2]),#common_glass_params[2]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[3],#bionic_dark_glass_params[3]),#common_glass_params[3]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[4],#bionic_dark_glass_params[4]),#common_glass_params[4]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[5],#bionic_dark_glass_params[5]),#common_glass_params[5]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[6],#bionic_dark_glass_params[6]),#common_glass_params[6]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[7],#bionic_dark_glass_params[7]),#common_glass_params[7]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[8],#bionic_dark_glass_params[8]),#common_glass_params[8]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[9],#bionic_dark_glass_params[9]),#common_glass_params[9]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[10],#bionic_dark_glass_params[10]),#common_glass_params[10]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[11],#bionic_dark_glass_params[11]),#common_glass_params[11]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[12],#bionic_dark_glass_params[12]),#common_glass_params[12]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[13],#bionic_dark_glass_params[13]),#common_glass_params[13]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[14],#bionic_dark_glass_params[14]),#common_glass_params[14]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[15],#bionic_dark_glass_params[15]),#common_glass_params[15]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[16],#bionic_dark_glass_params[16]),#common_glass_params[16]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[17],#bionic_dark_glass_params[17]),#common_glass_params[17]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[18],#bionic_dark_glass_params[18]),#common_glass_params[18]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[19],#bionic_dark_glass_params[19]),#common_glass_params[19]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[20],#bionic_dark_glass_params[20]),#common_glass_params[20]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[21],#bionic_dark_glass_params[21]),#common_glass_params[21]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[22],#bionic_dark_glass_params[22]),#common_glass_params[22]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[23],#bionic_dark_glass_params[23]),#common_glass_params[23]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[24],#bionic_dark_glass_params[24]),#common_glass_params[24]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[25],#bionic_dark_glass_params[25]),#common_glass_params[25]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[26],#bionic_dark_glass_params[26]),#common_glass_params[26]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[27],#bionic_dark_glass_params[27]),#common_glass_params[27]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[28],#bionic_dark_glass_params[28]),#common_glass_params[28]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[29],#bionic_dark_glass_params[29]),#common_glass_params[29]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[30],#bionic_dark_glass_params[30]),#common_glass_params[30]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[31],#bionic_dark_glass_params[31]),#common_glass_params[31]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[32],#bionic_dark_glass_params[32]),#common_glass_params[32]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[33],#bionic_dark_glass_params[33]),#common_glass_params[33]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[34],#bionic_dark_glass_params[34]),#common_glass_params[34]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[35],#bionic_dark_glass_params[35]),#common_glass_params[35]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[36],#bionic_dark_glass_params[36]),#common_glass_params[36]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[37],#bionic_dark_glass_params[37]),#common_glass_params[37]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[38],#bionic_dark_glass_params[38]),#common_glass_params[38]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[39],#bionic_dark_glass_params[39]),#common_glass_params[39]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[40],#bionic_dark_glass_params[40]),#common_glass_params[40]),ifelse(#isBionic,ifelse(#bionicUseLight,#bionic_light_glass_params[41],#bionic_dark_glass_params[41]),#common_glass_params[41])" disableGlass="ifelse((#showBg || #isBlend),1,0)"
                    smallBlurRadius="36" bigBlurRadius="500"/>
-      <ColorBlendConfig colors="ifelse(#__darkmode,'#52000000','#B3FFFFFF'),ifelse(#__darkmode,'#75000000','#33F9F9F9')"
-                        colorModes="ifelse(#__darkmode,3,20),ifelse(#__darkmode,19,15)"
+      <ColorBlendConfig colors="ifelse(#uiDark,'#52000000','#B3FFFFFF'),ifelse(#uiDark,'#75000000','#33F9F9F9')"
+                        colorModes="ifelse(#uiDark,3,20),ifelse(#uiDark,19,15)"
                         disableBlend="ifelse((#showBg || #isGlass),1,0)"/>
       <BloomStrokeConfig disableBloomStroke="ifelse((#showBg || #isGlass),1,0)" bloomStrokeHeight="#view_height" bloomStrokeRadius="#outlineRadius" bloomStrokeWidth="#view_width" uGeoPxPosX="0.0" uGeoPxPosY="0.0" uShapeEdgePow="3" uColorPow="1.2" uColorAdd="0.0" uAlpha="1" uShapeEdgePx="24" uDarker="0.0" uDarkerRangeX="0.4" uDarkerRangeY="0.5" uScaleX="1" uScaleY="1" uRotationTrigX="1" uRotationTrigY="0.0" uDirectionalLightDirectionX="-0.6" uDirectionalLightDirectionY="0.7" uDirectionalLightDirectionZ="-0.05" uDirectionalLightIntensity="1.8" uDirectionalLightOppositeIntensity="1.2" uDirectionalLightAngleRange="0.7" uDirectionalLightMinLight="-0.5" uDirectionalLightLightWidth="8"/>
     </MaterialToken>
     <ViewOutlineProvider radius="#outlineRadius" type="rect" left="0" top="0" right="#view_width" bottom="#view_height"/>
-    <Rectangle x="0" y="0" w="#view_width" h="#view_height" cornerRadius="#outlineRadius"
-               fillColor="@cardBgColor" visibility="#showBg"/>
+    <!-- 背景完全交给 MaterialToken 的系统柔光玻璃：不画任何自绘底色 / 圆角底板 / 描边 -->
     <Group w="#view_width" h="#view_height">
       <Function name="openApp">
         <IntentCommand action="android.intent.action.MAIN"
@@ -50,20 +61,35 @@
                        class="com.toretto5060.pickupcatapp.app.ExpressListActivity"
                        flags="268484608"/>
       </Function>
-      <Text x="#pad" y="#pad-4*#scale" size="20*#scale" color="@ink"
-            fontFamily="mipro-medium" textExp="'取件喵'"/>
-      <Text x="#pad" y="#pad+26*#scale" size="34*#scale" color="@ink"
-            fontFamily="mipro-medium" textExp="formatFloat('%.0f',#pc_count)+' '+@pc_suffix"/>
-      <Text x="#view_width-#pad" y="#pad+2*#scale" width="190*#scale" align="right"
-            size="28*#scale" color="@codeInk" fontFamily="mipro-medium" ellipsis="true"
-            textExp="ifelse(#pc_count}0,@pc_code1,@pc_empty_text)"/>
-      <Text x="#view_width-#pad" y="#pad+42*#scale" width="190*#scale" align="right"
-            size="14*#scale" color="@subInk" ellipsis="true"
-            textExp="ifelse(#pc_count}0,@pc_place1,'')"/>
-      <Text x="#pad" y="#view_height-#pad-18*#scale" size="14*#scale" color="@subInk"
-            textExp="ifelse(#pc_count}0,@pc_time1+' 更新','')"/>
-      <Button x="0" y="0" w="#view_width" h="#view_height" interceptTouch="true"
-              visibility="ifelse(#hideCard,0,1)">
+      <Text name="txt_count" x="#padX" y="#padTop+#titleH/2" width="120*#u" alignV="center" size="26*#u"
+            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_count)"/>
+      <Text x="#padX+#txt_count.text_width+6*#u" y="#padTop+#titleH/2" width="140*#u" alignV="center" size="18*#u"
+            color="@titleInk" fontFamily="mipro-demibold" textExp="@pc_suffix"/>
+      <Group visibility="ifelse(#pc_count==0,1,0)">
+        <Text x="#padX+#rowPad" y="#padTop+#titleH+#rowH/2" width="#cardW-2*#rowPad"
+              alignV="center" size="15*#u" color="@secondaryInk" fontFamily="mipro-regular"
+              textExp="ifelse(eqs(@pc_status,'ok'),@pc_empty_text,'等待取件喵数据')"/>
+      </Group>
+      <Group visibility="ifelse(#pc_rows}0,1,0)">
+        <Text x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+4*#u" width="#cardW-2*#rowPad-#btnW-12*#u"
+              size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_code1"/>
+        <Text x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-27*#u" width="96*#u" size="16*#u"
+              color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_company1"/>
+        <Text x="#padX+#rowPad+104*#u" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-27*#u" width="72*#u" size="17*#u"
+              color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_time1"/>
+        <Text x="#padX+#rowPad+184*#u" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-27*#u" width="#cardW-2*#rowPad-184*#u"
+              size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_addr1"/>
+        <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
+                   cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
+        <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH/2"
+              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+      </Group>
+      <Button x="0" y="0" w="#view_width" h="#view_height" interceptTouch="true">
         <Triggers>
           <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
         </Triggers>
@@ -71,46 +97,57 @@
     </Group>
   </Layer>
 
+  <!-- 唯一数据通道：广播 extras 直接注入变量。不放 ContentProviderBinder ——
+       rust_maml_sdk 在 Resume 会重查它并产生「结果已过期」竞态（实测组件闪一下）。 -->
   <VariableBinders>
-    <ContentProviderBinder name="pickupcat" uri="content://com.toretto5060.pickupcatapp.maml/pending"
-                           columns="count,updated_at,empty_text,suffix,code1,company1,place1,time1,code2,company2,place2,time2,code3,company3,place3,time3,code4,company4,place4,time4" queryAtStart="true"
-                           countName="pc_has_data" statusName="pc_status">
-      <Variable name="pc_count" type="number" column="count"/>
-      <Variable name="pc_updated_at" type="number" column="updated_at"/>
-      <Variable name="pc_empty_text" type="string" column="empty_text"/>
-      <Variable name="pc_suffix" type="string" column="suffix"/>
-      <Variable name="pc_code1" type="string" column="code1"/>
-      <Variable name="pc_company1" type="string" column="company1"/>
-      <Variable name="pc_place1" type="string" column="place1"/>
-      <Variable name="pc_time1" type="string" column="time1"/>
-      <Variable name="pc_code2" type="string" column="code2"/>
-      <Variable name="pc_company2" type="string" column="company2"/>
-      <Variable name="pc_place2" type="string" column="place2"/>
-      <Variable name="pc_time2" type="string" column="time2"/>
-      <Variable name="pc_code3" type="string" column="code3"/>
-      <Variable name="pc_company3" type="string" column="company3"/>
-      <Variable name="pc_place3" type="string" column="place3"/>
-      <Variable name="pc_time3" type="string" column="time3"/>
-      <Variable name="pc_code4" type="string" column="code4"/>
-      <Variable name="pc_company4" type="string" column="company4"/>
-      <Variable name="pc_place4" type="string" column="place4"/>
-      <Variable name="pc_time4" type="string" column="time4"/>
+    <BroadcastBinder action="com.toretto5060.pickupcatapp.MAML_WIDGET_CHANGED">
+      <Variable name="pc_status" type="string" extra="status"/>
+      <Variable name="pc_count" type="number" extra="count"/>
+      <Variable name="pc_rows" type="number" extra="rows"/>
+      <Variable name="pc_empty_text" type="string" extra="empty_text"/>
+      <Variable name="pc_suffix" type="string" extra="suffix"/>
+      <Variable name="pc_company1" type="string" extra="company1"/>
+      <Variable name="pc_company_color1" type="string" extra="company_color1"/>
+      <Variable name="pc_code1" type="string" extra="code1"/>
+      <Variable name="pc_time1" type="string" extra="time1"/>
+      <Variable name="pc_addr1" type="string" extra="addr1"/>
+      <Variable name="pc_company2" type="string" extra="company2"/>
+      <Variable name="pc_company_color2" type="string" extra="company_color2"/>
+      <Variable name="pc_code2" type="string" extra="code2"/>
+      <Variable name="pc_time2" type="string" extra="time2"/>
+      <Variable name="pc_addr2" type="string" extra="addr2"/>
+      <Variable name="pc_company3" type="string" extra="company3"/>
+      <Variable name="pc_company_color3" type="string" extra="company_color3"/>
+      <Variable name="pc_code3" type="string" extra="code3"/>
+      <Variable name="pc_time3" type="string" extra="time3"/>
+      <Variable name="pc_addr3" type="string" extra="addr3"/>
+      <Variable name="pc_company4" type="string" extra="company4"/>
+      <Variable name="pc_company_color4" type="string" extra="company_color4"/>
+      <Variable name="pc_code4" type="string" extra="code4"/>
+      <Variable name="pc_time4" type="string" extra="time4"/>
+      <Variable name="pc_addr4" type="string" extra="addr4"/>
+      <Variable name="pc_company5" type="string" extra="company5"/>
+      <Variable name="pc_company_color5" type="string" extra="company_color5"/>
+      <Variable name="pc_code5" type="string" extra="code5"/>
+      <Variable name="pc_time5" type="string" extra="time5"/>
+      <Variable name="pc_addr5" type="string" extra="addr5"/>
       <Trigger>
         <VariableCommand name="pc_tick" expression="#pc_tick+1"/>
       </Trigger>
-    </ContentProviderBinder>
+    </BroadcastBinder>
   </VariableBinders>
 
+  <!-- 兜底：小部件 init / resume 时主动向 App 要一次最新快照。
+       IntentCommand 用 broadcast="true"（不是 type=broadcast），package 让广播显式投递到 App，
+       即使 App 进程已被回收，静态注册的 MamlWidgetRequestReceiver 也会被拉起。 -->
   <ExternalCommands>
     <Trigger action="init">
-      <BinderCommand name="pickupcat" command="refresh"/>
-      <VariableCommand name="pc_last_query" expression="#time_sys" type="number"/>
+      <IntentCommand action="com.toretto5060.pickupcatapp.MAML_WIDGET_REQUEST"
+                     package="com.toretto5060.pickupcatapp" broadcast="true"/>
     </Trigger>
     <Trigger action="resume">
-      <MultiCommand condition="((#time_sys - #pc_last_query) } 15000)">
-        <BinderCommand name="pickupcat" command="refresh"/>
-        <VariableCommand name="pc_last_query" expression="#time_sys" type="number"/>
-      </MultiCommand>
+      <IntentCommand action="com.toretto5060.pickupcatapp.MAML_WIDGET_REQUEST"
+                     package="com.toretto5060.pickupcatapp" broadcast="true"/>
     </Trigger>
   </ExternalCommands>
 </Widget>

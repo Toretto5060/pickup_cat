@@ -146,8 +146,13 @@ class ExpressWidgetProvider : AppWidgetProvider() {
                 // 开关关闭：0 件时仍显示一条空态行「还没有待取件」（低版本由 Factory 兜底）。
                 builder.addItem(EMPTY_ITEM_ID, buildWidgetRow(context, null))
             } else {
+                // 同地址同批次共用聚合后的快递品牌：解析脏值（「2条」）不能显示成公司名。
+                val brands = brandByGroup(pending)
                 for (entry in pending.take(MAX_LIST_ITEMS)) {
-                    builder.addItem(entry.id, buildWidgetRow(context, entry))
+                    builder.addItem(
+                        entry.id,
+                        buildWidgetRow(context, entry, brands[groupKey(entry.address, entry.batch)]),
+                    )
                 }
             }
             root.setRemoteAdapter(R.id.widget_list, builder.build())

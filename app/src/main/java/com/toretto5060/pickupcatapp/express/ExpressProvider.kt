@@ -121,8 +121,8 @@ internal class ExpressProvider : ContentProvider() {
                 }
                 val out = Uri.withAppendedPath(Uri.parse(C.ENTRIES_URI), id.toString())
                 context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
-                // MAML 主题小部件靠 ContentProviderBinder 观察这个 URI 刷新，不能只通知私有表。
-                context?.contentResolver?.notifyChange(Uri.parse(C.MAML_PENDING_URI), null)
+                // MAML 主题不走 AppWidget 更新广播：刷新广播 extras 携带完整快照，由 BroadcastBinder 直接注入变量。
+                MamlWidgetNotifier.notifyDataChanged(context)
                 out
             }
             CODE_SETTINGS -> {
@@ -169,7 +169,7 @@ internal class ExpressProvider : ContentProvider() {
         }
         if (count > 0) {
             context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
-            context?.contentResolver?.notifyChange(Uri.parse(C.MAML_PENDING_URI), null)
+            MamlWidgetNotifier.notifyDataChanged(context)
         }
         return count
     }
@@ -187,8 +187,8 @@ internal class ExpressProvider : ContentProvider() {
         if (count > 0) {
             context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
             context?.contentResolver?.notifyChange(Uri.parse(C.SETTINGS_URI), null)
-            // 「已取」等状态变化也要让 MAML 小部件的 ContentProviderBinder 重新查询。
-            context?.contentResolver?.notifyChange(Uri.parse(C.MAML_PENDING_URI), null)
+            // 「已取」等状态变化同样要重推快照，否则 MAML 主题里的取件信息不会消失。
+            MamlWidgetNotifier.notifyDataChanged(context)
         }
         return count
     }

@@ -74,6 +74,42 @@ internal fun cabinetShort(c: String): String {
     return if (m != null) "${m.groupValues[1]}柜" else c
 }
 
+/**
+ * 快递品牌归一化：同品牌的不同写法（「韵达快递」/「韵达速递」/「【韵达快递】」）归到同一个键，
+ * 用来判断「同一取件点里是不是真的混了不同快递」。
+ *
+ * 解析噪声（「2条」「通知」这类既不是已知品牌、又很短的串）返回空串：不能因为一条脏数据
+ * 就把同一家快递的两条取件码误判成两家，从而叠出两个 logo。
+ */
+internal fun companyBrand(name: String): String {
+    val s = name.trim()
+    if (s.isEmpty()) return ""
+    val aliases = listOf(
+        "申通" to "申通快递", "圆通" to "圆通速递", "韵达" to "韵达快递",
+        "中通" to "中通快递", "顺丰" to "顺丰", "京东" to "京东",
+        "邮政" to "邮政", "EMS" to "EMS", "极兔" to "极兔",
+        "菜鸟" to "菜鸟", "丰巢" to "丰巢", "兔喜" to "兔喜生活", "多多" to "多多代收点",
+    )
+    for ((key, canonical) in aliases) {
+        if (s.contains(key, ignoreCase = true)) return canonical
+    }
+    return if (s.length < 3) "" else s
+}
+
+/** 分组键：与 [ExpressGroup.key] 同口径（归一化地址 + 冻结批次）。 */
+internal fun groupKey(address: String, batch: Int): String =
+    "${ExpressGroup.normalize(address)}#$batch"
+
+/**
+ * 同地址同批次里第一个可识别的快递品牌，供标准 AppWidget 逐行渲染共用。
+ * 解析脏值（「2条」）会被 [companyBrand] 过滤掉，避免它出现在公司名位置。
+ */
+internal fun brandByGroup(rows: List<ExpressRow>): Map<String, String> =
+    rows.groupBy { groupKey(it.address, it.batch) }
+        .mapValues { (_, list) ->
+            list.firstNotNullOfOrNull { companyBrand(it.company).takeIf(String::isNotEmpty) }.orEmpty()
+        }
+
 /** 快递品牌色（ARGB）：列表徽标与小部件公司文字共用同一映射，未知品牌按名取色。 */
 internal fun brandColorArgb(company: String): Int {
     val known = mapOf(

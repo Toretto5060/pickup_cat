@@ -76,6 +76,7 @@ import com.toretto5060.pickupcatapp.express.ExpressRow
 import com.toretto5060.pickupcatapp.express.ExpressStore
 import com.toretto5060.pickupcatapp.express.ExpressWidgetProvider
 import com.toretto5060.pickupcatapp.express.brandColorArgb
+import com.toretto5060.pickupcatapp.express.companyBrand
 import com.toretto5060.pickupcatapp.express.formatReceivedAt
 import com.toretto5060.pickupcatapp.ui.theme.AppTheme
 import kotlinx.coroutines.launch
@@ -736,19 +737,22 @@ private fun Pill(text: String, style: PillStyle, onClick: (() -> Unit)? = null) 
 /**
  * 站点徽标：同一地址只有一家快递时是单个品牌色方块；有多家时做**错位叠加**（后层偏右下、
  * 前层带卡片底色描边），一眼能看出这张卡片混了不同快递。
+ *
+ * 「是不是多家」按 [companyBrand] 归一后的品牌判断，不按原始字符串：同一个快递的
+ * 不同写法、以及解析噪声（如「2条」）都不该叠出第二个 logo。
  */
 @Composable
 private fun SiteLogo(companies: List<String>) {
-    val list = companies.filter { it.isNotEmpty() }.distinct()
+    val list = companies.map(::companyBrand).filter { it.isNotEmpty() }.distinct()
     if (list.size < 2) {
         val company = list.firstOrNull().orEmpty()
-        val tint = Color(brandColorArgb(company))
+        val tint = if (company.isEmpty()) Color(0xFF8A8A8E) else Color(brandColorArgb(company))
         Box(
             Modifier.size(40.dp).clip(RoundedCornerShape(11.dp)).background(tint.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                company.firstOrNull()?.toString().orEmpty(),
+                company.firstOrNull()?.toString().orEmpty().ifEmpty { "取" },
                 fontSize = 19.sp,
                 fontWeight = FontWeight.Bold,
                 color = tint,
