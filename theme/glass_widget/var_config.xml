@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WidgetConfig version="1" des="取件喵·柔光玻璃小部件可编辑项">
+  <Color name="textColor" displayTitle="文字颜色（关闭自动配色后生效）">
+    <item>#FFFFFF</item>
+    <item>#FF1A1A1A</item>
+    <item>#FF3482FF</item>
+    <item>#FFFF3B30</item>
+  </Color>
+
+  <OnOff name="autoColor" default="1" displayTitle="自动适配深浅色文字"/>
+
+  <MultiImageSelect name="glass_type" single="true" shapeType="1" displayTitle="柔光玻璃效果"
+                    width="210" height="210" dependOn="6">
+    <item displayTitle="深色柔光" value="assets/config/glass_bionic.webp" contentDescription="深色柔光"/>
+    <item displayTitle="浅色柔光" value="assets/config/glass_common_light.webp"
+          valueDark="assets/config/glass_common_dark.webp" contentDescription="浅色柔光"/>
+  </MultiImageSelect>
+
+  <OnOff name="showEmpty" default="0" displayTitle="0 件待取时仍显示卡片"/>
+
+  <ImageSelect name=" " displayTitle="使用说明：需安装取件喵并授予通知使用权。" width="0" height="0" uiType="0"/>
+  <ImageSelect name=" " displayTitle="数据来自 content://com.toretto5060.pickupcatapp.maml/pending 只读接口。" width="0" height="0" uiType="0"/>
+  <ImageSelect name=" " displayTitle="非 OS4 或关闭高级材质时自动回退半透明卡片。" width="0" height="0" uiType="0"/>
+</WidgetConfig>

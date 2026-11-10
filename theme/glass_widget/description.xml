@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<theme>
+  <title>取件喵·柔光玻璃</title>
+  <designer>取件喵</designer>
+  <author>取件喵</author>
+  <version>1</version>
+  <uiVersion>12</uiVersion>
+  <osVersion>4</osVersion>
+  <typeTag>theme_bind:com.toretto5060.pickupcatapp</typeTag>
+  <bindApp>com.toretto5060.pickupcatapp</bindApp>
+  <bindAction>click,show</bindAction>
+  <frame>0</frame>
+  <editable>true</editable>
+  <customEditLink>true</customEditLink>
+  <resourceType>widgets</resourceType>
+  <authors>
+    <author locale="zh_CN">取件喵</author>
+    <author locale="en_US">PickupCat</author>
+  </authors>
+  <designers>
+    <designer locale="zh_CN">取件喵</designer>
+    <designer locale="en_US">PickupCat</designer>
+  </designers>
+  <titles>
+    <title locale="zh_CN">取件喵·柔光玻璃</title>
+    <title locale="en_US">PickupCat Soft Glass</title>
+  </titles>
+  <description>
+    取件喵待取件小部件 2x1 / 2x2 / 4x2，HyperOS 4 高级材质开启时由桌面渲染真实背景模糊与柔光玻璃，
+    支持深色柔光 / 浅色柔光、自动深浅色文字与 0 件待取隐身。非 OS4 或关闭高级材质时回退半透明卡片。
+    需安装取件喵并授予通知使用权；主题仅读取待取件数量与前 4 条取件码，不读取短信原文。
+  </description>
+</theme>

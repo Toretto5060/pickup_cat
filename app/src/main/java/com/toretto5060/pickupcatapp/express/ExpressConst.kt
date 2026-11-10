@@ -16,6 +16,14 @@ internal object ExpressConst {
     const val ENTRIES_URI = "content://$AUTHORITY/entries"
     const val SETTINGS_URI = "content://$AUTHORITY/settings"
 
+    /** 供 HyperOS 4 MAML 小部件（.mtz 主题）读取的只读投影，独立于私有数据库 Provider。 */
+    const val MAML_AUTHORITY = "com.toretto5060.pickupcatapp.maml"
+    const val MAML_PENDING_URI = "content://$MAML_AUTHORITY/pending"
+    const val MAML_COL_COUNT = "count"
+    const val MAML_COL_UPDATED_AT = "updated_at"
+    const val MAML_COL_EMPTY_TEXT = "empty_text"
+    const val MAML_COL_SUFFIX = "suffix"
+
     /** SQLite table that holds one row per captured pickup. */
     const val TABLE_ENTRIES = "entries"
     /** SQLite table that holds one key/value row of settings. */

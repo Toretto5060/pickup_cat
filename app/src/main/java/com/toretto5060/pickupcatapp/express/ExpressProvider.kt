@@ -121,6 +121,8 @@ internal class ExpressProvider : ContentProvider() {
                 }
                 val out = Uri.withAppendedPath(Uri.parse(C.ENTRIES_URI), id.toString())
                 context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
+                // MAML 主题小部件靠 ContentProviderBinder 观察这个 URI 刷新，不能只通知私有表。
+                context?.contentResolver?.notifyChange(Uri.parse(C.MAML_PENDING_URI), null)
                 out
             }
             CODE_SETTINGS -> {
@@ -165,7 +167,10 @@ internal class ExpressProvider : ContentProvider() {
             CODE_ENTRIES_ID -> db.delete(C.TABLE_ENTRIES, "${C.COL_ID}=?", arrayOf(uri.lastPathSegment!!))
             else -> throw IllegalArgumentException("unknown uri $uri")
         }
-        if (count > 0) context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
+        if (count > 0) {
+            context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
+            context?.contentResolver?.notifyChange(Uri.parse(C.MAML_PENDING_URI), null)
+        }
         return count
     }
 
@@ -182,6 +187,8 @@ internal class ExpressProvider : ContentProvider() {
         if (count > 0) {
             context?.contentResolver?.notifyChange(Uri.parse(C.ENTRIES_URI), null)
             context?.contentResolver?.notifyChange(Uri.parse(C.SETTINGS_URI), null)
+            // 「已取」等状态变化也要让 MAML 小部件的 ContentProviderBinder 重新查询。
+            context?.contentResolver?.notifyChange(Uri.parse(C.MAML_PENDING_URI), null)
         }
         return count
     }

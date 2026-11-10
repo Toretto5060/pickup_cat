@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- OS4 高级材质 GlassConfig 的 42 个参数，取自系统内置 widget_clock_2x2 小部件。
+     common_* 会随 #__darkmode / #applied_light_wallpaper 自适应，bionic_* 为深色/浅色壁纸融合玻璃。 -->
+<MaterialVars>
+  <Var name="common_glass_params" type="number[]" values=" ifelse(#__darkmode,0.5,ifelse(#applied_light_wallpaper,0.5,1)),ifelse(#__darkmode,1,ifelse(#applied_light_wallpaper,1,1)),ifelse(#__darkmode,0,0),ifelse(#__darkmode,1,1), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.2,0.3)), ifelse(#__darkmode,3,2), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.1,0.2)), 0, ifelse(#__darkmode,0.4,ifelse(#applied_light_wallpaper,0.6,0.4)),0.8, ifelse(#__darkmode,0.04,0.02), ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.4,1), 0, ifelse(#__darkmode,0.8,1), ifelse(#__darkmode,1.5,1), 1, 36, ifelse(#__darkmode,2.2,ifelse(#applied_light_wallpaper,2.2,1.8)), 80, 200, 1, 0.8, -0.4,0.6,-0.8, ifelse(#__darkmode,2.4,1.4), ifelse(#__darkmode,1.6,0.8), 1.4, 0.85, 3, 0, 0, 0, 0, 0, 0, 0, 0,0 " />
+  <Var name="bionic_dark_glass_params" type="number[]" values=" 0.5,1.5,0.5,1.4, 0.16, 1.5, 0.2, 0.3, 0.2,0.8, 0, 1,1,1,0.1, 0, 0.2, 1.4, 1, 36, 2.2, 80, 200, 1, 0.8, -0.4,0.6,-0.8, 1, 0.7, 1.4, 1.12, 3, 1.8, -0.2, 1, 0, 0, 0, 0, 0,0 " />
+  <Var name="bionic_light_glass_params" type="number[]" values=" 0.5,1,0,1, 0.2, 2, 0.1, 0.01, 0.6,0.8, 0.02, 0.9,0.9,0.9,1, 0, 0.5, 1.5, 1, 36, 2.2, 80, 200, 1, 0.8, -0.4,0.6,-0.8, 0.8, 0.5, 1.4, 1.12, 3, 0, 0, 0, 0, 0, 0, 0, 0,0 " />
+</MaterialVars>
