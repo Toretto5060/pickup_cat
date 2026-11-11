@@ -45,7 +45,9 @@ MAX_ROWS = 5
 
 # designW/designH 为官方预览画布像素；u_factor 把 Android 的 dp/sp 换算到该画布。
 # 5x3 已按用户要求移除。
+# rows = 本尺寸「每页显示行数」；1x1 为角落总数卡（rows=0 不翻页只显示总数）。
 SIZES = {
+    "1x1": dict(w=216, h=216, rows=0, u=1.0, wide=False),   # 角落总数卡：左上「待取」+ 居中放大数字
     "2x1": dict(w=440, h=165, rows=1, u=1.15, wide=False),
     "2x2": dict(w=440, h=440, rows=2, u=2.0, wide=False),
     "4x2": dict(w=948, h=440, rows=2, u=2.0, wide=True),
@@ -64,16 +66,20 @@ GLASS_PARAMS = ",".join(
     for i in range(42)
 )
 
-# BroadcastBinder 的 Variable 用 extra 指定 Intent key（反编译 com.miui.maml 确认）：
-# type=string → getStringExtra，type=number → getDoubleExtra。count/rows 由 App 以 Double 放入 extras。
-# 不声明 pc_updated_at：主题没用到。
-BROADCAST_VARS = "\n".join(
-    [f'      <Variable name="pc_status" type="string" extra="status"/>',
-     f'      <Variable name="pc_count" type="number" extra="count"/>',
-     f'      <Variable name="pc_rows" type="number" extra="rows"/>',
-     f'      <Variable name="pc_empty_text" type="string" extra="empty_text"/>',
-     f'      <Variable name="pc_suffix" type="string" extra="suffix"/>']
-    + [f'      <Variable name="pc_{k}{i}" type="string" extra="{k}{i}"/>'
+# ContentProviderBinder 的 Variable 用 column 指定 Provider 列（init 时直接跨 UID 查询拉数据，
+# 不依赖 App 主动推送，因此「重新导入即有数据」）。变量在此**唯一声明一次**；
+# 广播收到后只用 BinderCommand 触发本 binder 重查，绝不重复声明同名变量（否则 MAML 报重复定义）。
+# type=string → 文本列；type=number → 数字列（Provider 以 Double/Long 写入，MAML 读为 number）。
+CP_VARS = "\n".join(
+    [f'      <Variable name="pc_status" type="string" column="status"/>',
+     f'      <Variable name="pc_count" type="number" column="count"/>',
+     f'      <Variable name="pc_rows" type="number" column="rows"/>',
+     f'      <Variable name="pc_rows_shown" type="number" column="rows_shown"/>',
+     f'      <Variable name="pc_empty_text" type="string" column="empty_text"/>',
+     f'      <Variable name="pc_suffix" type="string" column="suffix"/>']
+    + [f'      <Variable name="pc_id{i}" type="number" column="id{i}"/>'
+       for i in range(1, MAX_ROWS + 1)]
+    + [f'      <Variable name="pc_{k}{i}" type="string" column="{k}{i}"/>'
        for i in range(1, MAX_ROWS + 1)
        for k in ("company", "company_color", "code", "time", "addr")]
 )
@@ -128,6 +134,9 @@ HEADER = Template("""<?xml version="1.0" encoding="UTF-8"?>
   <Var name="secondaryInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#99FFFFFF','#99000000'),@textColor)"/>
   <Var name="countRed" type="string" expression="'#FFFF3B30'"/>
   <Var name="pickBg" type="string" expression="ifelse(#uiDark,'#FF4A8CFF','#FF3482FF')"/>
+  <!-- 翻页：page 为可写状态变量（无 expression），由卡片点按/滑动/点圆点的 VariableCommand 改写；
+       lastIndex 由生成时按每页行数算出（最大页码,0基）注入，避免运行时用 >/< 比较。 -->
+  <Var name="page" type="number"/>
   <Var name="pc_tick" type="number" expression="0"/>
 ${material_vars}
   <Layer width="#view_width" height="#view_height" frameRate="-1" layerType="bottom"
@@ -151,22 +160,33 @@ ${material_vars}
                        class="com.toretto5060.pickupcatapp.app.ExpressListActivity"
                        flags="268484608"/>
       </Function>
-${layout}
-      <Button x="0" y="0" w="#view_width" h="#view_height" interceptTouch="true">
+      ${layout}
+      <!-- 翻页层：只捕获上下滑动手势翻页，不挂 up。
+           openApp 与「我已取件」按钮都在本层之上的独立图层，
+           二者矩形零重叠，点按不会互相连带。 -->
+      <Button x="0" y="0" w="#view_width" h="#view_height">
         <Triggers>
-          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+          <Trigger action="onFling"><VariableCommand name="page" expression="ifelse(#page==${lastIndex},0,#page+1)"/></Trigger>
         </Triggers>
       </Button>
+      ${pick}
+      ${openapp}
     </Group>
   </Layer>
 
-  <!-- 唯一数据通道：广播 extras 直接注入变量。不放 ContentProviderBinder ——
-       rust_maml_sdk 在 Resume 会重查它并产生「结果已过期」竞态（实测组件闪一下）。 -->
+  <!-- 数据双通道（变量只在 ContentProviderBinder 声明一次）：
+       1) ContentProviderBinder：init 时跨 UID 直查本 App 导出的只读 Provider 拉初始数据，
+          因此「重新导入即显示」，不依赖 App 主动推送；并监听 Provider 的 notifyChange 自动重查。
+       2) BroadcastBinder：收到 App 推送广播时，用 BinderCommand 触发上面的 CP 重查，
+          双保险覆盖新消息/取件后的刷新。不重复声明变量。 -->
   <VariableBinders>
+    <ContentProviderBinder name="pc_provider" uri="content://com.toretto5060.pickupcatapp.maml/pending"
+        queryAtStart="true" firstRequery="false">
+${cp_vars}
+    </ContentProviderBinder>
     <BroadcastBinder action="com.toretto5060.pickupcatapp.MAML_WIDGET_CHANGED">
-${broadcast_vars}
       <Trigger>
-        <VariableCommand name="pc_tick" expression="#pc_tick+1"/>
+        <BinderCommand name="pc_provider"/>
       </Trigger>
     </BroadcastBinder>
   </VariableBinders>
@@ -189,53 +209,59 @@ ${broadcast_vars}
 
 
 def header() -> str:
-    """标题栏：alignV=center 把 y 当文字中心，所以给标题区中线，别给顶部。"""
-    return """      <Text name="txt_count" x="#padX" y="#padTop+#titleH/2" width="120*#u" alignV="center" size="26*#u"
-            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_count)"/>
-      <Text x="#padX+#txt_count.text_width+6*#u" y="#padTop+#titleH/2" width="140*#u" alignV="center" size="18*#u"
+    """标题栏：alignV=center 把 y 当文字中心，所以给标题区中线，别给顶部。
+    计数数字的左缘必须与下方快递公司名（#padX+#rowPad）对齐，不能直接用 #padX。
+    数字 = 待取件**件数**（pc_rows=取件码条数），不是取件点组数（pc_count）。"""
+    return """      <Text name="txt_count" x="#padX+#rowPad" y="#padTop+#titleH/2" width="120*#u" alignV="center" size="26*#u"
+            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_rows)"/>
+      <Text x="#padX+#rowPad+#txt_count.text_width+6*#u" y="#padTop+#titleH/2" width="140*#u" alignV="center" size="18*#u"
             color="@titleInk" fontFamily="mipro-demibold" textExp="@pc_suffix"/>"""
 
 
-def row_card(index: int, wide: bool) -> str:
-    """一条取件码；y 由行号推导，58dp 行高 + 12dp 间隔，无卡片背景。"""
-    y = f"#padTop+#titleH+{index - 1}*(#rowH+#gap)"
-    # 快递公司名同样跟随明暗反色（用户两次明确要求：深色玻璃白、浅色玻璃黑），
-    # 不再引用品牌色 —— 品牌色里中通/顺丰是纯黑、韵达是深蓝 #FF0E4C9A，
-    # 浅色玻璃上看起来都像黑字，用户会认为「反色没生效」。
+def row_card(data_index: int, local_i: int, page_index: int, wide: bool) -> str:
+    """一条取件码。
+    - data_index：1..MAX_ROWS，对应 pc_company{data_index} 等数据列；
+    - local_i   ：页内行号 1..perPage，决定这一行在卡片里的 y（各页内容叠在同一区域，
+                  靠 #page 切换可见性，实现「上下滑动/点按卡片体翻页」把多余条目翻出来）；
+    - page_index：这一行属于第几页（0 基）。
+    卡片体（全屏 Button，位于内容之下）上下滑动或点按翻页；「我已取件」按钮直接发广播
+    标记该行已取（与安卓小部件一致，按行 id 精确标记，不跳列表）。"""
+    y = f"#padTop+#titleH+{local_i - 1}*(#rowH+#gap)"
+    # 快递公司名同样跟随明暗反色（用户明确要求：深色玻璃白、浅色玻璃黑），不引用品牌色。
     company_color = "@textInk"
     if wide:
-        body = f"""        <Text name="txt_company@N@" x="#padX+#rowPad" y="@Y@+8*#u" width="150*#u" size="16*#u"
+        # 公司名(16sp)与取件码(26sp)都用 alignV=center + 同一个 y（取件码槽位中心 21u），垂直居中。
+        # 时间/地址从 rowH-23：26sp 取件码字形底部约在 Y+30u，留 5u 间隙。
+        body = f"""        <Text name="txt_company@N@" x="#padX+#rowPad" y="@Y@+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="{company_color}" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company@N@"/>
-        <Text x="#padX+#rowPad+#txt_company@N@.text_width+12*#u" y="@Y@+4*#u"
+        <Text x="#padX+#rowPad+#txt_company@N@.text_width+12*#u" y="@Y@+21*#u" alignV="center"
               width="#cardW-2*#rowPad-#txt_company@N@.text_width-12*#u-#btnW-12*#u"
               size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_code@N@"/>
-        <Text name="txt_time@N@" x="#padX+#rowPad" y="@Y@+#rowH-27*#u" width="120*#u" size="17*#u"
+        <Text name="txt_time@N@" x="#padX+#rowPad" y="@Y@+#rowH-23*#u" width="120*#u" size="17*#u"
               color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_time@N@"/>
-        <Text x="#padX+#rowPad+#txt_time@N@.text_width+8*#u" y="@Y@+#rowH-27*#u"
+        <Text x="#padX+#rowPad+#txt_time@N@.text_width+8*#u" y="@Y@+#rowH-23*#u"
               width="#cardW-2*#rowPad-#txt_time@N@.text_width-8*#u"
               size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_addr@N@"/>"""
     else:
-        body = f"""        <Text x="#padX+#rowPad" y="@Y@+4*#u" width="#cardW-2*#rowPad-#btnW-12*#u"
+        body = f"""        <Text x="#padX+#rowPad" y="@Y@+21*#u" alignV="center" width="#cardW-2*#rowPad-#btnW-12*#u"
               size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_code@N@"/>
-        <Text x="#padX+#rowPad" y="@Y@+#rowH-27*#u" width="96*#u" size="16*#u"
+        <Text x="#padX+#rowPad" y="@Y@+#rowH-23*#u" width="96*#u" size="16*#u"
               color="{company_color}" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company@N@"/>
-        <Text x="#padX+#rowPad+104*#u" y="@Y@+#rowH-27*#u" width="72*#u" size="17*#u"
+        <Text x="#padX+#rowPad+104*#u" y="@Y@+#rowH-23*#u" width="72*#u" size="17*#u"
               color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_time@N@"/>
-        <Text x="#padX+#rowPad+184*#u" y="@Y@+#rowH-27*#u" width="#cardW-2*#rowPad-184*#u"
+        <Text x="#padX+#rowPad+184*#u" y="@Y@+#rowH-23*#u" width="#cardW-2*#rowPad-184*#u"
               size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_addr@N@"/>"""
-    # 第 i 行仅在「取件码条数 > i-1」时显示。用 #pc_rows 而不是 #pc_count：
-    # 一个取件点（count=1）可能有多条取件码，都要逐行列出。
-    # 按钮文字的 x/y 必须是按钮中心（align/alignV=center 把 x/y 当文字中心点），
-    # 且不能带 width/height，否则白字会飘到蓝块左上外面。
-    tpl = """      <Group visibility="ifelse(#pc_rows}@MIN@,1,0)">
+    # 仅当「本行有数据(任一 k∈[data_index..MAX_ROWS] 满足 pc_rows==k) 且 处于当前页」时显示；
+    # 各页行按 local_i 叠在同一 y 区域，page 切换即原地翻页。可见性只用 ==/**/||，不依赖 >/<。
+    tpl = """      <Group visibility="ifelse(#page==@PAGE@ ** (@HASDATA@),1,0)">
 @BODY@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="@Y@+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
@@ -243,8 +269,80 @@ def row_card(index: int, wide: bool) -> str:
               align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'我已取件'"/>
       </Group>"""
-    return (tpl.replace("@BODY@", body).replace("@N@", str(index))
-            .replace("@MIN@", str(index - 1)).replace("@Y@", y))
+    has_data = " || ".join(f"#pc_rows_shown=={k}" for k in range(data_index, MAX_ROWS + 1))
+    return (tpl.replace("@BODY@", body).replace("@N@", str(data_index))
+            .replace("@HASDATA@", has_data).replace("@Y@", y).replace("@PAGE@", str(page_index)))
+
+
+def open_app_buttons(cfg: dict) -> str:
+    """卡片上「除我已取件按钮外」的可点区域 → 跳 App 待取件列表。
+
+    必须与取件按钮矩形**零重叠**：MAML 对重叠兄弟元素的点按会派发给所有层，
+    若像从前那样用一张全卡 Button 挂 up→openApp，点「我已取件」就会连带启动列表页
+    （表现为「进 app 又瞬间闪退」）。因此按几何拆成数个不重叠矩形：
+      - 左侧大块（标题 / 公司名 / 取件码 / 时间 / 地址都在这一侧）；
+      - 按钮列右缘到卡片右缘的窄条；
+      - 按钮列内、每个行槽里「按钮上方」与「按钮下方」的空白（含行间 gap）。
+    1x1 迷你卡没有取件按钮，整卡一个矩形即可。
+    """
+    def rect(x: str, y: str, w: str, h: str) -> str:
+        return (f'      <Button x="{x}" y="{y}" w="{w}" h="{h}">\n'
+                f'        <Triggers>\n'
+                f'          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>\n'
+                f'        </Triggers>\n'
+                f'      </Button>')
+
+    per_page = cfg["rows"]
+    if per_page <= 0:
+        return rect("0", "0", "#view_width", "#view_height")
+
+    left_edge = "#padX+#cardW-#rowPad-#btnW"   # 按钮列左缘
+    right_edge = "#padX+#cardW-#rowPad"        # 按钮列右缘
+    parts = [
+        rect("0", "0", left_edge, "#view_height"),
+        rect(right_edge, "0", "#padX+#rowPad", "#view_height"),
+    ]
+    base = "#padTop+#titleH"
+    for local_i in range(1, per_page + 1):
+        row_top = f"{base}+{local_i - 1}*(#rowH+#gap)"
+        btn_y = f"{row_top}+(#rowH-#btnH)/2"
+        parts.append(rect(left_edge, row_top, "#btnW", "(#rowH-#btnH)/2"))
+        parts.append(rect(left_edge, f"{btn_y}+#btnH", "#btnW",
+                          "(#rowH-#btnH)/2+#gap"))
+    return "\n".join(parts)
+
+
+def pick_button(data_index: int, local_i: int, page_index: int) -> str:
+    """「我已取件」按钮：置于翻页层之上（${pick}），点它直接发广播精确标记该行已取（按行 id），不跳列表。
+    可见性与对应行一致（本行有数据 且 处于当前页），避免翻到别的页时误点中错位按钮。"""
+    by = f"#padTop+#titleH+{local_i - 1}*(#rowH+#gap)+(#rowH-#btnH)/2"
+    has_data = " || ".join(f"#pc_rows_shown=={k}" for k in range(data_index, MAX_ROWS + 1))
+    return (f'      <Button x="#padX+#cardW-#rowPad-#btnW" y="{by}" w="#btnW" h="#btnH" '
+            f'interceptTouch="true" '
+            f'visibility="ifelse(#page=={page_index} ** ({has_data}),1,0)">\n'
+            f'        <Triggers>\n'
+            f'          <Trigger action="up"><IntentCommand\n'
+            f'            action="com.toretto5060.pickupcatapp.MAML_PICK"\n'
+            f'            package="com.toretto5060.pickupcatapp"\n'
+            f'            broadcast="true">\n'
+            f'              <Extra name="row_id" type="long" expression="#pc_id{data_index}"/>\n'
+            f'              <Extra name="row_index" type="string" expression="\'{data_index}\'"/>\n'
+            f'            </IntentCommand></Trigger>\n'
+            f'        </Triggers>\n'
+            f'      </Button>')
+
+
+def pick_buttons(cfg: dict) -> str:
+    """所有「我已取件」按钮（独立图层，位于翻页层之上）。"""
+    per_page = cfg["rows"]
+    if per_page <= 0:
+        return ""
+    parts = []
+    for r in range(1, MAX_ROWS + 1):
+        local_i = (r - 1) % per_page + 1
+        page_index = (r - 1) // per_page
+        parts.append(pick_button(r, local_i, page_index))
+    return "\n".join(parts)
 
 
 def empty_card() -> str:
@@ -256,19 +354,69 @@ def empty_card() -> str:
       </Group>"""
 
 
+def page_dots(perPage: int) -> str:
+    """翻页点点指示器：右侧竖向、垂直居中；当前页红点、其余暗点；纯视觉不可点。
+    暗点仅在该页确有取件码时显示 —— 因此 3 条(每页2)只显示 2 个点，而非容量 3 个。
+    可见性只用 ==/**/|| 与常量，不依赖 >/< 比较。"""
+    max_pages = (MAX_ROWS + perPage - 1) // perPage
+    if max_pages <= 1:
+        return ""
+    parts = []
+    gap = 16
+    for p in range(max_pages):
+        cx = "#view_width-18*#u"
+        cy = f"#view_height/2+({p-(max_pages-1)/2})*{gap}*#u"
+        # 该页首条索引：page p 含取件码 k∈[first..first+perPage-1]；有数据 ⇔ pc_rows≥first
+        first = p * perPage + 1
+        has = " || ".join(f"#pc_rows_shown=={k}" for k in range(first, MAX_ROWS + 1))
+        parts.append(
+            f'      <Rectangle x="{cx}-3*#u" y="{cy}-3*#u" w="6*#u" h="6*#u" '
+            f'cornerRadiusExp="3*#u" fillColor="@secondaryInk" '
+            f'visibility="ifelse({has},1,0)"/>')
+        parts.append(
+            f'      <Rectangle x="{cx}-3*#u" y="{cy}-3*#u" w="6*#u" h="6*#u" '
+            f'cornerRadiusExp="3*#u" fillColor="@countRed" '
+            f'visibility="ifelse(#page=={p},1,0)"/>')
+    return "\n".join(parts)
+
+
+def mini_widget() -> str:
+    """1x1 角落总数卡：左上「待取」+ 居中放大数字（总件数）+ 下方「件待取」。"""
+    return """      <Text x="#padX" y="#padTop" width="100*#u" size="15*#u" color="@secondaryInk"
+            fontFamily="mipro-demibold" textExp="'待取'"/>
+      <Text x="#view_width/2" y="#view_height/2" align="center" alignV="center"
+            size="84*#u" color="@countRed" fontFamily="mipro-demibold"
+            textExp="formatFloat('%.0f',#pc_rows)"/>
+      <Text x="#view_width/2" y="#view_height/2+50*#u" align="center" alignV="center"
+            size="15*#u" color="@secondaryInk" fontFamily="mipro-regular"
+            textExp="'件待取'"/>"""
+
+
 def layout(cfg: dict) -> str:
+    per_page = cfg["rows"]
+    if per_page <= 0:
+        # 1x1 角落卡：只显示总数，不翻页
+        return mini_widget()
     parts = [header(), empty_card()]
-    parts += [row_card(i, cfg["wide"]) for i in range(1, cfg["rows"] + 1)]
+    for r in range(1, MAX_ROWS + 1):
+        local_i = (r - 1) % per_page + 1
+        page_index = (r - 1) // per_page
+        parts.append(row_card(r, local_i, page_index, cfg["wide"]))
+    parts.append(page_dots(per_page))
     return "\n".join(parts)
 
 
 def main() -> None:
     for key, cfg in SIZES.items():
+        per_page = cfg["rows"]
+        max_pages = 1 if per_page <= 0 else (MAX_ROWS + per_page - 1) // per_page
+        last_index = max_pages - 1
         xml = HEADER.substitute(
             design_key=key, design_w=cfg["w"], design_h=cfg["h"],
             u_factor=cfg["u"], material_vars=MATERIAL_VARS, glass_params=GLASS_PARAMS,
             bloom_stroke=BLOOM_STROKE, layout=layout(cfg),
-            broadcast_vars=BROADCAST_VARS,
+            cp_vars=CP_VARS, lastIndex=last_index,
+            openapp=open_app_buttons(cfg), pick=pick_buttons(cfg),
         )
         out = ROOT / "src" / f"manifest_{key}.xml"
         out.write_text(xml, encoding="utf-8")

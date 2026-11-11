@@ -13,7 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "dist" / "取件喵柔光玻璃小部件.mtz"
-SIZES = ("2x1", "2x2", "4x2", "5x2")
+SIZES = ("1x1", "2x1", "2x2", "4x2", "5x2")
 CONFIG_ASSETS = (
     "glass_bionic.webp",
     "glass_common_light.webp",

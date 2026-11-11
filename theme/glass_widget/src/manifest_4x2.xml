@@ -36,6 +36,9 @@
   <Var name="secondaryInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#99FFFFFF','#99000000'),@textColor)"/>
   <Var name="countRed" type="string" expression="'#FFFF3B30'"/>
   <Var name="pickBg" type="string" expression="ifelse(#uiDark,'#FF4A8CFF','#FF3482FF')"/>
+  <!-- 翻页：page 为可写状态变量（无 expression），由卡片点按/滑动/点圆点的 VariableCommand 改写；
+       lastIndex 由生成时按每页行数算出（最大页码,0基）注入，避免运行时用 >/< 比较。 -->
+  <Var name="page" type="number"/>
   <Var name="pc_tick" type="number" expression="0"/>
   <Var name="common_glass_params" type="number[]" values=" ifelse(#__darkmode,0.5,ifelse(#applied_light_wallpaper,0.5,1)),ifelse(#__darkmode,1,ifelse(#applied_light_wallpaper,1,1)),ifelse(#__darkmode,0,0),ifelse(#__darkmode,1,1), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.2,0.3)), ifelse(#__darkmode,3,2), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.1,0.2)), 0, ifelse(#__darkmode,0.4,ifelse(#applied_light_wallpaper,0.6,0.4)),0.8, ifelse(#__darkmode,0.04,0.02), ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.4,1), 0, ifelse(#__darkmode,0.8,1), ifelse(#__darkmode,1.5,1), 1, 36, ifelse(#__darkmode,2.2,ifelse(#applied_light_wallpaper,2.2,1.8)), 80, 200, 1, 0.8, -0.4,0.6,-0.8, ifelse(#__darkmode,2.4,1.4), ifelse(#__darkmode,1.6,0.8), 1.4, 0.85, 3, 0, 0, 0, 0, 0, 0, 0, 0,0 " />
   <Var name="bionic_dark_glass_params" type="number[]" values=" 0.5,1.5,0.5,1.4, 0.16, 1.5, 0.2, 0.3, 0.2,0.8, 0, 1,1,1,0.1, 0, 0.2, 1.4, 1, 36, 2.2, 80, 200, 1, 0.8, -0.4,0.6,-0.8, 1, 0.7, 1.4, 1.12, 3, 1.8, -0.2, 1, 0, 0, 0, 0, 0,0 " />
@@ -61,27 +64,27 @@
                        class="com.toretto5060.pickupcatapp.app.ExpressListActivity"
                        flags="268484608"/>
       </Function>
-      <Text name="txt_count" x="#padX" y="#padTop+#titleH/2" width="120*#u" alignV="center" size="26*#u"
-            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_count)"/>
-      <Text x="#padX+#txt_count.text_width+6*#u" y="#padTop+#titleH/2" width="140*#u" alignV="center" size="18*#u"
+            <Text name="txt_count" x="#padX+#rowPad" y="#padTop+#titleH/2" width="120*#u" alignV="center" size="26*#u"
+            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_rows)"/>
+      <Text x="#padX+#rowPad+#txt_count.text_width+6*#u" y="#padTop+#titleH/2" width="140*#u" alignV="center" size="18*#u"
             color="@titleInk" fontFamily="mipro-demibold" textExp="@pc_suffix"/>
       <Group visibility="ifelse(#pc_count==0,1,0)">
         <Text x="#padX+#rowPad" y="#padTop+#titleH+#rowH/2" width="#cardW-2*#rowPad"
               alignV="center" size="15*#u" color="@secondaryInk" fontFamily="mipro-regular"
               textExp="ifelse(eqs(@pc_status,'ok'),@pc_empty_text,'等待取件喵数据')"/>
       </Group>
-      <Group visibility="ifelse(#pc_rows}0,1,0)">
-        <Text name="txt_company1" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+8*#u" width="150*#u" size="16*#u"
+      <Group visibility="ifelse(#page==0 ** (#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Text name="txt_company1" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company1"/>
-        <Text x="#padX+#rowPad+#txt_company1.text_width+12*#u" y="#padTop+#titleH+0*(#rowH+#gap)+4*#u"
+        <Text x="#padX+#rowPad+#txt_company1.text_width+12*#u" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center"
               width="#cardW-2*#rowPad-#txt_company1.text_width-12*#u-#btnW-12*#u"
               size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_code1"/>
-        <Text name="txt_time1" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-27*#u" width="120*#u" size="17*#u"
+        <Text name="txt_time1" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-23*#u" width="120*#u" size="17*#u"
               color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_time1"/>
-        <Text x="#padX+#rowPad+#txt_time1.text_width+8*#u" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-27*#u"
+        <Text x="#padX+#rowPad+#txt_time1.text_width+8*#u" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-23*#u"
               width="#cardW-2*#rowPad-#txt_time1.text_width-8*#u"
               size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_addr1"/>
@@ -91,18 +94,18 @@
               align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'我已取件'"/>
       </Group>
-      <Group visibility="ifelse(#pc_rows}1,1,0)">
-        <Text name="txt_company2" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+8*#u" width="150*#u" size="16*#u"
+      <Group visibility="ifelse(#page==0 ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Text name="txt_company2" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company2"/>
-        <Text x="#padX+#rowPad+#txt_company2.text_width+12*#u" y="#padTop+#titleH+1*(#rowH+#gap)+4*#u"
+        <Text x="#padX+#rowPad+#txt_company2.text_width+12*#u" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center"
               width="#cardW-2*#rowPad-#txt_company2.text_width-12*#u-#btnW-12*#u"
               size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_code2"/>
-        <Text name="txt_time2" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH-27*#u" width="120*#u" size="17*#u"
+        <Text name="txt_time2" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH-23*#u" width="120*#u" size="17*#u"
               color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_time2"/>
-        <Text x="#padX+#rowPad+#txt_time2.text_width+8*#u" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH-27*#u"
+        <Text x="#padX+#rowPad+#txt_time2.text_width+8*#u" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH-23*#u"
               width="#cardW-2*#rowPad-#txt_time2.text_width-8*#u"
               size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
               textExp="@pc_addr2"/>
@@ -112,7 +115,164 @@
               align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'我已取件'"/>
       </Group>
-      <Button x="0" y="0" w="#view_width" h="#view_height" interceptTouch="true">
+      <Group visibility="ifelse(#page==1 ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Text name="txt_company3" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
+              color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_company3"/>
+        <Text x="#padX+#rowPad+#txt_company3.text_width+12*#u" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center"
+              width="#cardW-2*#rowPad-#txt_company3.text_width-12*#u-#btnW-12*#u"
+              size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_code3"/>
+        <Text name="txt_time3" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-23*#u" width="120*#u" size="17*#u"
+              color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_time3"/>
+        <Text x="#padX+#rowPad+#txt_time3.text_width+8*#u" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-23*#u"
+              width="#cardW-2*#rowPad-#txt_time3.text_width-8*#u"
+              size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_addr3"/>
+        <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
+                   cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
+        <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH/2"
+              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+      </Group>
+      <Group visibility="ifelse(#page==1 ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Text name="txt_company4" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
+              color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_company4"/>
+        <Text x="#padX+#rowPad+#txt_company4.text_width+12*#u" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center"
+              width="#cardW-2*#rowPad-#txt_company4.text_width-12*#u-#btnW-12*#u"
+              size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_code4"/>
+        <Text name="txt_time4" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH-23*#u" width="120*#u" size="17*#u"
+              color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_time4"/>
+        <Text x="#padX+#rowPad+#txt_time4.text_width+8*#u" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH-23*#u"
+              width="#cardW-2*#rowPad-#txt_time4.text_width-8*#u"
+              size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_addr4"/>
+        <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
+                   cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
+        <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH/2"
+              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+      </Group>
+      <Group visibility="ifelse(#page==2 ** (#pc_rows_shown==5),1,0)">
+        <Text name="txt_company5" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
+              color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_company5"/>
+        <Text x="#padX+#rowPad+#txt_company5.text_width+12*#u" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center"
+              width="#cardW-2*#rowPad-#txt_company5.text_width-12*#u-#btnW-12*#u"
+              size="26*#u" color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
+              textExp="@pc_code5"/>
+        <Text name="txt_time5" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-23*#u" width="120*#u" size="17*#u"
+              color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_time5"/>
+        <Text x="#padX+#rowPad+#txt_time5.text_width+8*#u" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH-23*#u"
+              width="#cardW-2*#rowPad-#txt_time5.text_width-8*#u"
+              size="17*#u" color="@secondaryInk" fontFamily="mipro-regular" ellipsis="true"
+              textExp="@pc_addr5"/>
+        <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
+                   cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
+        <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH/2"
+              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+      </Group>
+      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(-1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5,1,0)"/>
+      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(-1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==0,1,0)"/>
+      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(0.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5,1,0)"/>
+      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(0.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==1,1,0)"/>
+      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==5,1,0)"/>
+      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==2,1,0)"/>
+      <!-- 翻页层：只捕获上下滑动手势翻页，不挂 up。
+           openApp 与「我已取件」按钮都在本层之上的独立图层，
+           二者矩形零重叠，点按不会互相连带。 -->
+      <Button x="0" y="0" w="#view_width" h="#view_height">
+        <Triggers>
+          <Trigger action="onFling"><VariableCommand name="page" expression="ifelse(#page==2,0,#page+1)"/></Trigger>
+        </Triggers>
+      </Button>
+            <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==0 ** (#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up"><IntentCommand
+            action="com.toretto5060.pickupcatapp.MAML_PICK"
+            package="com.toretto5060.pickupcatapp"
+            broadcast="true">
+              <Extra name="row_id" type="long" expression="#pc_id1"/>
+              <Extra name="row_index" type="string" expression="'1'"/>
+            </IntentCommand></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==0 ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up"><IntentCommand
+            action="com.toretto5060.pickupcatapp.MAML_PICK"
+            package="com.toretto5060.pickupcatapp"
+            broadcast="true">
+              <Extra name="row_id" type="long" expression="#pc_id2"/>
+              <Extra name="row_index" type="string" expression="'2'"/>
+            </IntentCommand></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==1 ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up"><IntentCommand
+            action="com.toretto5060.pickupcatapp.MAML_PICK"
+            package="com.toretto5060.pickupcatapp"
+            broadcast="true">
+              <Extra name="row_id" type="long" expression="#pc_id3"/>
+              <Extra name="row_index" type="string" expression="'3'"/>
+            </IntentCommand></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==1 ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up"><IntentCommand
+            action="com.toretto5060.pickupcatapp.MAML_PICK"
+            package="com.toretto5060.pickupcatapp"
+            broadcast="true">
+              <Extra name="row_id" type="long" expression="#pc_id4"/>
+              <Extra name="row_index" type="string" expression="'4'"/>
+            </IntentCommand></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==2 ** (#pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up"><IntentCommand
+            action="com.toretto5060.pickupcatapp.MAML_PICK"
+            package="com.toretto5060.pickupcatapp"
+            broadcast="true">
+              <Extra name="row_id" type="long" expression="#pc_id5"/>
+              <Extra name="row_index" type="string" expression="'5'"/>
+            </IntentCommand></Trigger>
+        </Triggers>
+      </Button>
+            <Button x="0" y="0" w="#padX+#cardW-#rowPad-#btnW" h="#view_height">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad" y="0" w="#padX+#rowPad" h="#view_height">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)" w="#btnW" h="(#rowH-#btnH)/2">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2+#btnH" w="#btnW" h="(#rowH-#btnH)/2+#gap">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)" w="#btnW" h="(#rowH-#btnH)/2">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2+#btnH" w="#btnW" h="(#rowH-#btnH)/2+#gap">
         <Triggers>
           <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
         </Triggers>
@@ -120,42 +280,54 @@
     </Group>
   </Layer>
 
-  <!-- 唯一数据通道：广播 extras 直接注入变量。不放 ContentProviderBinder ——
-       rust_maml_sdk 在 Resume 会重查它并产生「结果已过期」竞态（实测组件闪一下）。 -->
+  <!-- 数据双通道（变量只在 ContentProviderBinder 声明一次）：
+       1) ContentProviderBinder：init 时跨 UID 直查本 App 导出的只读 Provider 拉初始数据，
+          因此「重新导入即显示」，不依赖 App 主动推送；并监听 Provider 的 notifyChange 自动重查。
+       2) BroadcastBinder：收到 App 推送广播时，用 BinderCommand 触发上面的 CP 重查，
+          双保险覆盖新消息/取件后的刷新。不重复声明变量。 -->
   <VariableBinders>
+    <ContentProviderBinder name="pc_provider" uri="content://com.toretto5060.pickupcatapp.maml/pending"
+        queryAtStart="true" firstRequery="false">
+      <Variable name="pc_status" type="string" column="status"/>
+      <Variable name="pc_count" type="number" column="count"/>
+      <Variable name="pc_rows" type="number" column="rows"/>
+      <Variable name="pc_rows_shown" type="number" column="rows_shown"/>
+      <Variable name="pc_empty_text" type="string" column="empty_text"/>
+      <Variable name="pc_suffix" type="string" column="suffix"/>
+      <Variable name="pc_id1" type="number" column="id1"/>
+      <Variable name="pc_id2" type="number" column="id2"/>
+      <Variable name="pc_id3" type="number" column="id3"/>
+      <Variable name="pc_id4" type="number" column="id4"/>
+      <Variable name="pc_id5" type="number" column="id5"/>
+      <Variable name="pc_company1" type="string" column="company1"/>
+      <Variable name="pc_company_color1" type="string" column="company_color1"/>
+      <Variable name="pc_code1" type="string" column="code1"/>
+      <Variable name="pc_time1" type="string" column="time1"/>
+      <Variable name="pc_addr1" type="string" column="addr1"/>
+      <Variable name="pc_company2" type="string" column="company2"/>
+      <Variable name="pc_company_color2" type="string" column="company_color2"/>
+      <Variable name="pc_code2" type="string" column="code2"/>
+      <Variable name="pc_time2" type="string" column="time2"/>
+      <Variable name="pc_addr2" type="string" column="addr2"/>
+      <Variable name="pc_company3" type="string" column="company3"/>
+      <Variable name="pc_company_color3" type="string" column="company_color3"/>
+      <Variable name="pc_code3" type="string" column="code3"/>
+      <Variable name="pc_time3" type="string" column="time3"/>
+      <Variable name="pc_addr3" type="string" column="addr3"/>
+      <Variable name="pc_company4" type="string" column="company4"/>
+      <Variable name="pc_company_color4" type="string" column="company_color4"/>
+      <Variable name="pc_code4" type="string" column="code4"/>
+      <Variable name="pc_time4" type="string" column="time4"/>
+      <Variable name="pc_addr4" type="string" column="addr4"/>
+      <Variable name="pc_company5" type="string" column="company5"/>
+      <Variable name="pc_company_color5" type="string" column="company_color5"/>
+      <Variable name="pc_code5" type="string" column="code5"/>
+      <Variable name="pc_time5" type="string" column="time5"/>
+      <Variable name="pc_addr5" type="string" column="addr5"/>
+    </ContentProviderBinder>
     <BroadcastBinder action="com.toretto5060.pickupcatapp.MAML_WIDGET_CHANGED">
-      <Variable name="pc_status" type="string" extra="status"/>
-      <Variable name="pc_count" type="number" extra="count"/>
-      <Variable name="pc_rows" type="number" extra="rows"/>
-      <Variable name="pc_empty_text" type="string" extra="empty_text"/>
-      <Variable name="pc_suffix" type="string" extra="suffix"/>
-      <Variable name="pc_company1" type="string" extra="company1"/>
-      <Variable name="pc_company_color1" type="string" extra="company_color1"/>
-      <Variable name="pc_code1" type="string" extra="code1"/>
-      <Variable name="pc_time1" type="string" extra="time1"/>
-      <Variable name="pc_addr1" type="string" extra="addr1"/>
-      <Variable name="pc_company2" type="string" extra="company2"/>
-      <Variable name="pc_company_color2" type="string" extra="company_color2"/>
-      <Variable name="pc_code2" type="string" extra="code2"/>
-      <Variable name="pc_time2" type="string" extra="time2"/>
-      <Variable name="pc_addr2" type="string" extra="addr2"/>
-      <Variable name="pc_company3" type="string" extra="company3"/>
-      <Variable name="pc_company_color3" type="string" extra="company_color3"/>
-      <Variable name="pc_code3" type="string" extra="code3"/>
-      <Variable name="pc_time3" type="string" extra="time3"/>
-      <Variable name="pc_addr3" type="string" extra="addr3"/>
-      <Variable name="pc_company4" type="string" extra="company4"/>
-      <Variable name="pc_company_color4" type="string" extra="company_color4"/>
-      <Variable name="pc_code4" type="string" extra="code4"/>
-      <Variable name="pc_time4" type="string" extra="time4"/>
-      <Variable name="pc_addr4" type="string" extra="addr4"/>
-      <Variable name="pc_company5" type="string" extra="company5"/>
-      <Variable name="pc_company_color5" type="string" extra="company_color5"/>
-      <Variable name="pc_code5" type="string" extra="code5"/>
-      <Variable name="pc_time5" type="string" extra="time5"/>
-      <Variable name="pc_addr5" type="string" extra="addr5"/>
       <Trigger>
-        <VariableCommand name="pc_tick" expression="#pc_tick+1"/>
+        <BinderCommand name="pc_provider"/>
       </Trigger>
     </BroadcastBinder>
   </VariableBinders>

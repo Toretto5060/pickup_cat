@@ -77,6 +77,16 @@
             </intent-filter>
         </receiver>
 
+        <!-- 玻璃主题小部件「我已取件」：MAML 的 <IntentCommand broadcast="true"> 发来的显式广播。
+             exported=true（宿主是另一 UID），静态注册可被拉起；直接标记已取，不启动任何 Activity。 -->
+        <receiver
+            android:name=".express.MamlPickReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.toretto5060.pickupcatapp.MAML_PICK" />
+            </intent-filter>
+        </receiver>
+
         <!-- 待取件列表小部件（桌面 + 负一屏）。
              miui.appwidget.action.APPWIDGET_UPDATE 兼容小米桌面的曝光刷新；
              根布局用 @android:id/background 让系统统一裁圆角/叠加桌面材质。 -->

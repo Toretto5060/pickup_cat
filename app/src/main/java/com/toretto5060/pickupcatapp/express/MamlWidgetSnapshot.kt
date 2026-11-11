@@ -33,10 +33,12 @@ internal object MamlWidgetSnapshot {
         add(C.MAML_COL_STATUS)
         add(C.MAML_COL_COUNT)
         add(C.MAML_COL_ROWS)
+        add("rows_shown")
         add(C.MAML_COL_UPDATED_AT)
         add(C.MAML_COL_EMPTY_TEXT)
         add(C.MAML_COL_SUFFIX)
         for (i in 1..MAX_ROWS) {
+            add("id$i")
             add("company$i")
             add("company_color$i")
             add("code$i")
@@ -65,6 +67,11 @@ internal object MamlWidgetSnapshot {
         out[C.MAML_COL_STATUS] = "ok"
         out[C.MAML_COL_COUNT] = groups.size.toDouble()
         out[C.MAML_COL_ROWS] = rows.size.toDouble()
+        // 显示上限封顶：组件只生成 MAX_ROWS 个行槽，pc_rows 真实条数可能超过它。
+        // 若直接把真实 pc_rows 交给「行可见性」的 == 链（pc_rows==N||...||pc_rows==MAX_ROWS），
+        // 一旦 pc_rows>MAX_ROWS 所有 == 都不命中 → 卡片整片消失且无法恢复。
+        // 因此单独给一个封顶的 rows_shown 专供可见性/圆点使用，标题仍用真实 rows。
+        out["rows_shown"] = if (rows.size > MAX_ROWS) MAX_ROWS.toDouble() else rows.size.toDouble()
         out[C.MAML_COL_UPDATED_AT] = rows.maxOfOrNull { it.receivedAt } ?: 0L
         out[C.MAML_COL_EMPTY_TEXT] = "还没有待取件"
         out[C.MAML_COL_SUFFIX] = "件待取"
@@ -72,6 +79,7 @@ internal object MamlWidgetSnapshot {
             val r = rows.getOrNull(i)
             val n = i + 1
             val company = r?.let { brandByKey["${ExpressGroup.normalize(it.address)}#${it.batch}"] }.orEmpty()
+            out["id$n"] = (r?.id ?: 0L).toDouble()
             out["company$n"] = company
             out["company_color$n"] = if (company.isEmpty()) "" else
                 "#%08X".format(Locale.ROOT, brandColorArgb(company))
@@ -103,6 +111,7 @@ internal object MamlWidgetSnapshot {
         out[C.MAML_COL_EMPTY_TEXT] = "还没有待取件"
         out[C.MAML_COL_SUFFIX] = "件待取"
         for (i in 1..MAX_ROWS) {
+            out["id$i"] = 0.0
             out["company$i"] = ""
             out["company_color$i"] = ""
             out["code$i"] = ""
