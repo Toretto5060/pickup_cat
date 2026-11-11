@@ -134,7 +134,12 @@ HEADER = Template("""<?xml version="1.0" encoding="UTF-8"?>
   <Var name="titleInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#E6FFFFFF','#E6000000'),@textColor)"/>
   <Var name="textInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#F2FFFFFF','#F2000000'),@textColor)"/>
   <Var name="secondaryInk" type="string" expression="ifelse(#autoColor,ifelse(#uiDark,'#99FFFFFF','#99000000'),@textColor)"/>
-  <Var name="countRed" type="string" expression="'#FFFF3B30'"/>
+  <!-- 计数红字在红色系壁纸上会「红底红字」糊掉：红色随玻璃明暗自适应（深玻璃用亮珊瑚红、
+       浅玻璃用深红），并配一层随明暗反色的柔光阴影，让字在任何底色上都有轮廓分离。
+       阴影属性由 TextScreenElement 解析（shadowColor/shadowRadius/shadowDx/shadowDy），
+       ColorParser 支持 @变量 引用，与 color="@countRed" 同一套机制。 -->
+  <Var name="countRed" type="string" expression="ifelse(#uiDark,'#FFFF7B6E','#FFC1272A')"/>
+  <Var name="countHalo" type="string" expression="ifelse(#uiDark,'#E6000000','#E6FFFFFF')"/>
   <Var name="pickBg" type="string" expression="ifelse(#uiDark,'#FF4A8CFF','#FF3482FF')"/>
   <!-- 翻页：page 为可写状态变量（无 expression），由卡片点按/滑动/点圆点的 VariableCommand 改写；
        lastIndex 由生成时按每页行数算出（最大页码,0基）注入，避免运行时用 >/< 比较。 -->
@@ -215,7 +220,8 @@ def header() -> str:
     计数数字的左缘必须与下方快递公司名（#padX+#rowPad）对齐，不能直接用 #padX。
     数字 = 待取件**件数**（pc_rows=取件码条数），不是取件点组数（pc_count）。"""
     return """      <Text name="txt_count" x="#padX+#rowPad" y="#padTop+#titleH/2" width="120*#u" alignV="center" size="26*#u"
-            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_rows)"/>
+            color="@countRed" fontFamily="mipro-demibold" textExp="formatFloat('%.0f',#pc_rows)"
+            shadowColor="@countHalo" shadowRadius="3" shadowDx="0" shadowDy="0"/>
       <Text x="#padX+#rowPad+#txt_count.text_width+6*#u" y="#padTop+#titleH/2" width="140*#u" alignV="center" size="18*#u"
             color="@titleInk" fontFamily="mipro-demibold" textExp="@pc_suffix"/>"""
 
@@ -388,7 +394,8 @@ def mini_widget() -> str:
             fontFamily="mipro-demibold" textExp="'待取'"/>
       <Text x="#view_width/2" y="#view_height/2" align="center" alignV="center"
             size="84*#u" color="@countRed" fontFamily="mipro-demibold"
-            textExp="formatFloat('%.0f',#pc_rows)"/>
+            textExp="formatFloat('%.0f',#pc_rows)"
+            shadowColor="@countHalo" shadowRadius="5" shadowDx="0" shadowDy="0"/>
       <Text x="#view_width/2" y="#view_height/2+50*#u" align="center" alignV="center"
             size="15*#u" color="@secondaryInk" fontFamily="mipro-regular"
             textExp="'件待取'"/>"""
