@@ -18,8 +18,10 @@
   <Var name="rowH" type="number" expression="58*#u"/>
   <Var name="gap" type="number" expression="12*#u"/>
   <Var name="rowPad" type="number" expression="14*#u"/>
-  <Var name="btnW" type="number" expression="84*#u"/>
-  <Var name="btnH" type="number" expression="42*#u"/>
+  <!-- 方形「取」按钮：边长 = 取件码(26*#u) + 地址(17*#u) 的高度之和，宽高相等。 -->
+  <Var name="btnSide" type="number" expression="26*#u+17*#u"/>
+  <Var name="btnW" type="number" expression="#btnSide"/>
+  <Var name="btnH" type="number" expression="#btnSide"/>
   <Var name="cardW" type="number" expression="#view_width-2*#padX"/>
   <Var name="showBg" type="number" expression="!#enable_hyper_material||#isInPicker||(#hyper_material_view_type==2)"/>
   <Var name="isGlass" type="number" expression="#hyper_material_view_type==1"/>
@@ -91,8 +93,8 @@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
         <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH/2"
-              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
-              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+              align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
       <Group visibility="ifelse(#page==0 ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company2" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
@@ -112,8 +114,8 @@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
         <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH/2"
-              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
-              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+              align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
       <Group visibility="ifelse(#page==1 ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company3" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
@@ -133,8 +135,8 @@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
         <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH/2"
-              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
-              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+              align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
       <Group visibility="ifelse(#page==1 ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company4" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
@@ -154,8 +156,8 @@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
         <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+1*(#rowH+#gap)+#rowH/2"
-              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
-              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+              align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
       <Group visibility="ifelse(#page==2 ** (#pc_rows_shown==5),1,0)">
         <Text name="txt_company5" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
@@ -175,8 +177,8 @@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
         <Text x="#padX+#cardW-#rowPad-#btnW/2" y="#padTop+#titleH+0*(#rowH+#gap)+#rowH/2"
-              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
-              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+              align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
       <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(-1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5,1,0)"/>
       <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(-1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==0,1,0)"/>

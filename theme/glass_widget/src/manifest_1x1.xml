@@ -18,8 +18,10 @@
   <Var name="rowH" type="number" expression="58*#u"/>
   <Var name="gap" type="number" expression="12*#u"/>
   <Var name="rowPad" type="number" expression="14*#u"/>
-  <Var name="btnW" type="number" expression="84*#u"/>
-  <Var name="btnH" type="number" expression="42*#u"/>
+  <!-- 方形「取」按钮：边长 = 取件码(26*#u) + 地址(17*#u) 的高度之和，宽高相等。 -->
+  <Var name="btnSide" type="number" expression="26*#u+17*#u"/>
+  <Var name="btnW" type="number" expression="#btnSide"/>
+  <Var name="btnH" type="number" expression="#btnSide"/>
   <Var name="cardW" type="number" expression="#view_width-2*#padX"/>
   <Var name="showBg" type="number" expression="!#enable_hyper_material||#isInPicker||(#hyper_material_view_type==2)"/>
   <Var name="isGlass" type="number" expression="#hyper_material_view_type==1"/>

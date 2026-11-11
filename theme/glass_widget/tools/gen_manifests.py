@@ -3,8 +3,8 @@
 
 样式严格对齐 app/src/main/res/layout/express_widget.xml / express_widget_row.xml：
   - 标题：红色 26sp 数字 + 18sp「件待取」，粗体
-  - 取件信息行：不再画 cardBg 卡片背景，只保留文字 + 蓝色「我已取件」按钮
-  - 第一行：16sp 快递公司（跟随玻璃明暗反色，不用品牌色）+ 26sp 粗体取件码 + 蓝色「我已取件」按钮
+  - 取件信息行：不再画 cardBg 卡片背景，只保留文字 + 蓝色方形「取」按钮
+  - 第一行：16sp 快递公司（跟随玻璃明暗反色，不用品牌色）+ 26sp 粗体取件码 + 蓝色方形「取」按钮
   - 第二行：17sp 次要色时间 + 17sp 次要色地址
   - 每个取件码单独一行，不把同地址同快递的多个码合并（用户 11-10 明确要求）
   - 空态：0 件时只显示 15sp「还没有待取件」，同样不画卡片背景
@@ -116,8 +116,10 @@ HEADER = Template("""<?xml version="1.0" encoding="UTF-8"?>
   <Var name="rowH" type="number" expression="58*#u"/>
   <Var name="gap" type="number" expression="12*#u"/>
   <Var name="rowPad" type="number" expression="14*#u"/>
-  <Var name="btnW" type="number" expression="84*#u"/>
-  <Var name="btnH" type="number" expression="42*#u"/>
+  <!-- 方形「取」按钮：边长 = 取件码(26*#u) + 地址(17*#u) 的高度之和，宽高相等。 -->
+  <Var name="btnSide" type="number" expression="26*#u+17*#u"/>
+  <Var name="btnW" type="number" expression="#btnSide"/>
+  <Var name="btnH" type="number" expression="#btnSide"/>
   <Var name="cardW" type="number" expression="#view_width-2*#padX"/>
   <Var name="showBg" type="number" expression="!#enable_hyper_material||#isInPicker||(#hyper_material_view_type==2)"/>
   <Var name="isGlass" type="number" expression="#hyper_material_view_type==1"/>
@@ -266,8 +268,8 @@ def row_card(data_index: int, local_i: int, page_index: int, wide: bool) -> str:
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="@Y@+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
         <Text x="#padX+#cardW-#rowPad-#btnW/2" y="@Y@+#rowH/2"
-              align="center" alignV="center" size="14*#u" color="#FFFFFFFF"
-              fontFamily="mipro-demibold" textExp="'我已取件'"/>
+              align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
+              fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>"""
     has_data = " || ".join(f"#pc_rows_shown=={k}" for k in range(data_index, MAX_ROWS + 1))
     return (tpl.replace("@BODY@", body).replace("@N@", str(data_index))
