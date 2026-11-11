@@ -20,6 +20,20 @@ MAML 属性坑（反编译 com.miui.maml + 官方 maml_weather_2x2.mtz + 真机�
   - Rectangle 的 cornerRadius 只吃数字字面量（Float.parseFloat），表达式必须写
     cornerRadiusExp；官方样例两个都写。写成 cornerRadius="12*#u" 会解析失败 → 方角按钮。
   - 表达式里的 < / > 在 XML 属性中用 { / } 代替。
+  - **翻页（11-11 第 19~23 轮，当前最终态）**：MAML 主题部件在 HyperOS 桌面上**拿不到短滑动
+    手势**（三轮实测都只在长按后才翻页：桌面在 ACTION_DOWN 就消费了短滑动，
+    `interceptTouch` 只管 widget 收到事件之后，见避坑 C70）。因此改为**点按翻页**：
+    标题栏右侧「◄ 当前页/总页数 ►」两个大热区箭头 Button 改写 #page。
+    箭头字符别用 ◀ / ▶：它们是 emoji 字形，桌面会渲染成橙色方块（第 24 轮）。
+    totalPages 按 pc_rows_shown（真实条数封顶 5）算，不再按容量翻出空白页。
+    根标签 `frameRate="0"` + `useVariableUpdater="DateTime.Minute"` 意味着无更新时停止渲染、
+    每分钟才更新一次；桌面 host 点击后会补一次重绘，负一屏 host 不会 → 「点了不变」。
+    故每次翻页追加 `<PermanenceCommand requestUpdate="true"/>` 主动请求宿主重绘
+    （官方语法「小部件持久化变量」明确标注「OS 新增，请在小部件中使用」）。
+    `onFling` 是 Android GestureDetector 回调名，不是 MAML Trigger action，永远别用。
+    第 23 轮：取件后页数缩减仍会空白 —— 表达式变量在同一帧按声明顺序求值，
+    safePage 读 #totalPages 会拿到上一帧旧页数；改成直接按 #pc_rows_shown 展开，
+    点「取」时再用 VariableCommand 把 page 写回剩余条数的合法页，并给单页行加显示兜底。
 
 刷新链路（唯一通道）：App 写入 → MamlWidgetNotifier 把完整快照塞进 MAML_WIDGET_CHANGED
   广播 extras → <BroadcastBinder><Variable extra="..."/></BroadcastBinder> 直接写进 MAML 变量。
@@ -47,11 +61,14 @@ MAX_ROWS = 5
 # 5x3 已按用户要求移除。
 # rows = 本尺寸「每页显示行数」；1x1 为角落总数卡（rows=0 不翻页只显示总数）。
 SIZES = {
-    "1x1": dict(w=216, h=216, rows=0, u=1.0, wide=False),   # 角落总数卡：左上「待取」+ 居中放大数字
-    "2x1": dict(w=440, h=165, rows=1, u=1.15, wide=False),
-    "2x2": dict(w=440, h=440, rows=2, u=2.0, wide=False),
-    "4x2": dict(w=948, h=440, rows=2, u=2.0, wide=True),
-    "5x2": dict(w=1032, h=440, rows=2, u=2.0, wide=True),   # 实验尺寸
+    # pager = 标题栏右侧分页控件宽度（设计单位，运行时乘 #u）；0 = 该尺寸完全不显示分页控件
+    #          （pagerW=0 ⇒ pagerX=right_edge，openApp 标题栏自动恢复整条可点）。
+    # 第 21 轮按用户要求：只有 4x2 / 5x2 显示箭头与页码，2x1 / 2x2 / 1x1 一律 0。
+    "1x1": dict(w=216, h=216, rows=0, u=1.0, wide=False, pager=0),   # 角落总数卡，无分页
+    "2x1": dict(w=440, h=165, rows=1, u=1.15, wide=False, pager=0),
+    "2x2": dict(w=440, h=440, rows=2, u=2.0, wide=False, pager=0),
+    "4x2": dict(w=948, h=440, rows=2, u=2.0, wide=True, pager=168),
+    "5x2": dict(w=1032, h=440, rows=2, u=2.0, wide=True, pager=168),   # 实验尺寸
 }
 
 MATERIAL_VARS = (ROOT / "src/material_vars.xml").read_text(encoding="utf-8")
@@ -141,9 +158,33 @@ HEADER = Template("""<?xml version="1.0" encoding="UTF-8"?>
   <Var name="countRed" type="string" expression="ifelse(#uiDark,'#FFFF7B6E','#FFC1272A')"/>
   <Var name="countHalo" type="string" expression="ifelse(#uiDark,'#E6000000','#E6FFFFFF')"/>
   <Var name="pickBg" type="string" expression="ifelse(#uiDark,'#FF4A8CFF','#FF3482FF')"/>
-  <!-- 翻页：page 为可写状态变量（无 expression），由卡片点按/滑动/点圆点的 VariableCommand 改写；
-       lastIndex 由生成时按每页行数算出（最大页码,0基）注入，避免运行时用 >/< 比较。 -->
+  <!-- 分页控件（标题栏右侧靠右对齐）：◄ 当前页·总页数 ►，纯点按翻页。
+       page 是可写状态变量，由箭头 Button 的 VariableCommand 改写；
+       totalPages 由生成期按「真实条数 rows_shown」展开成 ==/||/ifelse 表达式，
+       保证 3 条(每页 2)只算 2 页，不会翻到空白页；pagerW 按尺寸注入避免窄卡挤爆标题。
+       safePage 只用于页码文字显示：取件后数据变少、页数从 2 变 1 时 page 可能仍停在
+       已不存在的第 2 页。第 23 轮：行 / 取件按钮 / 箭头步进全部改为按 #pc_rows_shown
+       与 #page 生成期展开，不再读 #safePage / #totalPages 表达式变量（frameRate=0 时
+       同一帧按声明顺序求值会读到上一帧旧值）；safePage 自身也直接按 pc_rows_shown 算。
+       点「取」时另用 VariableCommand 把 page 写回剩余条数能显示的合法页。
+       hitW = 3/8 pagerW 是箭头点击热区宽度（第 20 轮从 1/4 加大），热区高度占满标题栏。
+       pagerTick 只是刷新信号：根标签 frameRate=0，负一屏 host 点击后不主动重绘，
+       每次翻页用 PermanenceCommand requestUpdate="true" 请求宿主重取一帧。
+       第 21 轮：仅 4x2/5x2（pager>0）生成控件，且 totalPages>1 才显示；
+       第 24 轮：箭头改用 ◄ / ►（非 emoji 字形），避免 ◀ / ▶ 被桌面渲染成
+       带橙色底块的彩色 emoji，白色 color 对彩色字形不生效。
+       第 26 轮：箭头改用圆润图标 PNG（arrow_prev.png / arrow_next.png，白色、
+       透明背景，打包在 widget 包根目录），<Image src tint="@titleInk"> 渲染：
+       深色主题染白、浅色主题染黑，跟标题栏字体同色（tint 支持变量、不支持表达式，
+       只对白色底图生效）；箭头与页码中心都落在标题栏中线 #padTop+#titleH/2，
+       与页数垂直居中对齐；热区 Button 不变。 -->
   <Var name="page" type="number"/>
+  <Var name="totalPages" type="number" expression="${total_pages}"/>
+  <Var name="safePage" type="number" expression="${safe_page}"/>
+  <Var name="pagerW" type="number" expression="${pager_w}*#u"/>
+  <Var name="pagerX" type="number" expression="#padX+#cardW-#rowPad-#pagerW"/>
+  <Var name="hitW" type="number" expression="#pagerW*3/8"/>
+  <Permanence name="pagerTick" expression="0" type="number"/>
   <Var name="pc_tick" type="number" expression="0"/>
 ${material_vars}
   <Layer width="#view_width" height="#view_height" frameRate="-1" layerType="bottom"
@@ -168,15 +209,11 @@ ${material_vars}
                        flags="268484608"/>
       </Function>
       ${layout}
-      <!-- 翻页层：只捕获上下滑动手势翻页，不挂 up。
-           openApp 与「我已取件」按钮都在本层之上的独立图层，
-           二者矩形零重叠，点按不会互相连带。 -->
-      <Button x="0" y="0" w="#view_width" h="#view_height">
-        <Triggers>
-          <Trigger action="onFling"><VariableCommand name="page" expression="ifelse(#page==${lastIndex},0,#page+1)"/></Trigger>
-        </Triggers>
-      </Button>
+      <!-- 「取」按钮与分页箭头都在独立图层，各带 interceptTouch 独占点按；
+           openApp 分区与二者几何零重叠（标题栏右侧整段让给分页控件），
+           避免点箭头 / 点取件连带跳 App（避坑 C66）。 -->
       ${pick}
+      ${pager}
       ${openapp}
     </Group>
   </Layer>
@@ -226,14 +263,13 @@ def header() -> str:
             color="@titleInk" fontFamily="mipro-demibold" textExp="@pc_suffix"/>"""
 
 
-def row_card(data_index: int, local_i: int, page_index: int, wide: bool) -> str:
+def row_card(data_index: int, local_i: int, page_index: int, wide: bool, per_page: int) -> str:
     """一条取件码。
     - data_index：1..MAX_ROWS，对应 pc_company{data_index} 等数据列；
     - local_i   ：页内行号 1..perPage，决定这一行在卡片里的 y（各页内容叠在同一区域，
-                  靠 #page 切换可见性，实现「上下滑动/点按卡片体翻页」把多余条目翻出来）；
+                  靠 #safePage 切换可见性，由标题栏右侧箭头点按翻页把多余条目翻出来）；
     - page_index：这一行属于第几页（0 基）。
-    卡片体（全屏 Button，位于内容之下）上下滑动或点按翻页；「我已取件」按钮直接发广播
-    标记该行已取（与安卓小部件一致，按行 id 精确标记，不跳列表）。"""
+    「我已取件」按钮直接发广播标记该行已取（与安卓小部件一致，按行 id 精确标记，不跳列表）。"""
     y = f"#padTop+#titleH+{local_i - 1}*(#rowH+#gap)"
     # 快递公司名同样跟随明暗反色（用户明确要求：深色玻璃白、浅色玻璃黑），不引用品牌色。
     company_color = "@textInk"
@@ -269,7 +305,7 @@ def row_card(data_index: int, local_i: int, page_index: int, wide: bool) -> str:
               textExp="@pc_addr@N@"/>"""
     # 仅当「本行有数据(任一 k∈[data_index..MAX_ROWS] 满足 pc_rows==k) 且 处于当前页」时显示；
     # 各页行按 local_i 叠在同一 y 区域，page 切换即原地翻页。可见性只用 ==/**/||，不依赖 >/<。
-    tpl = """      <Group visibility="ifelse(#page==@PAGE@ ** (@HASDATA@),1,0)">
+    tpl = """      <Group visibility="ifelse((@PAGEMATCH@) ** (@HASDATA@),1,0)">
 @BODY@
         <Rectangle x="#padX+#cardW-#rowPad-#btnW" y="@Y@+(#rowH-#btnH)/2" w="#btnW" h="#btnH"
                    cornerRadius="12" cornerRadiusExp="12*#u" fillColor="@pickBg"/>
@@ -279,40 +315,214 @@ def row_card(data_index: int, local_i: int, page_index: int, wide: bool) -> str:
       </Group>"""
     has_data = " || ".join(f"#pc_rows_shown=={k}" for k in range(data_index, MAX_ROWS + 1))
     return (tpl.replace("@BODY@", body).replace("@N@", str(data_index))
-            .replace("@HASDATA@", has_data).replace("@Y@", y).replace("@PAGE@", str(page_index)))
+            .replace("@HASDATA@", has_data).replace("@Y@", y)
+            .replace("@PAGEMATCH@", page_match_expr(page_index, per_page)))
+
+
+# 分页（第 19 轮）：MAML 主题部件拿不到短滑动手势（避坑 C70），改为标题栏右侧点按翻页。
+# 页数与翻页步进全部用生成期展开的 ==/||/ifelse，只用真机已验证的语法，
+# 不依赖比较符或取模；totalPages 按真实条数算，避免翻到空白页。
+def multi_page_expr(per_page: int) -> str:
+    """只有总页数 > 1（即条数超过一页容量）才显示分页控件，箭头和页码一起隐藏。
+    第 23 轮改为直接展开 #pc_rows_shown：#totalPages 是表达式变量，取件后同一帧
+    可能是旧页数，会让「单页隐藏」这一判断滞后；只用 == / ||，不用比较符。"""
+    if per_page <= 0:
+        return "0"
+    return " || ".join(f"#pc_rows_shown=={k}" for k in range(per_page + 1, MAX_ROWS + 1))
+
+
+def total_pages_expr(per_page: int) -> str:
+    """总页数 = ceil(rows_shown / per_page)，下限 1；按 rows_shown 的取值逐一展开。"""
+    max_pages = (MAX_ROWS + per_page - 1) // per_page
+    expr = "1"
+    for t in range(2, max_pages + 1):
+        first = (t - 1) * per_page + 1
+        last = min(t * per_page, MAX_ROWS)
+        conds = " || ".join(f"#pc_rows_shown=={k}" for k in range(first, last + 1))
+        expr = f"ifelse({conds},{t},{expr})"
+    return expr
+
+
+def page_step_expr(per_page: int, delta: int) -> str:
+    """点箭头后的页码：按 (#pc_rows_shown, #page) 组合静态展开循环步进。
+    与钳制 / 行可见性一样只依赖原始广播变量与可写变量，不读 #safePage /
+    #totalPages 表达式变量，避免点击那一帧读到上一帧的旧页数。"""
+    expr = "0"
+    for k in range(MAX_ROWS, -1, -1):
+        total = max(1, (k + per_page - 1) // per_page)
+        inner = clamp_over_pages(
+            per_page, lambda p, t=total: str((p + delta) % t if p < t else 0))
+        expr = f"ifelse(#pc_rows_shown=={k},{inner},{expr})"
+    return expr
+
+
+def clamp_over_pages(per_page: int, value_for) -> str:
+    """按 #page==0..max_pages-1 展开；任何未知 / 越界的 page 一律按最大页处理，
+    表达式链末尾不留「默认 0」这种会把内容打回错误页的兜底。"""
+    max_pages = (MAX_ROWS + per_page - 1) // per_page
+    expr = value_for(max_pages - 1)
+    for p in range(max_pages - 2, -1, -1):
+        expr = f"ifelse(#page=={p},{value_for(p)},{expr})"
+    return expr
+
+
+def safe_page_expr(per_page: int) -> str:
+    """把 #page 钳制到 [0, totalPages-1]，但**直接按 #pc_rows_shown 展开**，不引用
+    另一个表达式变量 #totalPages：根标签 frameRate=0，表达式变量在同一帧按声明顺序
+    求值，读 #totalPages 会拿到上一帧的旧页数 —— 取件后 2 页→1 页时 safePage 仍停在
+    第 2 页，行全隐藏而分页控件已隐藏，整片空白且无法翻回（用户实测第 23 轮）。
+    只依赖广播写入的 pc_rows_shown 与可写变量 page，任何求值时机都得到正确页码。"""
+
+    def for_page(p: int) -> str:
+        inner = "0"
+        for k in range(MAX_ROWS, -1, -1):
+            total = max(1, (k + per_page - 1) // per_page)
+            inner = f"ifelse(#pc_rows_shown=={k},{min(p, total - 1)},{inner})"
+        return inner
+
+    return clamp_over_pages(per_page, for_page)
+
+
+def page_match_expr(page_index: int, per_page: int) -> str:
+    """行 / 取件按钮的「是否属于当前页」条件，**完全由 #pc_rows_shown 与 #page
+    生成期展开**，不引用 #safePage / #totalPages 表达式变量：frameRate=0 时表达式
+    变量可能停留在上一帧，取件后页数缩减就会让所有行都不匹配 → 整片空白。
+    - 单页（rows <= per_page）：任意 page（含越界值）都落到第一页；
+    - 最后一页：所有「大于末页下界」的 page 都落到最后一页；
+    - 其余页：只有 page 精确相等才显示。
+    这样即使一帧里表达式变量全是旧值，行内容也永远看得见、且不会重复渲染。"""
+    expr = "0"
+    for k in range(MAX_ROWS, -1, -1):
+        total = max(1, (k + per_page - 1) // per_page)
+        if page_index >= total:
+            cond = "0"
+        elif page_index == total - 1:
+            lower = " || ".join(f"#page=={p}" for p in range(0, page_index))
+            cond = f"ifelse({lower},0,1)" if lower else "1"
+        else:
+            # 分支值统一写成 ifelse(...,1,0)：比较表达式直接当分支值在真机语法上没验证过
+            cond = f"ifelse(#page=={page_index},1,0)"
+        expr = f"ifelse(#pc_rows_shown=={k},{cond},{expr})"
+    return expr
+
+
+def page_after_pick_expr(per_page: int) -> str:
+    """点「取」时立刻把 #page 钳到「本条取走后（rows_shown-1 条）」的合法页。
+    这是命令写入 page 本身，不依赖数据广播后表达式变量有没有重算，也不依赖
+    requestUpdate 是否生效：3 条取走 1 条 ⇒ 2 条 = 1 页 ⇒ page=0，直接回到第一页。"""
+    expr = "0"
+    for k in range(MAX_ROWS, -1, -1):
+        left = max(k - 1, 0)
+        total = max(1, (left + per_page - 1) // per_page)
+        inner = clamp_over_pages(per_page, lambda p, t=total: str(min(p, t - 1)))
+        expr = f"ifelse(#pc_rows_shown=={k},{inner},{expr})"
+    return expr
+
+
+def pager_visual(cfg: dict) -> str:
+    """标题栏右侧「◄ 当前页/总页数 ►」纯视觉；箭头 Button 在独立图层。
+    第 21 轮：固定纯白；只有多页时才显示整个控件。
+    第 24 轮：箭头曾用 ◄ / ►（非 emoji 实心三角），避免 ◀/▶ 被桌面渲染成橙底 emoji。
+    第 25 轮：曾做成半透明圆角圆形按钮，被用户否决——他要的是**箭头形状圆润**，不是加背景。
+    第 26 轮：改用用户提供的圆润箭头 PNG（arrow_prev.png / arrow_next.png，白色、
+    透明背景、256×256，放 widget 包根目录），<Image src tint="@titleInk"> 渲染。
+    tint 引用颜色变量（MIUI12+，支持变量、不支持表达式）：深色主题染白、浅色主题染黑，
+    跟标题栏字体 @titleInk 完全一致。tint 只对亮色底图生效，所以底图必须是白色。
+    箭头与页码 y 都用标题栏中线 #padTop+#titleH/2；Image 的 x/y 用「中心 − 半边长」
+    展开式定位（不依赖 align 语义），保证与页数垂直居中。热区 Button 不变。"""
+    if cfg["pager"] <= 0:
+        return ""
+    pages_cond = multi_page_expr(cfg["rows"])
+    vis = f"ifelse(({pages_cond}),1,0)"
+    cy = "#padTop+#titleH/2"          # 标题栏中线：箭头与页码共用的垂直中心
+    sz = "#pagerW/6"                  # 箭头图标边长（约等于原三角字号）
+    half = "#pagerW/12"               # 半边长，作左上角偏移
+    lx = "#pagerX+#hitW/2"            # 左箭头中心 x
+    mx = "#pagerX+#pagerW/2"          # 页码中心 x
+    rx = "#pagerX+#pagerW-#hitW/2"    # 右箭头中心 x
+    return f"""      <Group visibility="{vis}">
+        <Image x="{lx}-{half}" y="{cy}-{half}" w="{sz}" h="{sz}"
+               src="arrow_prev.png" tint="@titleInk"/>
+        <Text x="{mx}" y="{cy}" align="center" alignV="center"
+              size="14*#u" color="@titleInk" fontFamily="mipro-demibold"
+              textExp="formatFloat('%.0f',#safePage+1)+'/'+formatFloat('%.0f',#totalPages)"/>
+        <Image x="{rx}-{half}" y="{cy}-{half}" w="{sz}" h="{sz}"
+               src="arrow_next.png" tint="@titleInk"/>
+      </Group>"""
+
+
+def pager_buttons(cfg: dict) -> str:
+    """两个大热区透明箭头 Button（独立图层，带 interceptTouch 独占点按）。
+    第 20 轮：热区 hitW(3/8 pagerW) × 整个标题栏高，y=0、h=#padTop+#titleH；
+    第 21 轮热区**不变**（用户要求「箭头收小但点击区域别减小」），
+    显示条件改为 totalPages>1；与 openApp 分区仍零重叠。
+    每次翻页追加 PermanenceCommand requestUpdate="true"：根标签 frameRate=0，
+    负一屏（com.miui.personalassistant）点击后不会主动重绘，靠它请求宿主重取一帧。"""
+    per_page = cfg["rows"]
+    if cfg["pager"] <= 0:
+        return ""
+    pages_cond = multi_page_expr(per_page)
+    vis = f"ifelse(({pages_cond}),1,0)"
+    prev_expr = page_step_expr(per_page, -1)
+    next_expr = page_step_expr(per_page, 1)
+
+    def arrow(x: str, expr: str) -> str:
+        return (f'      <Button x="{x}" y="0" w="#hitW" h="#padTop+#titleH" '
+                f'interceptTouch="true" visibility="{vis}">\n'
+                f'        <Triggers>\n'
+                f'          <Trigger action="up">\n'
+                f'            <VariableCommand name="page" expression="{expr}"/>\n'
+                f'            <PermanenceCommand name="pagerTick" expression="#time_sys" '
+                f'requestUpdate="true" type="number"/>\n'
+                f'          </Trigger>\n'
+                f'        </Triggers>\n'
+                f'      </Button>')
+
+    return "\n".join([
+        arrow("#pagerX", prev_expr),
+        arrow("#pagerX+#pagerW-#hitW", next_expr),
+    ])
+
+
+CLICK_TRIGGERS = """        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+"""
 
 
 def open_app_buttons(cfg: dict) -> str:
-    """卡片上「除我已取件按钮外」的可点区域 → 跳 App 待取件列表。
+    """卡片上「除取件按钮 / 分页箭头外」的可点区域 → 跳 App 待取件列表。
 
-    必须与取件按钮矩形**零重叠**：MAML 对重叠兄弟元素的点按会派发给所有层，
-    若像从前那样用一张全卡 Button 挂 up→openApp，点「我已取件」就会连带启动列表页
-    （表现为「进 app 又瞬间闪退」）。因此按几何拆成数个不重叠矩形：
-      - 左侧大块（标题 / 公司名 / 取件码 / 时间 / 地址都在这一侧）；
-      - 按钮列右缘到卡片右缘的窄条；
+    必须与取件按钮、分页箭头**零重叠**（避坑 C66）：MAML 对重叠兄弟元素的点按会
+    派发给所有层，一张全卡 Button 会让点「取」/ 点箭头连带启动列表页。
+    按几何拆成不重叠矩形：
+      - 标题栏：左侧 [0, pagerX]（含「N 件待取」）+ 最右窄条 [right_edge, 卡片右缘]；
+        中间 [pagerX, right_edge] 整段让给分页控件，不挂 openApp；
+      - 内容区：左侧大块 [0, left_edge] + 最右窄条 [right_edge, ...]；
       - 按钮列内、每个行槽里「按钮上方」与「按钮下方」的空白（含行间 gap）。
-    1x1 迷你卡没有取件按钮，整卡一个矩形即可。
+    1x1 迷你卡没有取件按钮、也无分页，整卡一个纯点击矩形。
     """
     def rect(x: str, y: str, w: str, h: str) -> str:
         return (f'      <Button x="{x}" y="{y}" w="{w}" h="{h}">\n'
-                f'        <Triggers>\n'
-                f'          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>\n'
-                f'        </Triggers>\n'
+                f'{CLICK_TRIGGERS}'
                 f'      </Button>')
 
     per_page = cfg["rows"]
     if per_page <= 0:
         return rect("0", "0", "#view_width", "#view_height")
 
-    left_edge = "#padX+#cardW-#rowPad-#btnW"   # 按钮列左缘
-    right_edge = "#padX+#cardW-#rowPad"        # 按钮列右缘
+    left_edge = "#padX+#cardW-#rowPad-#btnW"   # 「取」按钮列左缘
+    right_edge = "#padX+#cardW-#rowPad"        # 「取」按钮列右缘 = 卡片内容右缘
+    content_top = "#padTop+#titleH"
+    content_h = "#view_height-(#padTop+#titleH)"
     parts = [
-        rect("0", "0", left_edge, "#view_height"),
-        rect(right_edge, "0", "#padX+#rowPad", "#view_height"),
+        rect("0", "0", "#pagerX", content_top),
+        rect(right_edge, "0", "#padX+#rowPad", content_top),
+        rect("0", content_top, left_edge, content_h),
+        rect(right_edge, content_top, "#padX+#rowPad", content_h),
     ]
-    base = "#padTop+#titleH"
     for local_i in range(1, per_page + 1):
-        row_top = f"{base}+{local_i - 1}*(#rowH+#gap)"
+        row_top = f"{content_top}+{local_i - 1}*(#rowH+#gap)"
         btn_y = f"{row_top}+(#rowH-#btnH)/2"
         parts.append(rect(left_edge, row_top, "#btnW", "(#rowH-#btnH)/2"))
         parts.append(rect(left_edge, f"{btn_y}+#btnH", "#btnW",
@@ -320,36 +530,46 @@ def open_app_buttons(cfg: dict) -> str:
     return "\n".join(parts)
 
 
-def pick_button(data_index: int, local_i: int, page_index: int) -> str:
-    """「我已取件」按钮：置于翻页层之上（${pick}），点它直接发广播精确标记该行已取（按行 id），不跳列表。
-    可见性与对应行一致（本行有数据 且 处于当前页），避免翻到别的页时误点中错位按钮。"""
+def pick_button(data_index: int, local_i: int, page_index: int,
+                per_page: int, clamp_page: str) -> str:
+    """「我已取件」按钮：置于内容层之上（${pick}），点它直接发广播精确标记该行已取（按行 id），不跳列表。
+    可见性与对应行一致（本行有数据 且 处于当前页），避免翻到别的页时误点中错位按钮。
+    第 23 轮：up 里先写 page = 取走本条后的合法页，再发取件广播，最后请求宿主重绘；
+    「3 条→2 条→1 页」时立刻回到第一页，不留越界的 page 状态。"""
     by = f"#padTop+#titleH+{local_i - 1}*(#rowH+#gap)+(#rowH-#btnH)/2"
     has_data = " || ".join(f"#pc_rows_shown=={k}" for k in range(data_index, MAX_ROWS + 1))
+    match = page_match_expr(page_index, per_page)
     return (f'      <Button x="#padX+#cardW-#rowPad-#btnW" y="{by}" w="#btnW" h="#btnH" '
             f'interceptTouch="true" '
-            f'visibility="ifelse(#page=={page_index} ** ({has_data}),1,0)">\n'
+            f'visibility="ifelse(({match}) ** ({has_data}),1,0)">\n'
             f'        <Triggers>\n'
-            f'          <Trigger action="up"><IntentCommand\n'
-            f'            action="com.toretto5060.pickupcatapp.MAML_PICK"\n'
-            f'            package="com.toretto5060.pickupcatapp"\n'
-            f'            broadcast="true">\n'
+            f'          <Trigger action="up">\n'
+            f'            <VariableCommand name="page" expression="{clamp_page}"/>\n'
+            f'            <IntentCommand\n'
+            f'              action="com.toretto5060.pickupcatapp.MAML_PICK"\n'
+            f'              package="com.toretto5060.pickupcatapp"\n'
+            f'              broadcast="true">\n'
             f'              <Extra name="row_id" type="long" expression="#pc_id{data_index}"/>\n'
             f'              <Extra name="row_index" type="string" expression="\'{data_index}\'"/>\n'
-            f'            </IntentCommand></Trigger>\n'
+            f'            </IntentCommand>\n'
+            f'            <PermanenceCommand name="pagerTick" expression="#time_sys" '
+            f'requestUpdate="true" type="number"/>\n'
+            f'          </Trigger>\n'
             f'        </Triggers>\n'
             f'      </Button>')
 
 
 def pick_buttons(cfg: dict) -> str:
-    """所有「我已取件」按钮（独立图层，位于翻页层之上）。"""
+    """所有「我已取件」按钮（独立图层，位于内容层之上）。"""
     per_page = cfg["rows"]
     if per_page <= 0:
         return ""
+    clamp_page = page_after_pick_expr(per_page)
     parts = []
     for r in range(1, MAX_ROWS + 1):
         local_i = (r - 1) % per_page + 1
         page_index = (r - 1) // per_page
-        parts.append(pick_button(r, local_i, page_index))
+        parts.append(pick_button(r, local_i, page_index, per_page, clamp_page))
     return "\n".join(parts)
 
 
@@ -362,30 +582,7 @@ def empty_card() -> str:
       </Group>"""
 
 
-def page_dots(perPage: int) -> str:
-    """翻页点点指示器：右侧竖向、垂直居中；当前页红点、其余暗点；纯视觉不可点。
-    暗点仅在该页确有取件码时显示 —— 因此 3 条(每页2)只显示 2 个点，而非容量 3 个。
-    可见性只用 ==/**/|| 与常量，不依赖 >/< 比较。"""
-    max_pages = (MAX_ROWS + perPage - 1) // perPage
-    if max_pages <= 1:
-        return ""
-    parts = []
-    gap = 16
-    for p in range(max_pages):
-        cx = "#view_width-18*#u"
-        cy = f"#view_height/2+({p-(max_pages-1)/2})*{gap}*#u"
-        # 该页首条索引：page p 含取件码 k∈[first..first+perPage-1]；有数据 ⇔ pc_rows≥first
-        first = p * perPage + 1
-        has = " || ".join(f"#pc_rows_shown=={k}" for k in range(first, MAX_ROWS + 1))
-        parts.append(
-            f'      <Rectangle x="{cx}-3*#u" y="{cy}-3*#u" w="6*#u" h="6*#u" '
-            f'cornerRadiusExp="3*#u" fillColor="@secondaryInk" '
-            f'visibility="ifelse({has},1,0)"/>')
-        parts.append(
-            f'      <Rectangle x="{cx}-3*#u" y="{cy}-3*#u" w="6*#u" h="6*#u" '
-            f'cornerRadiusExp="3*#u" fillColor="@countRed" '
-            f'visibility="ifelse(#page=={p},1,0)"/>')
-    return "\n".join(parts)
+# 圆点指示器已由标题栏「‹ 当前页/总页数 ›」取代（第 19 轮）。
 
 
 def mini_widget() -> str:
@@ -410,22 +607,23 @@ def layout(cfg: dict) -> str:
     for r in range(1, MAX_ROWS + 1):
         local_i = (r - 1) % per_page + 1
         page_index = (r - 1) // per_page
-        parts.append(row_card(r, local_i, page_index, cfg["wide"]))
-    parts.append(page_dots(per_page))
+        parts.append(row_card(r, local_i, page_index, cfg["wide"], per_page))
+    parts.append(pager_visual(cfg))
     return "\n".join(parts)
 
 
 def main() -> None:
     for key, cfg in SIZES.items():
         per_page = cfg["rows"]
-        max_pages = 1 if per_page <= 0 else (MAX_ROWS + per_page - 1) // per_page
-        last_index = max_pages - 1
         xml = HEADER.substitute(
             design_key=key, design_w=cfg["w"], design_h=cfg["h"],
             u_factor=cfg["u"], material_vars=MATERIAL_VARS, glass_params=GLASS_PARAMS,
             bloom_stroke=BLOOM_STROKE, layout=layout(cfg),
-            cp_vars=CP_VARS, lastIndex=last_index,
+            cp_vars=CP_VARS,
+            total_pages=total_pages_expr(max(per_page, 1)), pager_w=cfg["pager"],
+            safe_page=safe_page_expr(max(per_page, 1)),
             openapp=open_app_buttons(cfg), pick=pick_buttons(cfg),
+            pager=pager_buttons(cfg),
         )
         out = ROOT / "src" / f"manifest_{key}.xml"
         out.write_text(xml, encoding="utf-8")

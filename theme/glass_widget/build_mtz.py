@@ -19,6 +19,12 @@ CONFIG_ASSETS = (
     "glass_common_light.webp",
     "glass_common_dark.webp",
 )
+# 第 26 轮：圆润翻页箭头图标（白色、透明背景、256×256），放 widget 包根目录，
+# manifest 里 <Image src="arrow_prev.png" tint="@titleInk"> 按 manifest.xml 所在目录解析。
+ARROW_ASSETS = (
+    "arrow_prev.png",
+    "arrow_next.png",
+)
 
 
 def check_sources() -> None:
@@ -34,6 +40,9 @@ def check_sources() -> None:
     for asset in CONFIG_ASSETS:
         if not (ROOT / "assets/config" / asset).is_file():
             raise FileNotFoundError(asset)
+    for asset in ARROW_ASSETS:
+        if not (ROOT / "assets" / asset).is_file():
+            raise FileNotFoundError(asset)
 
 
 def widget_zip(size: str) -> bytes:
@@ -46,6 +55,8 @@ def widget_zip(size: str) -> bytes:
         z.write(ROOT / "var_config.xml", "var_config.xml")
         for asset in CONFIG_ASSETS:
             z.write(ROOT / "assets/config" / asset, f"assets/config/{asset}")
+        for asset in ARROW_ASSETS:
+            z.write(ROOT / "assets" / asset, asset)
     return buf.getvalue()
 
 
@@ -83,6 +94,8 @@ def verify() -> None:
                 ET.fromstring(inner.read("var_config.xml"))
                 for asset in CONFIG_ASSETS:
                     assert f"assets/config/{asset}" in inner_names
+                for asset in ARROW_ASSETS:
+                    assert asset in inner_names
     print(f"OK: {OUT} ({OUT.stat().st_size} bytes)")
     print("    sizes:", ", ".join(SIZES))
 

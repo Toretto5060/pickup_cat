@@ -43,9 +43,33 @@
   <Var name="countRed" type="string" expression="ifelse(#uiDark,'#FFFF7B6E','#FFC1272A')"/>
   <Var name="countHalo" type="string" expression="ifelse(#uiDark,'#E6000000','#E6FFFFFF')"/>
   <Var name="pickBg" type="string" expression="ifelse(#uiDark,'#FF4A8CFF','#FF3482FF')"/>
-  <!-- 翻页：page 为可写状态变量（无 expression），由卡片点按/滑动/点圆点的 VariableCommand 改写；
-       lastIndex 由生成时按每页行数算出（最大页码,0基）注入，避免运行时用 >/< 比较。 -->
+  <!-- 分页控件（标题栏右侧靠右对齐）：◄ 当前页·总页数 ►，纯点按翻页。
+       page 是可写状态变量，由箭头 Button 的 VariableCommand 改写；
+       totalPages 由生成期按「真实条数 rows_shown」展开成 ==/||/ifelse 表达式，
+       保证 3 条(每页 2)只算 2 页，不会翻到空白页；pagerW 按尺寸注入避免窄卡挤爆标题。
+       safePage 只用于页码文字显示：取件后数据变少、页数从 2 变 1 时 page 可能仍停在
+       已不存在的第 2 页。第 23 轮：行 / 取件按钮 / 箭头步进全部改为按 #pc_rows_shown
+       与 #page 生成期展开，不再读 #safePage / #totalPages 表达式变量（frameRate=0 时
+       同一帧按声明顺序求值会读到上一帧旧值）；safePage 自身也直接按 pc_rows_shown 算。
+       点「取」时另用 VariableCommand 把 page 写回剩余条数能显示的合法页。
+       hitW = 3/8 pagerW 是箭头点击热区宽度（第 20 轮从 1/4 加大），热区高度占满标题栏。
+       pagerTick 只是刷新信号：根标签 frameRate=0，负一屏 host 点击后不主动重绘，
+       每次翻页用 PermanenceCommand requestUpdate="true" 请求宿主重取一帧。
+       第 21 轮：仅 4x2/5x2（pager>0）生成控件，且 totalPages>1 才显示；
+       第 24 轮：箭头改用 ◄ / ►（非 emoji 字形），避免 ◀ / ▶ 被桌面渲染成
+       带橙色底块的彩色 emoji，白色 color 对彩色字形不生效。
+       第 26 轮：箭头改用圆润图标 PNG（arrow_prev.png / arrow_next.png，白色、
+       透明背景，打包在 widget 包根目录），<Image src tint="@titleInk"> 渲染：
+       深色主题染白、浅色主题染黑，跟标题栏字体同色（tint 支持变量、不支持表达式，
+       只对白色底图生效）；箭头与页码中心都落在标题栏中线 #padTop+#titleH/2，
+       与页数垂直居中对齐；热区 Button 不变。 -->
   <Var name="page" type="number"/>
+  <Var name="totalPages" type="number" expression="ifelse(#pc_rows_shown==5,3,ifelse(#pc_rows_shown==3 || #pc_rows_shown==4,2,1))"/>
+  <Var name="safePage" type="number" expression="ifelse(#page==0,ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,0,ifelse(#pc_rows_shown==4,0,ifelse(#pc_rows_shown==5,0,0)))))),ifelse(#page==1,ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,1,ifelse(#pc_rows_shown==4,1,ifelse(#pc_rows_shown==5,1,0)))))),ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,1,ifelse(#pc_rows_shown==4,1,ifelse(#pc_rows_shown==5,2,0))))))))"/>
+  <Var name="pagerW" type="number" expression="168*#u"/>
+  <Var name="pagerX" type="number" expression="#padX+#cardW-#rowPad-#pagerW"/>
+  <Var name="hitW" type="number" expression="#pagerW*3/8"/>
+  <Permanence name="pagerTick" expression="0" type="number"/>
   <Var name="pc_tick" type="number" expression="0"/>
   <Var name="common_glass_params" type="number[]" values=" ifelse(#__darkmode,0.5,ifelse(#applied_light_wallpaper,0.5,1)),ifelse(#__darkmode,1,ifelse(#applied_light_wallpaper,1,1)),ifelse(#__darkmode,0,0),ifelse(#__darkmode,1,1), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.2,0.3)), ifelse(#__darkmode,3,2), ifelse(#__darkmode,0.2,ifelse(#applied_light_wallpaper,0.1,0.2)), 0, ifelse(#__darkmode,0.4,ifelse(#applied_light_wallpaper,0.6,0.4)),0.8, ifelse(#__darkmode,0.04,0.02), ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.06,0.9),ifelse(#__darkmode,0.4,1), 0, ifelse(#__darkmode,0.8,1), ifelse(#__darkmode,1.5,1), 1, 36, ifelse(#__darkmode,2.2,ifelse(#applied_light_wallpaper,2.2,1.8)), 80, 200, 1, 0.8, -0.4,0.6,-0.8, ifelse(#__darkmode,2.4,1.4), ifelse(#__darkmode,1.6,0.8), 1.4, 0.85, 3, 0, 0, 0, 0, 0, 0, 0, 0,0 " />
   <Var name="bionic_dark_glass_params" type="number[]" values=" 0.5,1.5,0.5,1.4, 0.16, 1.5, 0.2, 0.3, 0.2,0.8, 0, 1,1,1,0.1, 0, 0.2, 1.4, 1, 36, 2.2, 80, 200, 1, 0.8, -0.4,0.6,-0.8, 1, 0.7, 1.4, 1.12, 3, 1.8, -0.2, 1, 0, 0, 0, 0, 0,0 " />
@@ -81,7 +105,7 @@
               alignV="center" size="15*#u" color="@secondaryInk" fontFamily="mipro-regular"
               textExp="ifelse(eqs(@pc_status,'ok'),@pc_empty_text,'等待取件喵数据')"/>
       </Group>
-      <Group visibility="ifelse(#page==0 ** (#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Group visibility="ifelse((ifelse(#pc_rows_shown==0,1,ifelse(#pc_rows_shown==1,1,ifelse(#pc_rows_shown==2,1,ifelse(#pc_rows_shown==3,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==4,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==5,ifelse(#page==0,1,0),0))))))) ** (#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company1" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company1"/>
@@ -102,7 +126,7 @@
               align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
-      <Group visibility="ifelse(#page==0 ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Group visibility="ifelse((ifelse(#pc_rows_shown==0,1,ifelse(#pc_rows_shown==1,1,ifelse(#pc_rows_shown==2,1,ifelse(#pc_rows_shown==3,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==4,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==5,ifelse(#page==0,1,0),0))))))) ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company2" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company2"/>
@@ -123,7 +147,7 @@
               align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
-      <Group visibility="ifelse(#page==1 ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Group visibility="ifelse((ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==5,ifelse(#page==1,1,0),0))))))) ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company3" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company3"/>
@@ -144,7 +168,7 @@
               align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
-      <Group visibility="ifelse(#page==1 ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Group visibility="ifelse((ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==5,ifelse(#page==1,1,0),0))))))) ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Text name="txt_company4" x="#padX+#rowPad" y="#padTop+#titleH+1*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company4"/>
@@ -165,7 +189,7 @@
               align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
-      <Group visibility="ifelse(#page==2 ** (#pc_rows_shown==5),1,0)">
+      <Group visibility="ifelse((ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,0,ifelse(#pc_rows_shown==4,0,ifelse(#pc_rows_shown==5,ifelse(#page==0 || #page==1,0,1),0))))))) ** (#pc_rows_shown==5),1,0)">
         <Text name="txt_company5" x="#padX+#rowPad" y="#padTop+#titleH+0*(#rowH+#gap)+21*#u" alignV="center" width="150*#u" size="16*#u"
               color="@textInk" fontFamily="mipro-demibold" ellipsis="true"
               textExp="@pc_company5"/>
@@ -186,81 +210,125 @@
               align="center" alignV="center" size="20*#u" color="#FFFFFFFF"
               fontFamily="mipro-demibold" textExp="'取'"/>
       </Group>
-      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(-1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5,1,0)"/>
-      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(-1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==0,1,0)"/>
-      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(0.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5,1,0)"/>
-      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(0.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==1,1,0)"/>
-      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@secondaryInk" visibility="ifelse(#pc_rows_shown==5,1,0)"/>
-      <Rectangle x="#view_width-18*#u-3*#u" y="#view_height/2+(1.0)*16*#u-3*#u" w="6*#u" h="6*#u" cornerRadiusExp="3*#u" fillColor="@countRed" visibility="ifelse(#page==2,1,0)"/>
-      <!-- 翻页层：只捕获上下滑动手势翻页，不挂 up。
-           openApp 与「我已取件」按钮都在本层之上的独立图层，
-           二者矩形零重叠，点按不会互相连带。 -->
-      <Button x="0" y="0" w="#view_width" h="#view_height">
+      <Group visibility="ifelse((#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Image x="#pagerX+#hitW/2-#pagerW/12" y="#padTop+#titleH/2-#pagerW/12" w="#pagerW/6" h="#pagerW/6"
+               src="arrow_prev.png" tint="@titleInk"/>
+        <Text x="#pagerX+#pagerW/2" y="#padTop+#titleH/2" align="center" alignV="center"
+              size="14*#u" color="@titleInk" fontFamily="mipro-demibold"
+              textExp="formatFloat('%.0f',#safePage+1)+'/'+formatFloat('%.0f',#totalPages)"/>
+        <Image x="#pagerX+#pagerW-#hitW/2-#pagerW/12" y="#padTop+#titleH/2-#pagerW/12" w="#pagerW/6" h="#pagerW/6"
+               src="arrow_next.png" tint="@titleInk"/>
+      </Group>
+      <!-- 「取」按钮与分页箭头都在独立图层，各带 interceptTouch 独占点按；
+           openApp 分区与二者几何零重叠（标题栏右侧整段让给分页控件），
+           避免点箭头 / 点取件连带跳 App（避坑 C66）。 -->
+            <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse((ifelse(#pc_rows_shown==0,1,ifelse(#pc_rows_shown==1,1,ifelse(#pc_rows_shown==2,1,ifelse(#pc_rows_shown==3,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==4,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==5,ifelse(#page==0,1,0),0))))))) ** (#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Triggers>
-          <Trigger action="onFling"><VariableCommand name="page" expression="ifelse(#page==2,0,#page+1)"/></Trigger>
-        </Triggers>
-      </Button>
-            <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==0 ** (#pc_rows_shown==1 || #pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
-        <Triggers>
-          <Trigger action="up"><IntentCommand
-            action="com.toretto5060.pickupcatapp.MAML_PICK"
-            package="com.toretto5060.pickupcatapp"
-            broadcast="true">
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,ifelse(#page==1,1,1)),ifelse(#pc_rows_shown==5,ifelse(#page==0,0,ifelse(#page==1,1,1)),0))))))"/>
+            <IntentCommand
+              action="com.toretto5060.pickupcatapp.MAML_PICK"
+              package="com.toretto5060.pickupcatapp"
+              broadcast="true">
               <Extra name="row_id" type="long" expression="#pc_id1"/>
               <Extra name="row_index" type="string" expression="'1'"/>
-            </IntentCommand></Trigger>
+            </IntentCommand>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
         </Triggers>
       </Button>
-      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==0 ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse((ifelse(#pc_rows_shown==0,1,ifelse(#pc_rows_shown==1,1,ifelse(#pc_rows_shown==2,1,ifelse(#pc_rows_shown==3,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==4,ifelse(#page==0,1,0),ifelse(#pc_rows_shown==5,ifelse(#page==0,1,0),0))))))) ** (#pc_rows_shown==2 || #pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Triggers>
-          <Trigger action="up"><IntentCommand
-            action="com.toretto5060.pickupcatapp.MAML_PICK"
-            package="com.toretto5060.pickupcatapp"
-            broadcast="true">
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,ifelse(#page==1,1,1)),ifelse(#pc_rows_shown==5,ifelse(#page==0,0,ifelse(#page==1,1,1)),0))))))"/>
+            <IntentCommand
+              action="com.toretto5060.pickupcatapp.MAML_PICK"
+              package="com.toretto5060.pickupcatapp"
+              broadcast="true">
               <Extra name="row_id" type="long" expression="#pc_id2"/>
               <Extra name="row_index" type="string" expression="'2'"/>
-            </IntentCommand></Trigger>
+            </IntentCommand>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
         </Triggers>
       </Button>
-      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==1 ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse((ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==5,ifelse(#page==1,1,0),0))))))) ** (#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Triggers>
-          <Trigger action="up"><IntentCommand
-            action="com.toretto5060.pickupcatapp.MAML_PICK"
-            package="com.toretto5060.pickupcatapp"
-            broadcast="true">
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,ifelse(#page==1,1,1)),ifelse(#pc_rows_shown==5,ifelse(#page==0,0,ifelse(#page==1,1,1)),0))))))"/>
+            <IntentCommand
+              action="com.toretto5060.pickupcatapp.MAML_PICK"
+              package="com.toretto5060.pickupcatapp"
+              broadcast="true">
               <Extra name="row_id" type="long" expression="#pc_id3"/>
               <Extra name="row_index" type="string" expression="'3'"/>
-            </IntentCommand></Trigger>
+            </IntentCommand>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
         </Triggers>
       </Button>
-      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==1 ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+1*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse((ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,1),ifelse(#pc_rows_shown==5,ifelse(#page==1,1,0),0))))))) ** (#pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
         <Triggers>
-          <Trigger action="up"><IntentCommand
-            action="com.toretto5060.pickupcatapp.MAML_PICK"
-            package="com.toretto5060.pickupcatapp"
-            broadcast="true">
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,ifelse(#page==1,1,1)),ifelse(#pc_rows_shown==5,ifelse(#page==0,0,ifelse(#page==1,1,1)),0))))))"/>
+            <IntentCommand
+              action="com.toretto5060.pickupcatapp.MAML_PICK"
+              package="com.toretto5060.pickupcatapp"
+              broadcast="true">
               <Extra name="row_id" type="long" expression="#pc_id4"/>
               <Extra name="row_index" type="string" expression="'4'"/>
-            </IntentCommand></Trigger>
+            </IntentCommand>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
         </Triggers>
       </Button>
-      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse(#page==2 ** (#pc_rows_shown==5),1,0)">
+      <Button x="#padX+#cardW-#rowPad-#btnW" y="#padTop+#titleH+0*(#rowH+#gap)+(#rowH-#btnH)/2" w="#btnW" h="#btnH" interceptTouch="true" visibility="ifelse((ifelse(#pc_rows_shown==0,0,ifelse(#pc_rows_shown==1,0,ifelse(#pc_rows_shown==2,0,ifelse(#pc_rows_shown==3,0,ifelse(#pc_rows_shown==4,0,ifelse(#pc_rows_shown==5,ifelse(#page==0 || #page==1,0,1),0))))))) ** (#pc_rows_shown==5),1,0)">
         <Triggers>
-          <Trigger action="up"><IntentCommand
-            action="com.toretto5060.pickupcatapp.MAML_PICK"
-            package="com.toretto5060.pickupcatapp"
-            broadcast="true">
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,0,ifelse(#page==1,1,1)),ifelse(#pc_rows_shown==5,ifelse(#page==0,0,ifelse(#page==1,1,1)),0))))))"/>
+            <IntentCommand
+              action="com.toretto5060.pickupcatapp.MAML_PICK"
+              package="com.toretto5060.pickupcatapp"
+              broadcast="true">
               <Extra name="row_id" type="long" expression="#pc_id5"/>
               <Extra name="row_index" type="string" expression="'5'"/>
-            </IntentCommand></Trigger>
+            </IntentCommand>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
         </Triggers>
       </Button>
-            <Button x="0" y="0" w="#padX+#cardW-#rowPad-#btnW" h="#view_height">
+            <Button x="#pagerX" y="0" w="#hitW" h="#padTop+#titleH" interceptTouch="true" visibility="ifelse((#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,1,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,1,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==5,ifelse(#page==0,2,ifelse(#page==1,0,1)),0))))))"/>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#pagerX+#pagerW-#hitW" y="0" w="#hitW" h="#padTop+#titleH" interceptTouch="true" visibility="ifelse((#pc_rows_shown==3 || #pc_rows_shown==4 || #pc_rows_shown==5),1,0)">
+        <Triggers>
+          <Trigger action="up">
+            <VariableCommand name="page" expression="ifelse(#pc_rows_shown==0,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==1,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==2,ifelse(#page==0,0,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==3,ifelse(#page==0,1,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==4,ifelse(#page==0,1,ifelse(#page==1,0,0)),ifelse(#pc_rows_shown==5,ifelse(#page==0,1,ifelse(#page==1,2,0)),0))))))"/>
+            <PermanenceCommand name="pagerTick" expression="#time_sys" requestUpdate="true" type="number"/>
+          </Trigger>
+        </Triggers>
+      </Button>
+            <Button x="0" y="0" w="#pagerX" h="#padTop+#titleH">
         <Triggers>
           <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
         </Triggers>
       </Button>
-      <Button x="#padX+#cardW-#rowPad" y="0" w="#padX+#rowPad" h="#view_height">
+      <Button x="#padX+#cardW-#rowPad" y="0" w="#padX+#rowPad" h="#padTop+#titleH">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="0" y="#padTop+#titleH" w="#padX+#cardW-#rowPad-#btnW" h="#view_height-(#padTop+#titleH)">
+        <Triggers>
+          <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
+        </Triggers>
+      </Button>
+      <Button x="#padX+#cardW-#rowPad" y="#padTop+#titleH" w="#padX+#rowPad" h="#view_height-(#padTop+#titleH)">
         <Triggers>
           <Trigger action="up"><FunctionCommand target="openApp"/></Trigger>
         </Triggers>
